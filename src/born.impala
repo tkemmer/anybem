@@ -1,8 +1,3 @@
-struct Charge {
-    pos: [f64 * 3],
-    val: f64
-}
-
 struct BornIon {
     charge: Charge,
     radius: f64
