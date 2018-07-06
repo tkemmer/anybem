@@ -7,8 +7,16 @@ include_directories(${ANYDSL_RUNTIME_DIR}/src)
 
 include_directories(src)
 
-anydsl_runtime_wrap(AnyBEM_PROGRAM  FILES src/born.impala)
-add_executable(anybem src/born.cpp ${AnyBEM_PROGRAM})
+anydsl_runtime_wrap(AnyBEM_PROGRAM  FILES
+        src/born.impala
+)
+
+add_executable(anybem
+        ${AnyBEM_PROGRAM}
+        src/born.h
+        src/main.cpp
+)
+
 target_link_libraries(anybem ${ANYDSL_RUNTIME_LIBRARY} ${ANYDSL_RUNTIME_LIBRARIES})
 set_target_properties(anybem PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
 
