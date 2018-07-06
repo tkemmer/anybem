@@ -3,4 +3,5 @@
 *.log
 *~
 build/
+.idea/
 
