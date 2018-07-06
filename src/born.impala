@@ -1,0 +1,48 @@
+struct Charge {
+    pos: [f64 * 3],
+    val: f64
+}
+
+struct BornIon {
+    charge: Charge,
+    radius: f64
+}
+
+static eps0     = 8.854187817620389e-12;
+static epsOmega = 2.;
+static epsSigma = 78.;
+static epsInf   = 1.8;
+static lambda   = 20.;
+static potpref  = 14.399639772478396;
+
+extern "C" {
+    fn sqrt(f64) -> f64;
+    fn sinh(f64) -> f64;
+    fn exp(f64)  -> f64;
+}
+
+fn euclidean(u: &[f64 * 3], v: &[f64 * 3]) -> f64 {
+    let mut sum = 0.;
+    for i:i32 in range(0,3) {
+        let d: f64 = (*u)(i) - (*v)(i);
+        sum += d * d;
+    }
+    sqrt(sum)
+}
+
+fn extpot_local(pos: &[f64 * 3], ion: &BornIon) -> f64 {
+    potpref * (*ion).charge.val / epsSigma / euclidean(pos, (*ion).charge.pos)
+}
+
+fn extpot_nonlocal(pos: &[f64 * 3], ion: &BornIon) -> f64 {
+    let r  = euclidean(pos, (*ion).charge.pos);
+    let nu = sqrt(epsSigma / epsInf) * (*ion).radius / lambda;
+    potpref * (*ion).charge.val * (1./r + 1./(*ion).radius/epsSigma * (1. - epsSigma + (epsSigma - epsInf)/epsInf * sinh(nu)/nu * exp(-nu)))
+}
+
+extern
+fn test() -> f64 {
+    let obs = [1., 1., 1.];
+    let li = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 0.645};
+    extpot_local(obs, li)
+}
