@@ -3,13 +3,6 @@ struct BornIon {
     radius: f64
 }
 
-static eps0     = 8.854187817620389e-12;
-static epsOmega = 2.;
-static epsSigma = 78.;
-static epsInf   = 1.8;
-static lambda   = 20.;
-static potpref  = 14.399639772478396;
-
 fn extpot_local(pos: &[f64 * 3], ion: &BornIon) -> f64 {
     potpref * (*ion).charge.val / epsSigma / euclidean(pos, (*ion).charge.pos)
 }

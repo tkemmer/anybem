@@ -1,0 +1,6 @@
+static eps0     = 8.854187817620389e-12;
+static epsOmega = 2.;
+static epsSigma = 78.;
+static epsInf   = 1.8;
+static lambda   = 20.;
+static potpref  = 14.399639772478396;

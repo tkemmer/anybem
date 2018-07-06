@@ -9,6 +9,7 @@ include_directories(src)
 
 anydsl_runtime_wrap(AnyBEM_PROGRAM  FILES
         src/born.impala
+        src/constants.impala
         src/model.impala
         src/util.impala
 )
