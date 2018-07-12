@@ -1,13 +1,13 @@
 extern "C" {
-	fn sqrt(f64) -> f64;
-	fn sinh(f64) -> f64;
-	fn exp(f64)  -> f64;
+	fn sqrt(Real) -> Real;
+	fn sinh(Real) -> Real;
+	fn exp(Real)  -> Real;
 }
 
-fn euclidean(u: &[f64 * 3], v: &[f64 * 3]) -> f64 {
-	let mut sum = 0.;
-	for i:i32 in range(0,3) {
-		let d: f64 = (*u)(i) - (*v)(i);
+fn euclidean(u: &Position, v: &Position) -> Real {
+	let mut sum = zero;
+	for i in range(0,3) {
+		let d = (*u)(i) - (*v)(i);
 		sum += d * d;
 	}
 	sqrt(sum)

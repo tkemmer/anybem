@@ -1,36 +1,37 @@
 struct BornIon {
 	charge: Charge,
-	radius: f64
+	radius: Real
 }
 
-static born_li = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 0.645};
-static born_na = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.005};
-static born_k  = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.365};
-static born_rb = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.505};
-static born_cs = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.715};
-static born_mg = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 0.615};
-static born_ca = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.015};
-static born_sr = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.195};
-static born_ba = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.385};
+static born_li = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 0.645 as Real};
+static born_na = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.005 as Real};
+static born_k  = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.365 as Real};
+static born_rb = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.505 as Real};
+static born_cs = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.715 as Real};
+static born_mg = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 0.615 as Real};
+static born_ca = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 1.015 as Real};
+static born_sr = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 1.195 as Real};
+static born_ba = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 1.385 as Real};
 
-fn born_extpot_local(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
+fn born_extpot_local(pos: &Position, ion: &BornIon, opt: &SystemParams) -> Real {
 	potpref * (*ion).charge.val / (*opt).epsSigma / euclidean(pos, (*ion).charge.pos)
 }
 
-fn born_extpot_nonlocal(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
+fn born_extpot_nonlocal(pos: &Position, ion: &BornIon, opt: &SystemParams) -> Real {
 	let r  = euclidean(pos, (*ion).charge.pos);
 	let nu = sqrt((*opt).epsSigma / (*opt).epsInf) * (*ion).radius / (*opt).lambda;
-	potpref * (*ion).charge.val/(*opt).epsSigma/r * (1. + ((*opt).epsSigma - (*opt).epsInf) /
+	potpref * (*ion).charge.val/(*opt).epsSigma/r * (one + ((*opt).epsSigma - (*opt).epsInf) /
 		(*opt).epsInf * sinh(nu)/nu * exp(-nu * (*ion).radius))
 }
 
-fn born_intpot_local(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
-	potpref * (*ion).charge.val * (1./euclidean(pos, (*ion).charge.pos) + 1./(*ion).radius * (1./(*opt).epsSigma - 1.))
+fn born_intpot_local(pos: &Position, ion: &BornIon, opt: &SystemParams) -> Real {
+	potpref * (*ion).charge.val *
+		(one/euclidean(pos, (*ion).charge.pos) + one/(*ion).radius * (one/(*opt).epsSigma - one))
 }
 
-fn born_intpot_nonlocal(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
+fn born_intpot_nonlocal(pos: &Position, ion: &BornIon, opt: &SystemParams) -> Real {
 	let r  = euclidean(pos, (*ion).charge.pos);
 	let nu = sqrt((*opt).epsSigma/(*opt).epsInf) * (*ion).radius / (*opt).lambda;
-	potpref * (*ion).charge.val * (1./r + 1./(*ion).radius/(*opt).epsSigma *
-		(1. - (*opt).epsSigma + ((*opt).epsSigma - (*opt).epsInf)/(*opt).epsInf * sinh(nu)/nu * exp(-nu)))
+	potpref * (*ion).charge.val * (one/r + one/(*ion).radius/(*opt).epsSigma *
+		(one - (*opt).epsSigma + ((*opt).epsSigma - (*opt).epsInf)/(*opt).epsInf * sinh(nu)/nu * exp(-nu)))
 }

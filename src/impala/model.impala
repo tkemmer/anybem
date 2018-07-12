@@ -1,4 +1,4 @@
 struct Charge {
-	pos: [f64 * 3],
-	val: f64
+	pos: Position,
+	val: Real
 }

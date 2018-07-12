@@ -8,11 +8,12 @@ include_directories(${ANYDSL_RUNTIME_DIR}/src)
 include_directories(src/cpp)
 
 anydsl_runtime_wrap(AnyBEM_PROGRAM  FILES
-	src/impala/born.impala
+	src/impala/types.impala
 	src/impala/constants.impala
-	src/impala/main.impala
 	src/impala/model.impala
 	src/impala/util.impala
+	src/impala/born.impala
+	src/impala/main.impala
 )
 
 add_executable(anybem

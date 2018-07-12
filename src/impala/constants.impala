@@ -1,10 +1,16 @@
 struct SystemParams {
-	epsOmega: f64,
-	epsSigma: f64,
-	epsInf:   f64,
-	lambda:   f64
+	epsOmega: Real,
+	epsSigma: Real,
+	epsInf:   Real,
+	lambda:   Real
 }
 
-static default_opt = SystemParams{epsOmega: 2., epsSigma: 78., epsInf: 1.8, lambda: 20.};
-static eps0        = 8.854187817620389e-12;
-static potpref     = 14.399639772478396;
+static default_opt = SystemParams{
+	epsOmega: 2   as Real,
+	epsSigma: 78  as Real,
+	epsInf:   1.8 as Real,
+	lambda:   20  as Real
+};
+
+static eps0    = 8.854187817620389e-12 as Real;
+static potpref = 14.399639772478396    as Real;
