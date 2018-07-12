@@ -3,6 +3,16 @@ struct BornIon {
     radius: f64
 }
 
+static born_li = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 0.645};
+static born_na = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.005};
+static born_k  = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.365};
+static born_rb = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.505};
+static born_cs = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 1.715};
+static born_mg = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 0.615};
+static born_ca = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.015};
+static born_sr = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.195};
+static born_ba = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.385};
+
 fn extpot_local(pos: &[f64 * 3], ion: &BornIon) -> f64 {
     potpref * (*ion).charge.val / epsSigma / euclidean(pos, (*ion).charge.pos)
 }

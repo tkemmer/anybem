@@ -1,6 +1,5 @@
 extern
 fn test() -> f64 {
     let obs = [1., 1., 1.];
-    let li = BornIon{charge: Charge{pos: [0., 0., 0.], val: 1.}, radius: 0.645};
-    extpot_local(obs, li)
+    extpot_local(obs, born_li)
 }
