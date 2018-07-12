@@ -5,20 +5,20 @@ project(AnyBEM CXX)
 find_package(AnyDSL_runtime REQUIRED)
 include_directories(${ANYDSL_RUNTIME_DIR}/src)
 
-include_directories(src)
+include_directories(src/cpp)
 
 anydsl_runtime_wrap(AnyBEM_PROGRAM  FILES
-	src/born.impala
-	src/constants.impala
-	src/main.impala
-	src/model.impala
-	src/util.impala
+	src/impala/born.impala
+	src/impala/constants.impala
+	src/impala/main.impala
+	src/impala/model.impala
+	src/impala/util.impala
 )
 
 add_executable(anybem
 	${AnyBEM_PROGRAM}
-	src/main.h
-	src/main.cpp
+	src/cpp/main.h
+	src/cpp/main.cpp
 )
 
 target_link_libraries(anybem ${ANYDSL_RUNTIME_LIBRARY} ${ANYDSL_RUNTIME_LIBRARIES})
