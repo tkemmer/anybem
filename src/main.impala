@@ -1,5 +1,5 @@
 extern
 fn test() -> f64 {
 	let obs = [1., 1., 1.];
-	born_extpot_local(obs, born_li)
+	born_extpot_local(obs, born_li, default_opt)
 }

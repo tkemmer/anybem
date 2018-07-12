@@ -13,23 +13,24 @@ static born_ca = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.0
 static born_sr = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.195};
 static born_ba = BornIon{charge: Charge{pos: [0., 0., 0.], val: 2.}, radius: 1.385};
 
-fn born_extpot_local(pos: &[f64 * 3], ion: &BornIon) -> f64 {
-	potpref * (*ion).charge.val / epsSigma / euclidean(pos, (*ion).charge.pos)
+fn born_extpot_local(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
+	potpref * (*ion).charge.val / (*opt).epsSigma / euclidean(pos, (*ion).charge.pos)
 }
 
-fn born_extpot_nonlocal(pos: &[f64 * 3], ion: &BornIon) -> f64 {
+fn born_extpot_nonlocal(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
 	let r  = euclidean(pos, (*ion).charge.pos);
-	let nu = sqrt(epsSigma / epsInf) * (*ion).radius / lambda;
-	potpref * (*ion).charge.val/epsSigma/r * (1. + (epsSigma - epsInf)/epsInf * sinh(nu)/nu * exp(-nu * (*ion).radius))
+	let nu = sqrt((*opt).epsSigma / (*opt).epsInf) * (*ion).radius / (*opt).lambda;
+	potpref * (*ion).charge.val/(*opt).epsSigma/r * (1. + ((*opt).epsSigma - (*opt).epsInf) /
+		(*opt).epsInf * sinh(nu)/nu * exp(-nu * (*ion).radius))
 }
 
-fn born_intpot_local(pos: &[f64 * 3], ion: &BornIon) -> f64 {
-	potpref * (*ion).charge.val * (1./euclidean(pos, (*ion).charge.pos) + 1./(*ion).radius * (1./epsSigma - 1.))
+fn born_intpot_local(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
+	potpref * (*ion).charge.val * (1./euclidean(pos, (*ion).charge.pos) + 1./(*ion).radius * (1./(*opt).epsSigma - 1.))
 }
 
-fn born_intpot_nonlocal(pos: &[f64 * 3], ion: &BornIon) -> f64 {
+fn born_intpot_nonlocal(pos: &[f64 * 3], ion: &BornIon, opt: &SystemParams) -> f64 {
 	let r  = euclidean(pos, (*ion).charge.pos);
-	let nu = sqrt(epsSigma/epsInf) * (*ion).radius / lambda;
-	potpref * (*ion).charge.val * (1./r + 1./(*ion).radius/epsSigma *
-		(1. - epsSigma + (epsSigma - epsInf)/epsInf * sinh(nu)/nu * exp(-nu)))
+	let nu = sqrt((*opt).epsSigma/(*opt).epsInf) * (*ion).radius / (*opt).lambda;
+	potpref * (*ion).charge.val * (1./r + 1./(*ion).radius/(*opt).epsSigma *
+		(1. - (*opt).epsSigma + ((*opt).epsSigma - (*opt).epsInf)/(*opt).epsInf * sinh(nu)/nu * exp(-nu)))
 }
