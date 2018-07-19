@@ -1,23 +1,39 @@
+struct NodeBuffer {
+	buf: Buffer,
+	len: Index
+}
+
+struct Triangle {
+	v1:     Index,      // first node
+	v2:     Index,      // second node
+	v3:     Index,      // third node
+	center: Position,   // centroid
+	normal: Position,   // unit normal vector
+	area:   Real,       // surface area
+	dist:   Real        // distance to origin
+}
+
+struct TriangleBuffer {
+	buf: Buffer,
+	len: Index
+}
+
+type SurfaceElement = Triangle;
+type SurfaceElementBuffer = TriangleBuffer;
+
 struct Charge {
 	pos: Position,
 	val: Real
 }
 
-struct Triangle {
-	v1:     &Position,   // first node
-	v2:     &Position,   // second node
-	v3:     &Position,   // third node
-	center: Position,    // centroid
-	normal: Position,    // unit normal vector
-	area:   Real,        // surface area
-	dist:   Real         // distance to origin
+struct ChargeBuffer {
+	buf: Buffer,
+	len: Index
 }
 
-type SurfaceElement = Triangle;
-
 struct SurfaceModel {
-	nodes:    &[Position],
-	elements: &[SurfaceElement],
-	charges:  &[Charge],
+	nodes:    NodeBuffer,
+	elements: SurfaceElementBuffer,
+	charges:  ChargeBuffer,
 	params:   SystemParams
 }
