@@ -1,3 +1,4 @@
+type Index    = i64;
 type Real     = f64;
 type Position = [Real * 3];
 
