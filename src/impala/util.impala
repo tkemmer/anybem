@@ -1,7 +1,5 @@
 extern "C" {
-	fn sqrt(Real) -> Real;
 	fn sinh(Real) -> Real;
-	fn exp(Real)  -> Real;
 }
 
 fn @euclidean(u: &Position, v: &Position) -> Real {
@@ -10,5 +8,5 @@ fn @euclidean(u: &Position, v: &Position) -> Real {
 		let d = (*u)(i) - (*v)(i);
 		sum += d * d;
 	}
-	sqrt(sum)
+	math.sqrt(sum)
 }
