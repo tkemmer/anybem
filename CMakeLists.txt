@@ -6,7 +6,8 @@ find_package(AnyDSL_runtime REQUIRED)
 
 include_directories(src/cpp)
 
-anydsl_runtime_wrap(AnyBEM_PROGRAM  FILES
+anydsl_runtime_wrap(AnyBEM_PROGRAM FILES
+	src/impala/backend/backend_cpu.impala
 	src/impala/types.impala
 	src/impala/constants.impala
 	src/impala/model.impala
