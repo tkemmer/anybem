@@ -6,7 +6,12 @@ find_package(AnyDSL_runtime REQUIRED)
 
 include_directories(src/cpp)
 
-anydsl_runtime_wrap(AnyBEM_PROGRAM FILES
+set(AnyBEM_IMPALA_FLAGS "")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	list(APPEND AnyBEM_IMPALA_FLAGS "-emit-annotated" "-log-level" "debug")
+endif()
+
+anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	src/impala/backend/backend_cpu.impala
 	src/impala/types.impala
 	src/impala/constants.impala
