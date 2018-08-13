@@ -23,6 +23,7 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 
 add_executable(anybem
 	${AnyBEM_PROGRAM}
+	src/cpp/error.h
 	src/cpp/main.h
 	src/cpp/main.cpp
 	src/cpp/model.h
