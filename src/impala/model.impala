@@ -1,7 +1,32 @@
+// ====================================================================================================================
+// Nodes
+
+type Node = Position;
+
 struct NodeBuffer {
 	buf: Buffer,
 	len: Index
 }
+
+fn new_node_buffer(buf: Buffer, len: Index) -> NodeBuffer {
+	NodeBuffer {
+		buf: buf,
+		len: len
+	}
+}
+
+fn to_node_buffer(nodes: &[Node], len: Index) -> NodeBuffer {
+	let buf = Buffer{
+		device: 0,
+		data:   bitcast[&[i8]](nodes),
+		size:   (len as i64) * (sizeof[Node]() as i64)
+	};
+	new_node_buffer(buf, len)
+}
+
+
+// ====================================================================================================================
+// Elements
 
 struct Triangle {
 	v1:     Index,      // first node
@@ -21,6 +46,10 @@ struct TriangleBuffer {
 type SurfaceElement = Triangle;
 type SurfaceElementBuffer = TriangleBuffer;
 
+
+// ====================================================================================================================
+// Charges
+
 struct Charge {
 	pos: Position,
 	val: Real
@@ -30,6 +59,10 @@ struct ChargeBuffer {
 	buf: Buffer,
 	len: Index
 }
+
+
+// ====================================================================================================================
+// Surface model
 
 struct SurfaceModel {
 	nodes:    NodeBuffer,
