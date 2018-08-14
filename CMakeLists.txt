@@ -1,10 +1,29 @@
 cmake_minimum_required(VERSION 3.7 FATAL_ERROR)
-
 project(AnyBEM CXX)
 
+#######################################################################################################################
+# Dependencies
+
+## AnyDSL
 find_package(AnyDSL_runtime REQUIRED)
 
+## Clipp
+set(CLIPP_INCLUDE_DIR "deps/clipp/include" CACHE INTERNAL "Clipp include directory")
+if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CLIPP_INCLUDE_DIR}")
+	message(STATUS "Fetching dependency Clipp")
+	find_program(GIT_CMD git REQUIRED)
+	execute_process(
+		COMMAND ${GIT_CMD} submodule update --init -- deps/clipp
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		OUTPUT_QUIET
+	)
+endif()
+
+
+#######################################################################################################################
+# Project configuration
 include_directories(src/cpp)
+include_directories(SYSTEM ${CLIPP_INCLUDE_DIR})
 
 set(AnyBEM_IMPALA_FLAGS "")
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")

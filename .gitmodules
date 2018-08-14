@@ -1,0 +1,3 @@
+[submodule "deps/clipp"]
+	path = deps/clipp
+	url = https://github.com/muellan/clipp
