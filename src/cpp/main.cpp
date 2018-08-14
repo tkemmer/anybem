@@ -1,5 +1,5 @@
-#include "impala.h"
 #include "hmo_reader.h"
+#include "impala.h"
 
 #include <clipp.h>
 
@@ -28,4 +28,7 @@ int main(int argc, char** argv) {
 	     << " * Nodes:    "s << to_string(reader.nodes().size()) << "\n"s
 	     << " * Elements: "s << to_string(reader.elements().size()) << "\n"s
 	     << " * Charges:  "s << to_string(reader.charges().size()) << "\n"s;
+
+	cout << "\n";
+	anybem_node_buffer_stats(reader.nodes().data(), reader.nodes().size());
 }

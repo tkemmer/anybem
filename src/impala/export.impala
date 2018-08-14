@@ -1,0 +1,21 @@
+extern
+fn anybem_node_buffer_stats(nodes: &[Node], len: Index) -> () {
+	let nb = to_node_buffer(nodes, len);
+	let data = bitcast[&[Node]](nb.buf.data);
+	print_string("Node buffer stats:\n");
+	print_string(" * Device: "); print_i32(nb.buf.device); print_string("\n");
+	print_string(" * Length: "); print_i64(nb.len as i64); print_string(" nodes\n");
+	print_string(" * Memory: "); print_i64(nb.buf.size); print_string(" bytes\n");
+	print_string(" * Head:\n");
+	for i in range(0, math.min(len as i32, 5)) {
+		print_string("    - Node ");
+		print_i32(i);
+		print_string(": {");
+		print_f64((*data)(i)(0) as f64);
+		print_string(", ");
+		print_f64((*data)(i)(1) as f64);
+		print_string(", ");
+		print_f64((*data)(i)(2) as f64);
+		print_string("}\n");
+	}
+}
