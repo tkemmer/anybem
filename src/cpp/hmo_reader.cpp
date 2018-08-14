@@ -9,11 +9,11 @@ using namespace std::string_literals;
 namespace anybem {
 
 	// ================================================================================================================
-	class HMOReader::Impl{
+	class HMOReader::Impl {
 	public:
-		std::vector<position_t> nodes   ;
-		std::vector<Triangle>   elements;
-		std::vector<Charge>     charges ;
+		std::vector<position_t> nodes    {0};
+		std::vector<Triangle>   elements {0};
+		std::vector<Charge>     charges  {0};
 
 		Impl(const string& filename) {
 			ifstream fin(filename);
