@@ -45,7 +45,7 @@ add_executable(anybem
 	src/cpp/error.h
 	src/cpp/hmo_reader.h
 	src/cpp/hmo_reader.cpp
-	src/cpp/main.h
+	src/cpp/impala.h
 	src/cpp/main.cpp
 	src/cpp/model.h
 	src/cpp/types.h
