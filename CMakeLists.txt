@@ -37,7 +37,7 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	src/impala/model.impala
 	src/impala/util.impala
 	src/impala/born.impala
-	src/impala/main.impala
+	src/impala/export.impala
 )
 
 add_executable(anybem
