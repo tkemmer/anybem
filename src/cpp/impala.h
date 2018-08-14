@@ -1,3 +1,2 @@
 extern "C" {
-	double test();
 }

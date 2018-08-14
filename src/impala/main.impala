@@ -1,5 +1,0 @@
-extern
-fn test() -> Real {
-	let obs = [one, one, one];
-	born_extpot_local(obs, born_li, default_opt)
-}
