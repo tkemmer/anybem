@@ -32,6 +32,7 @@ endif()
 
 anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	src/impala/backend/backend_cpu.impala
+	src/impala/import.impala
 	src/impala/types.impala
 	src/impala/constants.impala
 	src/impala/model.impala
