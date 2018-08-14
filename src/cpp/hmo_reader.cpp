@@ -54,7 +54,6 @@ namespace anybem {
 				nodes.push_back({x, y, z});
 			}
 
-			skip_line(fin); // skip the newline of the last node line
 			if(!next_line_matches(fin, "END_NODL_DATA"s)) {
 				clear();
 				throw FileFormatError{"Corrupt HMO file: missing END_NODL_DATA after node no. "s + to_string(maxn)};
@@ -66,7 +65,7 @@ namespace anybem {
 			auto maxn = 0ul;
 			fin >> maxn;
 			elements.reserve(maxn);
-			skip_line(fin); // we're only interested in the first number
+			next_line(fin); // we're only interested in the first number
 
 			for(auto i = 0u; i < maxn; ++i) {
 				if(!fin.good()) {
@@ -98,7 +97,6 @@ namespace anybem {
 				elements.push_back({v1, v2, v3, 0, 0, 0, 0});
 			}
 
-			skip_line(fin); // skip the newline of the last element line
 			if(!next_line_matches(fin, "END_ELEM_DATA"s)) {
 				clear();
 				throw FileFormatError{"Corrupt HMO file: missing END_ELEM_DATA after node no. "s + to_string(maxn)};
@@ -131,13 +129,13 @@ namespace anybem {
 				charges.push_back({{x, y, z}, q});
 			}
 
-			skip_line(fin); // skip the newline of the last charge line
 			if(!next_line_matches(fin, "END_CHARGE_DATA"s)) {
 				clear();
 				throw FileFormatError{"Corrupt HMO file: missing END_CHARGE_DATA after node no. "s + to_string(maxn)};
 			}
 		}
 
+		/// Fasts-forward behind the query line (or to EOF if the query line is not found)
 		void seek_line(ifstream& fin, const string& query) {
 			if(!fin.good())
 				return;
@@ -146,20 +144,24 @@ namespace anybem {
 					break;
 		}
 
-		void skip_line(ifstream& fin) {
+		/// Fasts-forward behind the next newline character
+		void next_line(ifstream &fin) {
 			if(!fin.good())
 				return;
 			string line;
 			getline(fin, line);
 		}
 
+		/// Checks whether the next line matches the given query string
 		bool next_line_matches(ifstream& fin, const string& query) {
+			next_line(fin);
 			if(!fin.good())
 				return false;
 			string line;
 			return getline(fin, line) && line == query;
 		}
 
+		/// Clears the current surface model and charges
 		void clear() {
 			nodes.clear();
 			elements.clear();
@@ -175,10 +177,10 @@ namespace anybem {
 
 	HMOReader::~HMOReader() noexcept = default;
 
-	vector<position_t>& HMOReader::getNodes() noexcept { return impl_->nodes; }
+	vector<position_t>& HMOReader::nodes() noexcept { return impl_->nodes; }
 
-	vector<Triangle>& HMOReader::getElements() noexcept { return impl_->elements; }
+	vector<Triangle>& HMOReader::elements() noexcept { return impl_->elements; }
 
-	vector<Charge>& HMOReader::getCharges() noexcept { return impl_->charges; }
+	vector<Charge>& HMOReader::charges() noexcept { return impl_->charges; }
 
 }
