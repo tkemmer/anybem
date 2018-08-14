@@ -90,7 +90,7 @@ namespace anybem {
 				if(idx != i + 1)
 				{
 					clear();
-					throw FileFormatError{"Corrupt HMO file: missing node no. "s + to_string(i)};
+					throw FileFormatError{"Corrupt HMO file: missing element no. "s + to_string(i)};
 				}
 
 				auto v1 = 0, v2 = 0, v3 = 0;
