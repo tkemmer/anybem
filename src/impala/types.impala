@@ -1,7 +1,3 @@
 type Index    = i64;
 type Real     = f64;
 type Position = [Real * 3];
-
-static zero   = 0 as Real;
-static one    = 1 as Real;
-static origin = [zero, zero, zero] as Position;
