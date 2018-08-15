@@ -4,6 +4,7 @@
 #include "types.h"
 
 namespace anybem {
+
 	struct Triangle {
 		index_t    v1;       // first node
 		index_t    v2;       // second node
@@ -18,6 +19,14 @@ namespace anybem {
 		position_t pos;
 		real_t     val;
 	};
+
+	struct SystemParams {
+		real_t epsOmega;
+		real_t epsSigma;
+		real_t epsInf;
+		real_t lambda;
+	};
+
 }
 
 #endif // ANYBEM_MODEL_H
