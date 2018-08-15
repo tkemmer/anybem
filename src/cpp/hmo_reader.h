@@ -56,10 +56,6 @@ namespace anybem {
 		HMOReader& operator=(const HMOReader&) = delete;
 		HMOReader& operator=(const HMOReader&&) = delete;
 
-		std::vector<position_t>& nodes() noexcept;
-		std::vector<Triangle>& elements() noexcept;
-		std::vector<Charge>& charges() noexcept;
-
 		SurfaceModelResource extractSurfaceModel() noexcept;
 
 	private:

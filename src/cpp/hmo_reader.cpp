@@ -177,12 +177,6 @@ namespace anybem {
 
 	HMOReader::~HMOReader() noexcept = default;
 
-	vector<position_t>& HMOReader::nodes() noexcept { return impl_->nodes; }
-
-	vector<Triangle>& HMOReader::elements() noexcept { return impl_->elements; }
-
-	vector<Charge>& HMOReader::charges() noexcept { return impl_->charges; }
-
 	SurfaceModelResource HMOReader::extractSurfaceModel() noexcept {
 		SurfaceModelResource surf = {move(impl_->nodes), move(impl_->elements), move(impl_->charges)};
 		impl_->clear();
