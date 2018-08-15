@@ -49,6 +49,7 @@ add_executable(anybem
 	src/cpp/impala.h
 	src/cpp/main.cpp
 	src/cpp/model.h
+	src/cpp/reader.h
 	src/cpp/types.h
 	src/cpp/util.h
 	src/cpp/util.cpp

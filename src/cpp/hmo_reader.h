@@ -1,11 +1,7 @@
 #ifndef ANYBEM_HMO_READER_H
 #define ANYBEM_HMO_READER_H
 
-#include "model.h"
-
-#include <memory>
-#include <string>
-#include <vector>
+#include "reader.h"
 
 namespace anybem {
 
@@ -39,19 +35,14 @@ namespace anybem {
 	 * END_CHARGE_DATA
 	 * </pre>
 	 */
-	class HMOReader {
+	class HMOReader : public Reader {
 	public:
 		HMOReader() = default;
-		~HMOReader() noexcept = default;
+		~HMOReader() noexcept override = default;
 
-		/**
-		 * Reads the surface model and charges from the given file.
-		 *
-		 * @param filename path to an HMO file
-		 * @throws FileAccessError if the given file is not readable
-		 * @throws FileFormatError if the given HMO file is corrupt or unsupported
-		 */
-		SurfaceModelResource readSurfaceModel(const std::string& filename);
+		bool supportsCharges() const noexcept override { return false; }
+
+		SurfaceModelResource readSurfaceModel(const std::string& filename) override;
 	};
 
 }
