@@ -1,7 +1,6 @@
 #include "hmo_reader.h"
 #include "error.h"
-
-#include <fstream>
+#include "util.h"
 
 using namespace std;
 using namespace std::string_literals;
@@ -142,31 +141,6 @@ namespace anybem {
 			}
 		}
 
-		/// Fasts-forward behind the query line (or to EOF if the query line is not found)
-		void seek_line(ifstream& fin, const string& query) {
-			if(!fin.good())
-				return;
-			for(string line; getline(fin, line);)
-				if(line == query)
-					break;
-		}
-
-		/// Fasts-forward behind the next newline character
-		void next_line(ifstream &fin) {
-			if(!fin.good())
-				return;
-			string line;
-			getline(fin, line);
-		}
-
-		/// Checks whether the next line matches the given query string
-		bool next_line_matches(ifstream& fin, const string& query) {
-			next_line(fin);
-			if(!fin.good())
-				return false;
-			string line;
-			return getline(fin, line) && line == query;
-		}
 	};
 
 

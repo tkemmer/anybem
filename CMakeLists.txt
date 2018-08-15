@@ -50,6 +50,8 @@ add_executable(anybem
 	src/cpp/main.cpp
 	src/cpp/model.h
 	src/cpp/types.h
+	src/cpp/util.h
+	src/cpp/util.cpp
 )
 
 target_link_libraries(anybem ${AnyDSL_runtime_LIBRARIES})
