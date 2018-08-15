@@ -35,8 +35,11 @@ namespace anybem {
 
 	struct SurfaceModel {
 		Node*           nodes;
+		index_t         node_count;
 		SurfaceElement* elements;
+		index_t         element_count;
 		Charge*         charges;
+		index_t         charge_count;
 		SystemParams    params;
 	};
 
@@ -57,8 +60,11 @@ namespace anybem {
 		SurfaceModel get() {
 			return SurfaceModel{
 				nodes_.data(),
+				node_count(),
 				elements_.data(),
+				element_count(),
 				charges_.data(),
+				charge_count(),
 				{0, 0, 0, 0} // TODO
 			};
 		}
