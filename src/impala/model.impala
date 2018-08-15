@@ -24,6 +24,26 @@ fn to_node_buffer(nodes: &[Node], len: Index) -> NodeBuffer {
 	new_node_buffer(buf, len)
 }
 
+fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
+	print_string("Node buffer stats:\n");
+	print_string(" * Device: "); print_i32(nodes.buf.device); print_string("\n");
+	print_string(" * Length: "); print_i64(nodes.len as i64); print_string(" nodes\n");
+	print_string(" * Memory: "); print_i64(nodes.buf.size); print_string(" bytes\n");
+	print_string(" * Head:\n");
+	let data = bitcast[&[Node]](nodes.buf.data);
+	for i in range(0, math.min(nodes.len as i32, head_max)) {
+		print_string("    - Node ");
+		print_i32(i);
+		print_string(": {");
+		print_f64((*data)(i)(0) as f64);
+		print_string(", ");
+		print_f64((*data)(i)(1) as f64);
+		print_string(", ");
+		print_f64((*data)(i)(2) as f64);
+		print_string("}\n");
+	}
+}
+
 
 // ====================================================================================================================
 // Elements
@@ -59,6 +79,26 @@ fn to_triangle_buffer(elements: &[Triangle], len: Index) -> TriangleBuffer {
 	new_triangle_buffer(buf, len)
 }
 
+fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
+	print_string("Surface element buffer stats:\n");
+	print_string(" * Device: "); print_i32(elements.buf.device); print_string("\n");
+	print_string(" * Length: "); print_i64(elements.len as i64); print_string(" elements\n");
+	print_string(" * Memory: "); print_i64(elements.buf.size); print_string(" bytes\n");
+	print_string(" * Head:\n");
+	let data = bitcast[&[SurfaceElement]](elements.buf.data);
+	for i in range(0, math.min(elements.len as i32, head_max)) {
+		print_string("    - Element ");
+		print_i32(i);
+		print_string(": {");
+		print_i64((*data)(i).v1 as i64);
+		print_string(", ");
+		print_i64((*data)(i).v2 as i64);
+		print_string(", ");
+		print_i64((*data)(i).v3 as i64);
+		print_string("}\n");
+	}
+}
+
 type SurfaceElement = Triangle;
 type SurfaceElementBuffer = TriangleBuffer;
 
@@ -68,6 +108,10 @@ fn new_surface_element_buffer(buf: Buffer, len: Index) -> SurfaceElementBuffer {
 
 fn to_surface_element_buffer(elements: &[SurfaceElement], len: Index) -> SurfaceElementBuffer {
 	to_triangle_buffer(elements, len)
+}
+
+fn dump_surface_element_buffer(elements: SurfaceElementBuffer, head_max: i32) -> () {
+	dump_triangle_buffer(elements, head_max)
 }
 
 
@@ -98,6 +142,28 @@ fn to_charge_buffer(charges: &[Charge], len: Index) -> ChargeBuffer {
 		size:   (len as i64) * (sizeof[Charge]() as i64)
 	};
 	new_charge_buffer(buf, len)
+}
+
+fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
+	print_string("Charge buffer stats:\n");
+	print_string(" * Device: "); print_i32(charges.buf.device); print_string("\n");
+	print_string(" * Length: "); print_i64(charges.len as i64); print_string(" charges\n");
+	print_string(" * Memory: "); print_i64(charges.buf.size); print_string(" bytes\n");
+	print_string(" * Head:\n");
+	let data = bitcast[&[Charge]](charges.buf.data);
+	for i in range(0, math.min(charges.len as i32, head_max)) {
+		print_string("    - Charge ");
+		print_i32(i);
+		print_string(": { {");
+		print_f64((*data)(i).pos(0) as f64);
+		print_string(", ");
+		print_f64((*data)(i).pos(1) as f64);
+		print_string(", ");
+		print_f64((*data)(i).pos(2) as f64);
+		print_string("}, ");
+		print_f64((*data)(i).val as f64);
+		print_string("}\n");
+	}
 }
 
 
