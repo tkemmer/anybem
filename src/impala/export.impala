@@ -26,7 +26,7 @@ fn anybem_surface_element_buffer_stats(elements: &[SurfaceElement], len: Index) 
 	let data = bitcast[&[SurfaceElement]](seb.buf.data);
 	print_string("Surface element buffer stats:\n");
 	print_string(" * Device: "); print_i32(seb.buf.device); print_string("\n");
-	print_string(" * Length: "); print_i64(seb.len as i64); print_string(" nodes\n");
+	print_string(" * Length: "); print_i64(seb.len as i64); print_string(" elements\n");
 	print_string(" * Memory: "); print_i64(seb.buf.size); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(len as i32, 5)) {
@@ -38,6 +38,30 @@ fn anybem_surface_element_buffer_stats(elements: &[SurfaceElement], len: Index) 
 		print_i64((*data)(i).v2 as i64);
 		print_string(", ");
 		print_i64((*data)(i).v3 as i64);
+		print_string("}\n");
+	}
+}
+
+extern
+fn anybem_charge_buffer_stats(charges: &[Charge], len: Index) -> () {
+	let cb = to_charge_buffer(charges, len);
+	let data = bitcast[&[Charge]](cb.buf.data);
+	print_string("Charge buffer stats:\n");
+	print_string(" * Device: "); print_i32(cb.buf.device); print_string("\n");
+	print_string(" * Length: "); print_i64(cb.len as i64); print_string(" charges\n");
+	print_string(" * Memory: "); print_i64(cb.buf.size); print_string(" bytes\n");
+	print_string(" * Head:\n");
+	for i in range(0, math.min(len as i32, 5)) {
+		print_string("    - Charge ");
+		print_i32(i);
+		print_string(": { {");
+		print_f64((*data)(i).pos(0) as f64);
+		print_string(", ");
+		print_f64((*data)(i).pos(1) as f64);
+		print_string(", ");
+		print_f64((*data)(i).pos(2) as f64);
+		print_string("}, ");
+		print_f64((*data)(i).val as f64);
 		print_string("}\n");
 	}
 }
