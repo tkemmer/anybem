@@ -8,13 +8,13 @@ using namespace std::string_literals;
 namespace anybem {
 
 	// ================================================================================================================
-	class HMOReader::Impl {
+	class HMOReaderImpl {
 	public:
 		std::vector<Node>     nodes    {0};
 		std::vector<Triangle> elements {0};
 		std::vector<Charge>   charges  {0};
 
-		Impl(const string& filename) {
+		HMOReaderImpl(const string& filename) {
 			ifstream fin(filename);
 			if(fin.rdstate() & ifstream::failbit)
 				throw FileAccessError("Cannot open file "s + filename);
@@ -24,7 +24,7 @@ namespace anybem {
 			read_charges(fin);
 		}
 
-		~Impl() = default;
+		~HMOReaderImpl() = default;
 
 		/// Clears the current surface model and charges
 		void clear() noexcept {
@@ -145,16 +145,9 @@ namespace anybem {
 
 
 	// ================================================================================================================
-	HMOReader::HMOReader(const string& filename) :
-		impl_{make_unique<HMOReader::Impl>(filename)} {
-	}
-
-	HMOReader::~HMOReader() noexcept = default;
-
-	SurfaceModelResource HMOReader::extractSurfaceModel() noexcept {
-		SurfaceModelResource surf = {move(impl_->nodes), move(impl_->elements), move(impl_->charges)};
-		impl_->clear();
-		return surf;
+	SurfaceModelResource HMOReader::readSurfaceModel(const std::string& filename) {
+		HMOReaderImpl reader(filename);
+		return {move(reader.nodes), move(reader.elements), move(reader.charges)};
 	}
 
 }

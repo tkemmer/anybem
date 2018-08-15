@@ -23,8 +23,8 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	HMOReader reader(hmo_file);
-	auto sh = reader.extractSurfaceModel();
+	HMOReader reader;
+	auto sh = reader.readSurfaceModel(hmo_file);
 	auto surf = sh.get();
 
 	cout << "HMO file statistics:\n"s

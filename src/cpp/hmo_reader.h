@@ -39,8 +39,11 @@ namespace anybem {
 	 * END_CHARGE_DATA
 	 * </pre>
 	 */
-	class HMOReader final {
+	class HMOReader {
 	public:
+		HMOReader() = default;
+		~HMOReader() noexcept = default;
+
 		/**
 		 * Reads the surface model and charges from the given file.
 		 *
@@ -48,19 +51,7 @@ namespace anybem {
 		 * @throws FileAccessError if the given file is not readable
 		 * @throws FileFormatError if the given HMO file is corrupt or unsupported
 		 */
-		explicit HMOReader(const std::string& filename);
-		~HMOReader() noexcept;
-
-		HMOReader(const HMOReader&) = delete;
-		HMOReader(const HMOReader&&) = delete;
-		HMOReader& operator=(const HMOReader&) = delete;
-		HMOReader& operator=(const HMOReader&&) = delete;
-
-		SurfaceModelResource extractSurfaceModel() noexcept;
-
-	private:
-		class Impl;
-		std::unique_ptr<Impl> impl_;
+		SurfaceModelResource readSurfaceModel(const std::string& filename);
 	};
 
 }
