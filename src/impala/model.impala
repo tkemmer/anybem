@@ -102,6 +102,17 @@ fn to_charge_buffer(charges: &[Charge], len: Index) -> ChargeBuffer {
 
 
 // ====================================================================================================================
+// System parameters
+
+struct SystemParams {
+	epsOmega: Real,
+	epsSigma: Real,
+	epsInf:   Real,
+	lambda:   Real
+}
+
+
+// ====================================================================================================================
 // Surface model
 
 struct SurfaceModel {
