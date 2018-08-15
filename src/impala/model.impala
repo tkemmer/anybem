@@ -84,6 +84,22 @@ struct ChargeBuffer {
 	len: Index
 }
 
+fn new_charge_buffer(buf: Buffer, len: Index) -> ChargeBuffer {
+	ChargeBuffer {
+		buf: buf,
+		len: len
+	}
+}
+
+fn to_charge_buffer(charges: &[Charge], len: Index) -> ChargeBuffer {
+	let buf = Buffer {
+		device: 0,
+		data:   bitcast[&[i8]](charges),
+		size:   (len as i64) * (sizeof[Charge]() as i64)
+	};
+	new_charge_buffer(buf, len)
+}
+
 
 // ====================================================================================================================
 // Surface model
