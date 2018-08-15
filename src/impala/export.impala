@@ -12,3 +12,11 @@ extern
 fn anybem_charge_buffer_stats(charges: &[Charge], len: Index) -> () {
 	dump_charge_buffer(to_charge_buffer(charges, len), 5)
 }
+
+extern
+fn anybem_surface_model_stats(surf: &SurfaceModelPrototype) -> () {
+	let sb = to_surface_model(*surf);
+	dump_node_buffer(sb.nodes, 5); print_string("\n");
+	dump_surface_element_buffer(sb.elements, 5); print_string("\n");
+	dump_surface_element_buffer(sb.elements, 5);
+}
