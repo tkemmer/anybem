@@ -63,9 +63,9 @@ namespace anybem {
 			};
 		}
 
-		std::vector<Node>::size_type node_count() { return nodes_.size(); }
-		std::vector<SurfaceElement>::size_type element_count() { return elements_.size(); }
-		std::vector<Charge>::size_type charge_count() { return charges_.size(); }
+		index_t node_count() const { return nodes_.size(); }
+		index_t element_count() const { return elements_.size(); }
+		index_t charge_count() const { return charges_.size(); }
 
 	private:
 		std::vector<Node>           nodes_;
