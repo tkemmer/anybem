@@ -4,7 +4,7 @@ static zero    = 0 as Real;
 static one     = 1 as Real;
 static origin  = [zero, zero, zero] as Position;
 
-static default_opt = SystemParams{
+static default_params = SystemParams{
 	epsOmega: 2   as Real,
 	epsSigma: 78  as Real,
 	epsInf:   1.8 as Real,
