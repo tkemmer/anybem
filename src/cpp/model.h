@@ -5,6 +5,8 @@
 
 namespace anybem {
 
+	using Node = position_t;
+
 	struct Triangle {
 		index_t    v1;       // first node
 		index_t    v2;       // second node
