@@ -31,4 +31,7 @@ int main(int argc, char** argv) {
 
 	cout << "\n";
 	anybem_node_buffer_stats(reader.nodes().data(), reader.nodes().size());
+
+	cout << "\n";
+	anybem_surface_element_buffer_stats(reader.elements().data(), reader.elements().size());
 }
