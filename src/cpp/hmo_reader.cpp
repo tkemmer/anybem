@@ -94,7 +94,7 @@ namespace anybem {
 
 				auto v1 = 0, v2 = 0, v3 = 0;
 				fin >> v1 >> v2 >> v3;
-				elements.push_back({v1, v2, v3, 0, 0, 0, 0});
+				elements.push_back({v1 - 1, v2 - 1, v3 - 1, 0, 0, 0, 0});
 			}
 
 			if(!next_line_matches(fin, "END_ELEM_DATA"s)) {
