@@ -43,8 +43,32 @@ struct TriangleBuffer {
 	len: Index
 }
 
+fn new_triangle_buffer(buf: Buffer, len: Index) -> TriangleBuffer {
+	TriangleBuffer {
+		buf: buf,
+		len: len
+	}
+}
+
+fn to_triangle_buffer(elements: &[Triangle], len: Index) -> TriangleBuffer {
+	let buf = Buffer {
+		device: 0,
+		data:   bitcast[&[i8]](elements),
+		size:   (len as i64) * (sizeof[Triangle]() as i64)
+	};
+	new_triangle_buffer(buf, len)
+}
+
 type SurfaceElement = Triangle;
 type SurfaceElementBuffer = TriangleBuffer;
+
+fn new_surface_element_buffer(buf: Buffer, len: Index) -> SurfaceElementBuffer {
+	new_triangle_buffer(buf, len)
+}
+
+fn to_surface_element_buffer(elements: &[SurfaceElement], len: Index) -> SurfaceElementBuffer {
+	to_triangle_buffer(elements, len)
+}
 
 
 // ====================================================================================================================
