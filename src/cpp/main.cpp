@@ -24,17 +24,20 @@ int main(int argc, char** argv) {
 	}
 
 	HMOReader reader(hmo_file);
+	auto sh = reader.extractSurfaceModel();
+	auto surf = sh.get();
+
 	cout << "HMO file statistics:\n"s
-	     << " * Nodes:    "s << to_string(reader.nodes().size()) << "\n"s
-	     << " * Elements: "s << to_string(reader.elements().size()) << "\n"s
-	     << " * Charges:  "s << to_string(reader.charges().size()) << "\n"s;
+	     << " * Nodes:    "s << to_string(sh.node_count()) << "\n"s
+	     << " * Elements: "s << to_string(sh.element_count()) << "\n"s
+	     << " * Charges:  "s << to_string(sh.charge_count()) << "\n"s;
 
 	cout << "\n";
-	anybem_node_buffer_stats(reader.nodes().data(), reader.nodes().size());
+	anybem_node_buffer_stats(surf.nodes, sh.node_count());
 
 	cout << "\n";
-	anybem_surface_element_buffer_stats(reader.elements().data(), reader.elements().size());
+	anybem_surface_element_buffer_stats(surf.elements, sh.element_count());
 
 	cout << "\n";
-	anybem_charge_buffer_stats(reader.charges().data(), reader.charges().size());
+	anybem_charge_buffer_stats(surf.charges, sh.charge_count());
 }

@@ -60,6 +60,8 @@ namespace anybem {
 		std::vector<Triangle>& elements() noexcept;
 		std::vector<Charge>& charges() noexcept;
 
+		SurfaceModelResource extractSurfaceModel() noexcept;
+
 	private:
 		class Impl;
 		std::unique_ptr<Impl> impl_;

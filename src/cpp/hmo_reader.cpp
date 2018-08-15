@@ -27,6 +27,13 @@ namespace anybem {
 
 		~Impl() = default;
 
+		/// Clears the current surface model and charges
+		void clear() noexcept {
+			nodes.clear();
+			elements.clear();
+			charges.clear();
+		}
+
 	private:
 		void read_nodes(ifstream& fin) {
 			seek_line(fin, "BEG_NODL_DATA"s);
@@ -160,13 +167,6 @@ namespace anybem {
 			string line;
 			return getline(fin, line) && line == query;
 		}
-
-		/// Clears the current surface model and charges
-		void clear() {
-			nodes.clear();
-			elements.clear();
-			charges.clear();
-		}
 	};
 
 
@@ -182,5 +182,11 @@ namespace anybem {
 	vector<Triangle>& HMOReader::elements() noexcept { return impl_->elements; }
 
 	vector<Charge>& HMOReader::charges() noexcept { return impl_->charges; }
+
+	SurfaceModelResource HMOReader::extractSurfaceModel() noexcept {
+		SurfaceModelResource surf = {move(impl_->nodes), move(impl_->elements), move(impl_->charges)};
+		impl_->clear();
+		return surf;
+	}
 
 }
