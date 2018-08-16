@@ -68,6 +68,11 @@ struct TriangleBuffer {
 	len: Index
 }
 
+struct TriangleBufferPrototype {
+	data: &[Triangle],
+	len:  Index
+}
+
 fn new_triangle_buffer(buf: Buffer, len: Index) -> TriangleBuffer {
 	TriangleBuffer {
 		buf: buf,
@@ -75,13 +80,13 @@ fn new_triangle_buffer(buf: Buffer, len: Index) -> TriangleBuffer {
 	}
 }
 
-fn to_triangle_buffer(elements: &[Triangle], len: Index) -> TriangleBuffer {
+fn to_triangle_buffer(elements: TriangleBufferPrototype) -> TriangleBuffer {
 	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](elements),
-		size:   (len as i64) * (sizeof[Triangle]() as i64)
+		data:   bitcast[&[i8]](elements.data),
+		size:   (elements.len as i64) * (sizeof[Triangle]() as i64)
 	};
-	new_triangle_buffer(buf, len)
+	new_triangle_buffer(buf, elements.len)
 }
 
 fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
@@ -106,13 +111,14 @@ fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 
 type SurfaceElement = Triangle;
 type SurfaceElementBuffer = TriangleBuffer;
+type SurfaceElementBufferPrototype = TriangleBufferPrototype;
 
 fn new_surface_element_buffer(buf: Buffer, len: Index) -> SurfaceElementBuffer {
 	new_triangle_buffer(buf, len)
 }
 
-fn to_surface_element_buffer(elements: &[SurfaceElement], len: Index) -> SurfaceElementBuffer {
-	to_triangle_buffer(elements, len)
+fn to_surface_element_buffer(elements: TriangleBufferPrototype) -> SurfaceElementBuffer {
+	to_triangle_buffer(elements)
 }
 
 fn dump_surface_element_buffer(elements: SurfaceElementBuffer, head_max: i32) -> () {
@@ -203,8 +209,7 @@ struct SurfaceModel {
 
 struct SurfaceModelPrototype {
 	nodes:         NodeBufferPrototype,
-	elements:      &[SurfaceElement],
-	element_count: Index,
+	elements:      SurfaceElementBufferPrototype,
 	charges:       &[Charge],
 	charge_count:  Index,
 	params:        SystemParams
@@ -227,7 +232,7 @@ fn new_surface_model(
 fn to_surface_model(surf: SurfaceModelPrototype) -> SurfaceModel {
 	new_surface_model(
 		to_node_buffer(surf.nodes),
-		to_surface_element_buffer(surf.elements, surf.element_count),
+		to_surface_element_buffer(surf.elements),
 		to_charge_buffer(surf.charges, surf.charge_count),
 		surf.params
 	)

@@ -4,8 +4,8 @@ fn anybem_node_buffer_stats(nodes: &NodeBufferPrototype) -> () {
 }
 
 extern
-fn anybem_surface_element_buffer_stats(elements: &[SurfaceElement], len: Index) -> () {
-	dump_surface_element_buffer(to_surface_element_buffer(elements, len), 5)
+fn anybem_surface_element_buffer_stats(elements: &SurfaceElementBufferPrototype) -> () {
+	dump_surface_element_buffer(to_surface_element_buffer(*elements), 5)
 }
 
 extern

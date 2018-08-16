@@ -36,6 +36,7 @@ namespace anybem {
 
 	// ================================================================================================================
 	// Elements
+
 	struct Triangle {
 		index_t    v1;       // first node
 		index_t    v2;       // second node
@@ -46,7 +47,29 @@ namespace anybem {
 		real_t     dist;     // distance to origin
 	};
 
+	class TriangleBuffer final {
+	public:
+		struct Prototype {
+			Triangle* data;
+			index_t   len;
+		};
+
+		explicit TriangleBuffer(std::vector<Triangle>&& elements) :
+			elements_{elements} {
+		}
+
+		~TriangleBuffer() noexcept = default;
+
+		Prototype prototype() { return {elements_.data(), size()}; }
+
+		index_t size() const noexcept { return elements_.size(); }
+
+	private:
+		std::vector<Triangle> elements_;
+	};
+
 	using SurfaceElement = Triangle;
+	using SurfaceElementBuffer = TriangleBuffer;
 
 
 	// ================================================================================================================
@@ -78,15 +101,14 @@ namespace anybem {
 	public:
 
 		struct Prototype {
-			NodeBuffer::Prototype nodes;
-			SurfaceElement* elements;
-			index_t         element_count;
-			Charge*         charges;
-			index_t         charge_count;
-			SystemParams    params;
+			NodeBuffer::Prototype           nodes;
+			SurfaceElementBuffer::Prototype elements;
+			Charge*                         charges;
+			index_t                         charge_count;
+			SystemParams                    params;
 		};
 
-		SurfaceModel(NodeBuffer&& nodes, std::vector<SurfaceElement>&& elements) :
+		SurfaceModel(NodeBuffer&& nodes, SurfaceElementBuffer && elements) :
 			nodes_{nodes},
 			elements_{elements},
 			charges_{},
@@ -95,7 +117,7 @@ namespace anybem {
 
 		SurfaceModel(
 			NodeBuffer&& nodes,
-			std::vector<SurfaceElement>&& elements,
+			SurfaceElementBuffer && elements,
 			std::vector<Charge>&& charges
 		) :
 			nodes_{nodes},
@@ -109,8 +131,7 @@ namespace anybem {
 		Prototype prototype() {
 			return {
 				nodes_.prototype(),
-				elements_.data(),
-				element_count(),
+				elements_.prototype(),
 				charges_.data(),
 				charge_count(),
 				params_
@@ -125,10 +146,10 @@ namespace anybem {
 		index_t charge_count() const noexcept { return charges_.size(); }
 
 	private:
-		NodeBuffer                  nodes_;
-		std::vector<SurfaceElement> elements_;
-		std::vector<Charge>         charges_;
-		SystemParams                params_;
+		NodeBuffer           nodes_;
+		SurfaceElementBuffer elements_;
+		std::vector<Charge>  charges_;
+		SystemParams         params_;
 	};
 }
 
