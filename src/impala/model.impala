@@ -213,10 +213,10 @@ struct SurfaceModel {
 }
 
 struct SurfaceModelPrototype {
-	nodes:         NodeBufferPrototype,
-	elements:      SurfaceElementBufferPrototype,
-	charges:       ChargeBufferPrototype,
-	params:        SystemParams
+	nodes:    NodeBufferPrototype,
+	elements: SurfaceElementBufferPrototype,
+	charges:  ChargeBufferPrototype,
+	params:   SystemParams
 }
 
 fn new_surface_model(
