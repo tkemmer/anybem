@@ -7,8 +7,14 @@
 
 namespace anybem {
 
+	// ================================================================================================================
+	// Nodes
+
 	using Node = position_t;
 
+
+	// ================================================================================================================
+	// Elements
 	struct Triangle {
 		index_t    v1;       // first node
 		index_t    v2;       // second node
@@ -21,10 +27,18 @@ namespace anybem {
 
 	using SurfaceElement = Triangle;
 
+
+	// ================================================================================================================
+	// Charges
+
 	struct Charge {
 		position_t pos;
 		real_t     val;
 	};
+
+
+	// ================================================================================================================
+	// System parameters
 
 	struct SystemParams {
 		real_t epsOmega;
@@ -32,6 +46,12 @@ namespace anybem {
 		real_t epsInf;
 		real_t lambda;
 	};
+
+	constexpr SystemParams default_params = {2, 78, 1.8, 20};
+
+
+	// ================================================================================================================
+	// Surface model
 
 	class SurfaceModel final {
 	public:
@@ -49,7 +69,8 @@ namespace anybem {
 		SurfaceModel(std::vector<Node>&& nodes, std::vector<SurfaceElement>&& elements) :
 			nodes_{nodes},
 			elements_{elements},
-			charges_{} {
+			charges_{},
+			params_{default_params} {
 		}
 
 		SurfaceModel(
@@ -59,7 +80,8 @@ namespace anybem {
 		) :
 			nodes_{nodes},
 			elements_{elements},
-			charges_{charges} {
+			charges_{charges},
+			params_{default_params} {
 		}
 
 		~SurfaceModel() = default;
@@ -72,11 +94,12 @@ namespace anybem {
 				element_count(),
 				charges_.data(),
 				charge_count(),
-				{0, 0, 0, 0} // TODO
+				params_
 			};
 		}
 
 		void charges(std::vector<Charge>&& charges) noexcept { charges_ = std::move(charges); }
+		void params(SystemParams params) noexcept { params_ = params; }
 
 		index_t node_count() const { return nodes_.size(); }
 		index_t element_count() const { return elements_.size(); }
@@ -86,6 +109,7 @@ namespace anybem {
 		std::vector<Node>           nodes_;
 		std::vector<SurfaceElement> elements_;
 		std::vector<Charge>         charges_;
+		SystemParams                params_;
 	};
 }
 
