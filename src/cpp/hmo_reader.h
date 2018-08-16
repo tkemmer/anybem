@@ -42,7 +42,7 @@ namespace anybem {
 
 		bool supportsCharges() const noexcept override { return false; }
 
-		SurfaceModelResource readSurfaceModel(const std::string& filename) override;
+		SurfaceModel readSurfaceModel(const std::string& filename) override;
 	};
 
 }

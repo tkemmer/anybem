@@ -33,19 +33,20 @@ namespace anybem {
 		real_t lambda;
 	};
 
-	struct SurfaceModel {
-		Node*           nodes;
-		index_t         node_count;
-		SurfaceElement* elements;
-		index_t         element_count;
-		Charge*         charges;
-		index_t         charge_count;
-		SystemParams    params;
-	};
-
-	class SurfaceModelResource final {
+	class SurfaceModel final {
 	public:
-		SurfaceModelResource(
+
+		struct Prototype {
+			Node*           nodes;
+			index_t         node_count;
+			SurfaceElement* elements;
+			index_t         element_count;
+			Charge*         charges;
+			index_t         charge_count;
+			SystemParams    params;
+		};
+
+		SurfaceModel(
 			std::vector<Node>&& nodes,
 			std::vector<SurfaceElement>&& elements,
 			std::vector<Charge>&& charges
@@ -55,10 +56,10 @@ namespace anybem {
 			charges_{charges} {
 		}
 
-		~SurfaceModelResource() = default;
+		~SurfaceModel() = default;
 
-		SurfaceModel get() {
-			return SurfaceModel{
+		Prototype prototype() {
+			return {
 				nodes_.data(),
 				node_count(),
 				elements_.data(),

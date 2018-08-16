@@ -26,7 +26,7 @@ namespace anybem {
 		 * @throws FileAccessError if the given file is not readable
 		 * @throws FileFormatError if the given HMO file is corrupt or unsupported
 		 */
-		virtual SurfaceModelResource readSurfaceModel(const std::string& filename) = 0;
+		virtual SurfaceModel readSurfaceModel(const std::string& filename) = 0;
 	};
 
 }

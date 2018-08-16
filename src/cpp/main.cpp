@@ -32,6 +32,6 @@ int main(int argc, char** argv) {
 	     << " * Charges:  "s << to_string(sh.charge_count()) << "\n"s
 	     << "\n"s;
 
-	auto surf = sh.get();
+	auto surf = sh.prototype();
 	anybem_surface_model_stats(&surf);
 }
