@@ -147,7 +147,7 @@ namespace anybem {
 	// ================================================================================================================
 	SurfaceModel HMOReader::readSurfaceModel(const std::string& filename) {
 		HMOReaderImpl reader(filename);
-		return {move(reader.nodes), move(reader.elements), move(reader.charges)};
+		return {NodeBuffer{move(reader.nodes)}, move(reader.elements), move(reader.charges)};
 	}
 
 }

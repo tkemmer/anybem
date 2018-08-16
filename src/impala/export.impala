@@ -1,6 +1,6 @@
 extern
-fn anybem_node_buffer_stats(nodes: &[Node], len: Index) -> () {
-	dump_node_buffer(to_node_buffer(nodes, len), 5)
+fn anybem_node_buffer_stats(nodes: &NodeBufferPrototype) -> () {
+	dump_node_buffer(to_node_buffer(*nodes), 5)
 }
 
 extern

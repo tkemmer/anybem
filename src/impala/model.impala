@@ -8,6 +8,11 @@ struct NodeBuffer {
 	len: Index
 }
 
+struct NodeBufferPrototype {
+	data: &[Node],
+	len:  Index
+}
+
 fn new_node_buffer(buf: Buffer, len: Index) -> NodeBuffer {
 	NodeBuffer {
 		buf: buf,
@@ -15,13 +20,13 @@ fn new_node_buffer(buf: Buffer, len: Index) -> NodeBuffer {
 	}
 }
 
-fn to_node_buffer(nodes: &[Node], len: Index) -> NodeBuffer {
+fn to_node_buffer(nodes: NodeBufferPrototype) -> NodeBuffer {
 	let buf = Buffer{
 		device: 0,
-		data:   bitcast[&[i8]](nodes),
-		size:   (len as i64) * (sizeof[Node]() as i64)
+		data:   bitcast[&[i8]](nodes.data),
+		size:   (nodes.len as i64) * (sizeof[Node]() as i64)
 	};
-	new_node_buffer(buf, len)
+	new_node_buffer(buf, nodes.len)
 }
 
 fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
@@ -197,8 +202,7 @@ struct SurfaceModel {
 }
 
 struct SurfaceModelPrototype {
-	nodes:         &[Node],
-	node_count:    Index,
+	nodes:         NodeBufferPrototype,
 	elements:      &[SurfaceElement],
 	element_count: Index,
 	charges:       &[Charge],
@@ -222,7 +226,7 @@ fn new_surface_model(
 
 fn to_surface_model(surf: SurfaceModelPrototype) -> SurfaceModel {
 	new_surface_model(
-		to_node_buffer(surf.nodes, surf.node_count),
+		to_node_buffer(surf.nodes),
 		to_surface_element_buffer(surf.elements, surf.element_count),
 		to_charge_buffer(surf.charges, surf.charge_count),
 		surf.params

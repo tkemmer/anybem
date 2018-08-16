@@ -12,6 +12,27 @@ namespace anybem {
 
 	using Node = position_t;
 
+	class NodeBuffer final {
+	public:
+		struct Prototype {
+			Node*   data;
+			index_t len;
+		};
+
+		explicit NodeBuffer(std::vector<Node>&& nodes) :
+			nodes_{nodes} {
+		}
+
+		~NodeBuffer() noexcept = default;
+
+		Prototype prototype() { return {nodes_.data(), size()}; }
+
+		index_t size() const noexcept { return nodes_.size(); }
+
+	private:
+		std::vector<Node> nodes_;
+	};
+
 
 	// ================================================================================================================
 	// Elements
@@ -57,8 +78,7 @@ namespace anybem {
 	public:
 
 		struct Prototype {
-			Node*           nodes;
-			index_t         node_count;
+			NodeBuffer::Prototype nodes;
 			SurfaceElement* elements;
 			index_t         element_count;
 			Charge*         charges;
@@ -66,7 +86,7 @@ namespace anybem {
 			SystemParams    params;
 		};
 
-		SurfaceModel(std::vector<Node>&& nodes, std::vector<SurfaceElement>&& elements) :
+		SurfaceModel(NodeBuffer&& nodes, std::vector<SurfaceElement>&& elements) :
 			nodes_{nodes},
 			elements_{elements},
 			charges_{},
@@ -74,7 +94,7 @@ namespace anybem {
 		}
 
 		SurfaceModel(
-			std::vector<Node>&& nodes,
+			NodeBuffer&& nodes,
 			std::vector<SurfaceElement>&& elements,
 			std::vector<Charge>&& charges
 		) :
@@ -88,8 +108,7 @@ namespace anybem {
 
 		Prototype prototype() {
 			return {
-				nodes_.data(),
-				node_count(),
+				nodes_.prototype(),
 				elements_.data(),
 				element_count(),
 				charges_.data(),
@@ -101,12 +120,12 @@ namespace anybem {
 		void charges(std::vector<Charge>&& charges) noexcept { charges_ = std::move(charges); }
 		void params(SystemParams params) noexcept { params_ = params; }
 
-		index_t node_count() const { return nodes_.size(); }
-		index_t element_count() const { return elements_.size(); }
-		index_t charge_count() const { return charges_.size(); }
+		index_t node_count() const noexcept { return nodes_.size(); }
+		index_t element_count() const noexcept { return elements_.size(); }
+		index_t charge_count() const noexcept { return charges_.size(); }
 
 	private:
-		std::vector<Node>           nodes_;
+		NodeBuffer                  nodes_;
 		std::vector<SurfaceElement> elements_;
 		std::vector<Charge>         charges_;
 		SystemParams                params_;
