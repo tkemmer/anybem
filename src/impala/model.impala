@@ -139,6 +139,11 @@ struct ChargeBuffer {
 	len: Index
 }
 
+struct ChargeBufferPrototype {
+	data: &[Charge],
+	len:  Index
+}
+
 fn new_charge_buffer(buf: Buffer, len: Index) -> ChargeBuffer {
 	ChargeBuffer {
 		buf: buf,
@@ -146,13 +151,13 @@ fn new_charge_buffer(buf: Buffer, len: Index) -> ChargeBuffer {
 	}
 }
 
-fn to_charge_buffer(charges: &[Charge], len: Index) -> ChargeBuffer {
+fn to_charge_buffer(charges: ChargeBufferPrototype) -> ChargeBuffer {
 	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](charges),
-		size:   (len as i64) * (sizeof[Charge]() as i64)
+		data:   bitcast[&[i8]](charges.data),
+		size:   (charges.len as i64) * (sizeof[Charge]() as i64)
 	};
-	new_charge_buffer(buf, len)
+	new_charge_buffer(buf, charges.len)
 }
 
 fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
@@ -210,8 +215,7 @@ struct SurfaceModel {
 struct SurfaceModelPrototype {
 	nodes:         NodeBufferPrototype,
 	elements:      SurfaceElementBufferPrototype,
-	charges:       &[Charge],
-	charge_count:  Index,
+	charges:       ChargeBufferPrototype,
 	params:        SystemParams
 }
 
@@ -233,7 +237,7 @@ fn to_surface_model(surf: SurfaceModelPrototype) -> SurfaceModel {
 	new_surface_model(
 		to_node_buffer(surf.nodes),
 		to_surface_element_buffer(surf.elements),
-		to_charge_buffer(surf.charges, surf.charge_count),
+		to_charge_buffer(surf.charges),
 		surf.params
 	)
 }

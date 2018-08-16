@@ -150,7 +150,7 @@ namespace anybem {
 		return {
 			NodeBuffer{move(reader.nodes)},
 			SurfaceElementBuffer{move(reader.elements)},
-			move(reader.charges)
+			ChargeBuffer{move(reader.charges)}
 		};
 	}
 

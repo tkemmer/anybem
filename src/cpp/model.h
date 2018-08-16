@@ -23,6 +23,9 @@ namespace anybem {
 			nodes_{nodes} {
 		}
 
+		NodeBuffer(NodeBuffer&&) = default;
+		NodeBuffer& operator=(NodeBuffer&&) = default;
+
 		~NodeBuffer() noexcept = default;
 
 		Prototype prototype() { return {nodes_.data(), size()}; }
@@ -58,6 +61,9 @@ namespace anybem {
 			elements_{elements} {
 		}
 
+		TriangleBuffer(TriangleBuffer&&) = default;
+		TriangleBuffer& operator=(TriangleBuffer&&) = default;
+
 		~TriangleBuffer() noexcept = default;
 
 		Prototype prototype() { return {elements_.data(), size()}; }
@@ -78,6 +84,34 @@ namespace anybem {
 	struct Charge {
 		position_t pos;
 		real_t     val;
+	};
+
+	class ChargeBuffer final {
+	public:
+		struct Prototype {
+			Charge* data;
+			index_t len;
+		};
+
+		ChargeBuffer() :
+			charges_{} {
+		}
+
+		explicit ChargeBuffer(std::vector<Charge>&& charges) :
+			charges_{charges} {
+		}
+
+		ChargeBuffer(ChargeBuffer&&) = default;
+		ChargeBuffer& operator=(ChargeBuffer&&) = default;
+
+		~ChargeBuffer() noexcept = default;
+
+		Prototype prototype() { return {charges_.data(), size()}; }
+
+		index_t size() const noexcept { return charges_.size(); }
+
+	private:
+		std::vector<Charge> charges_;
 	};
 
 
@@ -103,28 +137,30 @@ namespace anybem {
 		struct Prototype {
 			NodeBuffer::Prototype           nodes;
 			SurfaceElementBuffer::Prototype elements;
-			Charge*                         charges;
-			index_t                         charge_count;
+			ChargeBuffer::Prototype         charges;
 			SystemParams                    params;
 		};
 
-		SurfaceModel(NodeBuffer&& nodes, SurfaceElementBuffer && elements) :
-			nodes_{nodes},
-			elements_{elements},
+		SurfaceModel(NodeBuffer&& nodes, SurfaceElementBuffer&& elements) :
+			nodes_{std::move(nodes)},
+			elements_{std::move(elements)},
 			charges_{},
 			params_{default_params} {
 		}
 
 		SurfaceModel(
 			NodeBuffer&& nodes,
-			SurfaceElementBuffer && elements,
-			std::vector<Charge>&& charges
+			SurfaceElementBuffer&& elements,
+			ChargeBuffer&& charges
 		) :
-			nodes_{nodes},
-			elements_{elements},
-			charges_{charges},
+			nodes_{std::move(nodes)},
+			elements_{std::move(elements)},
+			charges_{std::move(charges)},
 			params_{default_params} {
 		}
+
+		SurfaceModel(SurfaceModel&&) = default;
+		SurfaceModel& operator=(SurfaceModel&&) = default;
 
 		~SurfaceModel() = default;
 
@@ -132,13 +168,12 @@ namespace anybem {
 			return {
 				nodes_.prototype(),
 				elements_.prototype(),
-				charges_.data(),
-				charge_count(),
+				charges_.prototype(),
 				params_
 			};
 		}
 
-		void charges(std::vector<Charge>&& charges) noexcept { charges_ = std::move(charges); }
+		void charges(ChargeBuffer&& charges) noexcept { charges_ = std::move(charges); }
 		void params(SystemParams params) noexcept { params_ = params; }
 
 		index_t node_count() const noexcept { return nodes_.size(); }
@@ -148,7 +183,7 @@ namespace anybem {
 	private:
 		NodeBuffer           nodes_;
 		SurfaceElementBuffer elements_;
-		std::vector<Charge>  charges_;
+		ChargeBuffer         charges_;
 		SystemParams         params_;
 	};
 }
