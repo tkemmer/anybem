@@ -177,6 +177,14 @@ struct SystemParams {
 	lambda:   Real
 }
 
+fn dump_system_params(params: SystemParams) -> () {
+	print_string("System parameters:\n");
+	print_string(" * epsOmega: "); print_f64(params.epsOmega as f64); print_string("\n");
+	print_string(" * epsSigma: "); print_f64(params.epsSigma as f64); print_string("\n");
+	print_string(" * epsInf:   "); print_f64(params.epsInf as f64); print_string("\n");
+	print_string(" * lambda:   "); print_f64(params.lambda as f64); print_string("\n");
+}
+
 
 // ====================================================================================================================
 // Surface model
