@@ -46,6 +46,12 @@ namespace anybem {
 			SystemParams    params;
 		};
 
+		SurfaceModel(std::vector<Node>&& nodes, std::vector<SurfaceElement>&& elements) :
+			nodes_{nodes},
+			elements_{elements},
+			charges_{} {
+		}
+
 		SurfaceModel(
 			std::vector<Node>&& nodes,
 			std::vector<SurfaceElement>&& elements,
@@ -69,6 +75,8 @@ namespace anybem {
 				{0, 0, 0, 0} // TODO
 			};
 		}
+
+		void charges(std::vector<Charge>&& charges) noexcept { charges_ = std::move(charges); }
 
 		index_t node_count() const { return nodes_.size(); }
 		index_t element_count() const { return elements_.size(); }
