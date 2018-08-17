@@ -10,11 +10,7 @@ namespace anybem {
 	// ================================================================================================================
 	// Nodes
 
-	struct Node {
-		real_t x;
-		real_t y;
-		real_t z;
-	};
+	using Node = Position;
 
 	class NodeBuffer final {
 	public:
