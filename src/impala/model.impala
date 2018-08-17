@@ -1,50 +1,79 @@
 // ====================================================================================================================
 // Nodes
 
-type Node = Position;
+struct Node {
+	pos: fn() -> Position,
+	x:   fn() -> Real,
+	y:   fn() -> Real,
+	z:   fn() -> Real
+}
+
+type NodePrimitive = Position;
 
 struct NodeBuffer {
+	device: fn()      -> i32,
+	get:    fn(Index) -> Node,
+	memory: fn()      -> i64,
+	size:   fn()      -> Index
+}
+
+struct NodeBufferPrimitive {
 	buf: Buffer,
 	len: Index
 }
 
 struct NodeBufferPrototype {
-	data: &[Node],
+	data: &[NodePrimitive],
 	len:  Index
 }
 
-fn new_node_buffer(buf: Buffer, len: Index) -> NodeBuffer {
-	NodeBuffer {
-		buf: buf,
-		len: len
+fn new_node(node: NodePrimitive) -> Node {
+	Node {
+		pos: || node,
+		x:   || node(0),
+		y:   || node(1),
+		z:   || node(2)
 	}
 }
 
-fn to_node_buffer(nodes: NodeBufferPrototype) -> NodeBuffer {
-	let buf = Buffer{
+fn new_node_buffer(nodes: NodeBufferPrimitive) -> NodeBuffer {
+	NodeBuffer {
+		device: ||    nodes.buf.device,
+		get:    |idx| new_node(bitcast[&[NodePrimitive]](nodes.buf.data)(idx)),
+		memory: ||    nodes.buf.size,
+		size:   ||    nodes.len
+	}
+}
+
+fn to_node_buffer(proto: NodeBufferPrototype) -> NodeBuffer {
+	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](nodes.data),
-		size:   (nodes.len as i64) * (sizeof[Node]() as i64)
+		data:   bitcast[&[i8]](proto.data),
+		size:   (proto.len as i64) * (sizeof[NodePrimitive]() as i64)
 	};
-	new_node_buffer(buf, nodes.len)
+	let nodes = NodeBufferPrimitive {
+		buf: buf,
+		len: proto.len
+	};
+	new_node_buffer(nodes)
 }
 
 fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 	print_string("Node buffer stats:\n");
-	print_string(" * Device: "); print_i32(nodes.buf.device); print_string("\n");
-	print_string(" * Length: "); print_i64(nodes.len as i64); print_string(" nodes\n");
-	print_string(" * Memory: "); print_i64(nodes.buf.size); print_string(" bytes\n");
+	print_string(" * Device: "); print_i32(nodes.device()); print_string("\n");
+	print_string(" * Length: "); print_i64(nodes.size() as i64); print_string(" nodes\n");
+	print_string(" * Memory: "); print_i64(nodes.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	let data = bitcast[&[Node]](nodes.buf.data);
-	for i in range(0, math.min(nodes.len as i32, head_max)) {
+	for i in range(0, math.min(nodes.size() as i32, head_max)) {
+		let node = nodes.get(i as Index);
 		print_string("    - Node ");
 		print_i32(i);
 		print_string(": {");
-		print_f64((*data)(i)(0) as f64);
+		print_f64(node.x() as f64);
 		print_string(", ");
-		print_f64((*data)(i)(1) as f64);
+		print_f64(node.y() as f64);
 		print_string(", ");
-		print_f64((*data)(i)(2) as f64);
+		print_f64(node.z() as f64);
 		print_string("}\n");
 	}
 }
