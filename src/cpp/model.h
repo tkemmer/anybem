@@ -10,16 +10,16 @@ namespace anybem {
 	// ================================================================================================================
 	// Nodes
 
-	using Node = Position;
+	using NodePrimitive = Position;
 
 	class NodeBuffer final {
 	public:
 		struct Prototype {
-			Node*   data;
-			index_t len;
+			NodePrimitive* data;
+			index_t        len;
 		};
 
-		explicit NodeBuffer(std::vector<Node>&& nodes) :
+		explicit NodeBuffer(std::vector<NodePrimitive>&& nodes) :
 			nodes_{nodes} {
 		}
 
@@ -33,27 +33,27 @@ namespace anybem {
 		index_t size() const noexcept { return nodes_.size(); }
 
 	private:
-		std::vector<Node> nodes_;
+		std::vector<NodePrimitive> nodes_;
 	};
 
 
 	// ================================================================================================================
 	// Elements
 
-	struct Triangle {
-		index_t    v1;   // index of first node in node buffer
-		index_t    v2;   // index of second node in node buffer
-		index_t    v3;   // index of third node in node buffer
+	struct TrianglePrimitive {
+		index_t v1;   // index of first node in node buffer
+		index_t v2;   // index of second node in node buffer
+		index_t v3;   // index of third node in node buffer
 	};
 
 	class TriangleBuffer final {
 	public:
 		struct Prototype {
-			Triangle* data;
-			index_t   len;
+			TrianglePrimitive* data;
+			index_t            len;
 		};
 
-		explicit TriangleBuffer(std::vector<Triangle>&& elements) :
+		explicit TriangleBuffer(std::vector<TrianglePrimitive>&& elements) :
 			elements_{elements} {
 		}
 
@@ -67,17 +67,17 @@ namespace anybem {
 		index_t size() const noexcept { return elements_.size(); }
 
 	private:
-		std::vector<Triangle> elements_;
+		std::vector<TrianglePrimitive> elements_;
 	};
 
-	using SurfaceElement = Triangle;
+	using SurfaceElementPrimitive = TrianglePrimitive;
 	using SurfaceElementBuffer = TriangleBuffer;
 
 
 	// ================================================================================================================
 	// Charges
 
-	struct Charge {
+	struct ChargePrimitive {
 		Position pos;
 		real_t   val;
 	};
@@ -85,15 +85,15 @@ namespace anybem {
 	class ChargeBuffer final {
 	public:
 		struct Prototype {
-			Charge* data;
-			index_t len;
+			ChargePrimitive* data;
+			index_t          len;
 		};
 
 		ChargeBuffer() :
 			charges_{} {
 		}
 
-		explicit ChargeBuffer(std::vector<Charge>&& charges) :
+		explicit ChargeBuffer(std::vector<ChargePrimitive>&& charges) :
 			charges_{charges} {
 		}
 
@@ -107,7 +107,7 @@ namespace anybem {
 		index_t size() const noexcept { return charges_.size(); }
 
 	private:
-		std::vector<Charge> charges_;
+		std::vector<ChargePrimitive> charges_;
 	};
 
 

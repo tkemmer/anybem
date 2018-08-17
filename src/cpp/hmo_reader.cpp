@@ -10,9 +10,9 @@ namespace anybem {
 	// ================================================================================================================
 	class HMOReaderImpl {
 	public:
-		std::vector<Node>     nodes    {0};
-		std::vector<Triangle> elements {0};
-		std::vector<Charge>   charges  {0};
+		std::vector<NodePrimitive>     nodes    {0};
+		std::vector<TrianglePrimitive> elements {0};
+		std::vector<ChargePrimitive>   charges  {0};
 
 		HMOReaderImpl(const string& filename) {
 			ifstream fin(filename);
