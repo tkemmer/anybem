@@ -1,19 +1,4 @@
 extern
-fn anybem_node_buffer_stats(nodes: &NodeBufferPrototype) -> () {
-	dump_node_buffer(to_node_buffer(*nodes), 5)
-}
-
-extern
-fn anybem_surface_element_buffer_stats(elements: &SurfaceElementBufferPrototype) -> () {
-	dump_surface_element_buffer(to_surface_element_buffer(*elements), 5)
-}
-
-extern
-fn anybem_charge_buffer_stats(charges: &ChargeBufferPrototype) -> () {
-	dump_charge_buffer(to_charge_buffer(*charges), 5)
-}
-
-extern
 fn anybem_surface_model_stats(surf: &SurfaceModelPrototype) -> () {
 	let sb = to_surface_model(*surf);
 	dump_node_buffer(sb.nodes, 5); print_string("\n");
