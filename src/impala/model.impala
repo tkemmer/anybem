@@ -327,6 +327,13 @@ fn dump_system_params(params: SystemParams) -> () {
 // Surface model
 
 struct SurfaceModel {
+	nodes:    fn() -> NodeBuffer,
+	elements: fn() -> SurfaceElementBuffer,
+	charges:  fn() -> ChargeBuffer,
+	params:   fn() -> SystemParams
+}
+
+struct SurfaceModelPrimitive {
 	nodes:    NodeBuffer,
 	elements: SurfaceElementBuffer,
 	charges:  ChargeBuffer,
@@ -340,26 +347,22 @@ struct SurfaceModelPrototype {
 	params:   SystemParams
 }
 
-fn new_surface_model(
-		nodes: NodeBuffer,
-		elements: SurfaceElementBuffer,
-		charges: ChargeBuffer,
-		params: SystemParams
-	) -> SurfaceModel {
+fn new_surface_model(surf: SurfaceModelPrimitive) -> SurfaceModel {
 	SurfaceModel {
-		nodes:    nodes,
-		elements: elements,
-		charges:  charges,
-		params:   params
+		nodes:    || surf.nodes,
+		elements: || surf.elements,
+		charges:  || surf.charges,
+		params:   || surf.params
 	}
 }
 
-fn to_surface_model(surf: SurfaceModelPrototype) -> SurfaceModel {
-	let nodes = to_node_buffer(surf.nodes);
-	new_surface_model(
-		nodes,
-		to_surface_element_buffer(surf.elements, nodes),
-		to_charge_buffer(surf.charges),
-		surf.params
-	)
+fn to_surface_model(proto: SurfaceModelPrototype) -> SurfaceModel {
+	let nodes = to_node_buffer(proto.nodes);
+	let surf = SurfaceModelPrimitive {
+		nodes:    nodes,
+		elements: to_surface_element_buffer(proto.elements, nodes),
+		charges:  to_charge_buffer(proto.charges),
+		params:   proto.params
+	};
+	new_surface_model(surf)
 }

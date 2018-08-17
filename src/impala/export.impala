@@ -1,8 +1,8 @@
 extern
-fn anybem_surface_model_stats(surf: &SurfaceModelPrototype) -> () {
-	let sb = to_surface_model(*surf);
-	dump_node_buffer(sb.nodes, 5); print_string("\n");
-	dump_surface_element_buffer(sb.elements, 3); print_string("\n");
-	dump_charge_buffer(sb.charges, 5); print_string("\n");
-	dump_system_params(sb.params);
+fn anybem_surface_model_stats(proto: &SurfaceModelPrototype) -> () {
+	let surf = to_surface_model(*proto);
+	dump_node_buffer(surf.nodes(), 5); print_string("\n");
+	dump_surface_element_buffer(surf.elements(), 3); print_string("\n");
+	dump_charge_buffer(surf.charges(), 5); print_string("\n");
+	dump_system_params(surf.params());
 }
