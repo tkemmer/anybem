@@ -54,13 +54,9 @@ fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 // Elements
 
 struct Triangle {
-	v1:     Index,      // first node
-	v2:     Index,      // second node
-	v3:     Index,      // third node
-	center: Position,   // centroid
-	normal: Position,   // unit normal vector
-	area:   Real,       // surface area
-	dist:   Real        // distance to origin
+	v1:     Index,
+	v2:     Index,
+	v3:     Index
 }
 
 struct TriangleBuffer {

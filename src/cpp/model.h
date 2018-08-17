@@ -41,13 +41,9 @@ namespace anybem {
 	// Elements
 
 	struct Triangle {
-		index_t    v1;       // first node
-		index_t    v2;       // second node
-		index_t    v3;       // third node
-		position_t center;   // centroid
-		position_t normal;   // unit normal vector
-		real_t     area;     // surface area
-		real_t     dist;     // distance to origin
+		index_t    v1;   // index of first node in node buffer
+		index_t    v2;   // index of second node in node buffer
+		index_t    v3;   // index of third node in node buffer
 	};
 
 	class TriangleBuffer final {
