@@ -14,10 +14,10 @@ fn @dot(u: Position, v: Position) -> Real {
 	sum
 }
 
-fn @euclidean(u: &Position, v: &Position) -> Real {
+fn @euclidean(u: Position, v: Position) -> Real {
 	let mut sum = zero;
-	for i in range(0,3) {
-		let d = (*u)(i) - (*v)(i);
+	for i in range(0, 3) {
+		let d = u(i) - v(i);
 		sum += d * d;
 	}
 	math.sqrt(sum)
