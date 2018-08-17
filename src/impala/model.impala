@@ -168,19 +168,34 @@ fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 		let elem = elements.get(i as Index);
 		print_string("    - Element ");
 		print_i32(i);
-		print_string(": { {");
+		print_string(":\n");
+		print_string("       - v1:     {");
 		print_f64(elem.v1().x() as f64); print_string(", ");
 		print_f64(elem.v1().y() as f64); print_string(", ");
 		print_f64(elem.v1().z() as f64);
-		print_string("}, {");
+		print_string("}\n");
+		print_string("       - v2:     {");
 		print_f64(elem.v2().x() as f64); print_string(", ");
 		print_f64(elem.v2().y() as f64); print_string(", ");
 		print_f64(elem.v2().z() as f64);
-		print_string("}, {");
+		print_string("}\n");
+		print_string("       - v3:     {");
 		print_f64(elem.v3().x() as f64); print_string(", ");
 		print_f64(elem.v3().y() as f64); print_string(", ");
 		print_f64(elem.v3().z() as f64);
-		print_string("} }\n");
+		print_string("}\n");
+		print_string("       - center: {");
+		print_f64(elem.center().x as f64); print_string(", ");
+		print_f64(elem.center().y as f64); print_string(", ");
+		print_f64(elem.center().z as f64);
+		print_string("}\n");
+		print_string("       - normal: {");
+		print_f64(elem.normal().x as f64); print_string(", ");
+		print_f64(elem.normal().y as f64); print_string(", ");
+		print_f64(elem.normal().z as f64);
+		print_string("}\n");
+		print_string("       - area:   "); print_f64(elem.area() as f64); print_string("\n");
+		print_string("       - dist:   "); print_f64(elem.dist() as f64); print_string("\n");
 	}
 }
 
