@@ -116,14 +116,23 @@ struct TriangleBufferPrototype {
 }
 
 fn new_triangle(elem: TrianglePrimitive, nodes: NodeBuffer) -> Triangle {
+	let v1 = nodes.get(elem.v1);
+	let v2 = nodes.get(elem.v2);
+	let v3 = nodes.get(elem.v3);
+	let unscaled_normal = cross(
+		sub(v2.pos(), v1.pos()),
+		sub(v3.pos(), v1.pos())
+	);
+	let vnorm = vecnorm(unscaled_normal);
+	let unit_normal = sdiv(unscaled_normal, vnorm);
 	Triangle {
-		v1:     || nodes.get(elem.v1),
-		v2:     || nodes.get(elem.v2),
-		v3:     || nodes.get(elem.v3),
-		center: || origin, // FIXME
-		normal: || origin, // FIXME
-		area:   || zero,   // FIXME
-		dist:   || zero    // FIXME
+		v1:     || v1,
+		v2:     || v2,
+		v3:     || v3,
+		center: || sdiv(add(v1.pos(), add(v2.pos(), v3.pos())), 3 as Real),
+		normal: || unit_normal,
+		area:   || vnorm / 2 as Real,
+		dist:   || dot(unit_normal, v1.pos())
 	}
 }
 
