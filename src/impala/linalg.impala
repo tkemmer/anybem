@@ -1,26 +1,20 @@
 fn @cross(u: Position, v: Position) -> Position {
-	[
-		u(1) * v(2) - u(2) * v(1),
-		u(0) * v(2) - u(2) * v(0),
-		u(0) * v(1) - u(1) * v(0)
-	]
+	Position {
+		x: u.y * v.z - u.z * v.y,
+		y: u.x * v.z - u.z * v.x,
+		z: u.x * v.y - u.y * v.x
+	}
 }
 
 fn @dot(u: Position, v: Position) -> Real {
-	let mut sum = zero;
-	for i in range(0, 3) {
-		sum += u(i) * v(i);
-	}
-	sum
+	u.x * v.x + u.y * v.y + u.z * v.z
 }
 
 fn @euclidean(u: Position, v: Position) -> Real {
-	let mut sum = zero;
-	for i in range(0, 3) {
-		let d = u(i) - v(i);
-		sum += d * d;
-	}
-	math.sqrt(sum)
+	let dx = u.x - v.x;
+	let dy = u.y - v.y;
+	let dz = u.z - v.z;
+	math.sqrt(dx * dx + dy * dy + dz * dz)
 }
 
 fn @vecnorm(u: Position) -> Real {

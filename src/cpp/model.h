@@ -82,8 +82,8 @@ namespace anybem {
 	// Charges
 
 	struct Charge {
-		position_t pos;
-		real_t     val;
+		Position pos;
+		real_t   val;
 	};
 
 	class ChargeBuffer final {

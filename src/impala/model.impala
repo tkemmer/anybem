@@ -8,11 +8,7 @@ struct Node {
 	z:   fn() -> Real
 }
 
-struct NodePrimitive {
-	x: Real,
-	y: Real,
-	z: Real
-}
+type NodePrimitive = Position;
 
 struct NodeBuffer {
 	device: fn()      -> i32,
@@ -33,7 +29,7 @@ struct NodeBufferPrototype {
 
 fn new_node(node: NodePrimitive) -> Node {
 	Node {
-		pos: || [node.x, node.y, node.z],
+		pos: || node,
 		x:   || node.x,
 		y:   || node.y,
 		z:   || node.z
@@ -247,11 +243,11 @@ fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 		print_string("    - Charge ");
 		print_i32(i);
 		print_string(": { {");
-		print_f64((*data)(i).pos(0) as f64);
+		print_f64((*data)(i).pos.x as f64);
 		print_string(", ");
-		print_f64((*data)(i).pos(1) as f64);
+		print_f64((*data)(i).pos.y as f64);
 		print_string(", ");
-		print_f64((*data)(i).pos(2) as f64);
+		print_f64((*data)(i).pos.z as f64);
 		print_string("}, ");
 		print_f64((*data)(i).val as f64);
 		print_string("}\n");

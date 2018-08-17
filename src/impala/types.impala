@@ -1,3 +1,8 @@
 type Index    = i64;
 type Real     = f64;
-type Position = [Real * 3];
+
+struct Position {
+	x: Real,
+	y: Real,
+	z: Real
+}
