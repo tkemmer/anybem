@@ -83,67 +83,114 @@ fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 // Elements
 
 struct Triangle {
+	v1:     fn() -> Node,       // first node
+	v2:     fn() -> Node,       // second node
+	v3:     fn() -> Node,       // third node
+	center: fn() -> Position,   // centroid
+	normal: fn() -> Position,   // unit normal vector
+	area:   fn() -> Real,       // surface area
+	dist:   fn() -> Real        // distance to origin
+}
+
+struct TrianglePrimitive {
 	v1:     Index,
 	v2:     Index,
 	v3:     Index
 }
 
 struct TriangleBuffer {
+	device: fn()      -> i32,
+	get:    fn(Index) -> Triangle,
+	memory: fn()      -> i64,
+	size:   fn()      -> Index
+}
+
+struct TriangleBufferPrimitive {
 	buf: Buffer,
 	len: Index
 }
 
 struct TriangleBufferPrototype {
-	data: &[Triangle],
+	data: &[TrianglePrimitive],
 	len:  Index
 }
 
-fn new_triangle_buffer(buf: Buffer, len: Index) -> TriangleBuffer {
-	TriangleBuffer {
-		buf: buf,
-		len: len
+fn new_triangle(elem: TrianglePrimitive, nodes: NodeBuffer) -> Triangle {
+	Triangle {
+		v1:     || nodes.get(elem.v1),
+		v2:     || nodes.get(elem.v2),
+		v3:     || nodes.get(elem.v3),
+		center: || origin, // FIXME
+		normal: || origin, // FIXME
+		area:   || zero,   // FIXME
+		dist:   || zero    // FIXME
 	}
 }
 
-fn to_triangle_buffer(elements: TriangleBufferPrototype) -> TriangleBuffer {
+fn new_triangle_buffer(elements: TriangleBufferPrimitive, nodes: NodeBuffer) -> TriangleBuffer {
+	TriangleBuffer {
+		device: ||    elements.buf.device,
+		get:    |idx| new_triangle(bitcast[&[TrianglePrimitive]](elements.buf.data)(idx), nodes),
+		memory: ||    elements.buf.size,
+		size:   ||    elements.len
+	}
+}
+
+fn to_triangle_buffer(proto: TriangleBufferPrototype, nodes: NodeBuffer) -> TriangleBuffer {
 	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](elements.data),
-		size:   (elements.len as i64) * (sizeof[Triangle]() as i64)
+		data:   bitcast[&[i8]](proto.data),
+		size:   (proto.len as i64) * (sizeof[TrianglePrimitive]() as i64)
 	};
-	new_triangle_buffer(buf, elements.len)
+	let elements = TriangleBufferPrimitive {
+		buf: buf,
+		len: proto.len
+	};
+	new_triangle_buffer(elements, nodes)
 }
 
 fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 	print_string("Surface element buffer stats:\n");
-	print_string(" * Device: "); print_i32(elements.buf.device); print_string("\n");
-	print_string(" * Length: "); print_i64(elements.len as i64); print_string(" elements\n");
-	print_string(" * Memory: "); print_i64(elements.buf.size); print_string(" bytes\n");
+	print_string(" * Device: "); print_i32(elements.device()); print_string("\n");
+	print_string(" * Length: "); print_i64(elements.size() as i64); print_string(" elements\n");
+	print_string(" * Memory: "); print_i64(elements.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	let data = bitcast[&[SurfaceElement]](elements.buf.data);
-	for i in range(0, math.min(elements.len as i32, head_max)) {
+	for i in range(0, math.min(elements.size() as i32, head_max)) {
+		let elem = elements.get(i as Index);
 		print_string("    - Element ");
 		print_i32(i);
-		print_string(": {");
-		print_i64((*data)(i).v1 as i64);
-		print_string(", ");
-		print_i64((*data)(i).v2 as i64);
-		print_string(", ");
-		print_i64((*data)(i).v3 as i64);
-		print_string("}\n");
+		print_string(": { {");
+		print_f64(elem.v1().x() as f64); print_string(", ");
+		print_f64(elem.v1().y() as f64); print_string(", ");
+		print_f64(elem.v1().z() as f64);
+		print_string("}, {");
+		print_f64(elem.v2().x() as f64); print_string(", ");
+		print_f64(elem.v2().y() as f64); print_string(", ");
+		print_f64(elem.v2().z() as f64);
+		print_string("}, {");
+		print_f64(elem.v3().x() as f64); print_string(", ");
+		print_f64(elem.v3().y() as f64); print_string(", ");
+		print_f64(elem.v3().z() as f64);
+		print_string("} }\n");
 	}
 }
 
 type SurfaceElement = Triangle;
+type SurfaceElementPrimitive = TrianglePrimitive;
 type SurfaceElementBuffer = TriangleBuffer;
+type SurfaceElementBufferPrimitive = TriangleBufferPrimitive;
 type SurfaceElementBufferPrototype = TriangleBufferPrototype;
 
-fn new_surface_element_buffer(buf: Buffer, len: Index) -> SurfaceElementBuffer {
-	new_triangle_buffer(buf, len)
+fn new_surface_element(elem: SurfaceElementPrimitive, nodes: NodeBuffer) -> SurfaceElement {
+	new_triangle(elem, nodes)
 }
 
-fn to_surface_element_buffer(elements: TriangleBufferPrototype) -> SurfaceElementBuffer {
-	to_triangle_buffer(elements)
+fn new_surface_element_buffer(elements: SurfaceElementBufferPrimitive, nodes: NodeBuffer) -> SurfaceElementBuffer {
+	new_triangle_buffer(elements, nodes)
+}
+
+fn to_surface_element_buffer(proto: SurfaceElementBufferPrototype, nodes: NodeBuffer) -> SurfaceElementBuffer {
+	to_triangle_buffer(proto, nodes)
 }
 
 fn dump_surface_element_buffer(elements: SurfaceElementBuffer, head_max: i32) -> () {
@@ -259,9 +306,10 @@ fn new_surface_model(
 }
 
 fn to_surface_model(surf: SurfaceModelPrototype) -> SurfaceModel {
+	let nodes = to_node_buffer(surf.nodes);
 	new_surface_model(
-		to_node_buffer(surf.nodes),
-		to_surface_element_buffer(surf.elements),
+		nodes,
+		to_surface_element_buffer(surf.elements, nodes),
 		to_charge_buffer(surf.charges),
 		surf.params
 	)
