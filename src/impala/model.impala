@@ -8,7 +8,11 @@ struct Node {
 	z:   fn() -> Real
 }
 
-type NodePrimitive = Position;
+struct NodePrimitive {
+	x: Real,
+	y: Real,
+	z: Real
+}
 
 struct NodeBuffer {
 	device: fn()      -> i32,
@@ -29,10 +33,10 @@ struct NodeBufferPrototype {
 
 fn new_node(node: NodePrimitive) -> Node {
 	Node {
-		pos: || node,
-		x:   || node(0),
-		y:   || node(1),
-		z:   || node(2)
+		pos: || [node.x, node.y, node.z],
+		x:   || node.x,
+		y:   || node.y,
+		z:   || node.z
 	}
 }
 
