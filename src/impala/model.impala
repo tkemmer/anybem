@@ -61,7 +61,7 @@ fn to_node_buffer(proto: NodeBufferPrototype) -> NodeBuffer {
 fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 	print_string("Node buffer stats:\n");
 	print_string(" * Device: "); print_i32(nodes.device()); print_string("\n");
-	print_string(" * Length: "); print_i64(nodes.size() as i64); print_string(" nodes\n");
+	print_string(" * Size:   "); print_i64(nodes.size() as i64); print_string(" nodes\n");
 	print_string(" * Memory: "); print_i64(nodes.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(nodes.size() as i32, head_max)) {
@@ -161,7 +161,7 @@ fn to_triangle_buffer(proto: TriangleBufferPrototype, nodes: NodeBuffer) -> Tria
 fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 	print_string("Surface element buffer stats:\n");
 	print_string(" * Device: "); print_i32(elements.device()); print_string("\n");
-	print_string(" * Length: "); print_i64(elements.size() as i64); print_string(" elements\n");
+	print_string(" * Size:   "); print_i64(elements.size() as i64); print_string(" elements\n");
 	print_string(" * Memory: "); print_i64(elements.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(elements.size() as i32, head_max)) {
@@ -284,7 +284,7 @@ fn to_charge_buffer(proto: ChargeBufferPrototype) -> ChargeBuffer {
 fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 	print_string("Charge buffer stats:\n");
 	print_string(" * Device: "); print_i32(charges.device()); print_string("\n");
-	print_string(" * Length: "); print_i64(charges.size() as i64); print_string(" charges\n");
+	print_string(" * Size:   "); print_i64(charges.size() as i64); print_string(" charges\n");
 	print_string(" * Memory: "); print_i64(charges.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(charges.size() as i32, head_max)) {
