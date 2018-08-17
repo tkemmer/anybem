@@ -1,17 +1,17 @@
 struct BornIon {
-	charge: Charge,
+	charge: ChargePrimitive,
 	radius: Real
 }
 
-static born_li = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 0.645 as Real};
-static born_na = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.005 as Real};
-static born_k  = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.365 as Real};
-static born_rb = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.505 as Real};
-static born_cs = BornIon{charge: Charge{pos: origin, val: 1 as Real}, radius: 1.715 as Real};
-static born_mg = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 0.615 as Real};
-static born_ca = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 1.015 as Real};
-static born_sr = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 1.195 as Real};
-static born_ba = BornIon{charge: Charge{pos: origin, val: 2 as Real}, radius: 1.385 as Real};
+static born_li = BornIon{charge: ChargePrimitive{pos: origin, val: 1 as Real}, radius: 0.645 as Real};
+static born_na = BornIon{charge: ChargePrimitive{pos: origin, val: 1 as Real}, radius: 1.005 as Real};
+static born_k  = BornIon{charge: ChargePrimitive{pos: origin, val: 1 as Real}, radius: 1.365 as Real};
+static born_rb = BornIon{charge: ChargePrimitive{pos: origin, val: 1 as Real}, radius: 1.505 as Real};
+static born_cs = BornIon{charge: ChargePrimitive{pos: origin, val: 1 as Real}, radius: 1.715 as Real};
+static born_mg = BornIon{charge: ChargePrimitive{pos: origin, val: 2 as Real}, radius: 0.615 as Real};
+static born_ca = BornIon{charge: ChargePrimitive{pos: origin, val: 2 as Real}, radius: 1.015 as Real};
+static born_sr = BornIon{charge: ChargePrimitive{pos: origin, val: 2 as Real}, radius: 1.195 as Real};
+static born_ba = BornIon{charge: ChargePrimitive{pos: origin, val: 2 as Real}, radius: 1.385 as Real};
 
 fn born_extpot_local(pos: &Position, ion: &BornIon, params: &SystemParams) -> Real {
 	potpref * (*ion).charge.val / (*params).epsSigma / euclidean(*pos, (*ion).charge.pos)

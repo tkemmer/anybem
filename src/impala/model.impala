@@ -226,54 +226,79 @@ fn dump_surface_element_buffer(elements: SurfaceElementBuffer, head_max: i32) ->
 // Charges
 
 struct Charge {
+	pos: fn() -> Position,
+	val: fn() -> Real
+}
+
+struct ChargePrimitive {
 	pos: Position,
 	val: Real
 }
 
 struct ChargeBuffer {
+	device: fn()      -> i32,
+	get:    fn(Index) -> Charge,
+	memory: fn()      -> i64,
+	size:   fn()      -> Index
+}
+
+struct ChargeBufferPrimitive {
 	buf: Buffer,
 	len: Index
 }
 
 struct ChargeBufferPrototype {
-	data: &[Charge],
+	data: &[ChargePrimitive],
 	len:  Index
 }
 
-fn new_charge_buffer(buf: Buffer, len: Index) -> ChargeBuffer {
-	ChargeBuffer {
-		buf: buf,
-		len: len
+fn new_charge(charge: ChargePrimitive) -> Charge {
+	Charge {
+		pos: || charge.pos,
+		val: || charge.val
 	}
 }
 
-fn to_charge_buffer(charges: ChargeBufferPrototype) -> ChargeBuffer {
+fn new_charge_buffer(charges: ChargeBufferPrimitive) -> ChargeBuffer {
+	ChargeBuffer {
+		device: ||    charges.buf.device,
+		get:    |idx| new_charge(bitcast[&[ChargePrimitive]](charges.buf.data)(idx)),
+		memory: ||    charges.buf.size,
+		size:   ||    charges.len
+	}
+}
+
+fn to_charge_buffer(proto: ChargeBufferPrototype) -> ChargeBuffer {
 	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](charges.data),
-		size:   (charges.len as i64) * (sizeof[Charge]() as i64)
+		data:   bitcast[&[i8]](proto.data),
+		size:   (proto.len as i64) * (sizeof[ChargePrimitive]() as i64)
 	};
-	new_charge_buffer(buf, charges.len)
+	let charges = ChargeBufferPrimitive {
+		buf: buf,
+		len: proto.len
+	};
+	new_charge_buffer(charges)
 }
 
 fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 	print_string("Charge buffer stats:\n");
-	print_string(" * Device: "); print_i32(charges.buf.device); print_string("\n");
-	print_string(" * Length: "); print_i64(charges.len as i64); print_string(" charges\n");
-	print_string(" * Memory: "); print_i64(charges.buf.size); print_string(" bytes\n");
+	print_string(" * Device: "); print_i32(charges.device()); print_string("\n");
+	print_string(" * Length: "); print_i64(charges.size() as i64); print_string(" charges\n");
+	print_string(" * Memory: "); print_i64(charges.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	let data = bitcast[&[Charge]](charges.buf.data);
-	for i in range(0, math.min(charges.len as i32, head_max)) {
+	for i in range(0, math.min(charges.size() as i32, head_max)) {
+		let charge = charges.get(i as Index);
 		print_string("    - Charge ");
 		print_i32(i);
 		print_string(": { {");
-		print_f64((*data)(i).pos.x as f64);
+		print_f64(charge.pos().x as f64);
 		print_string(", ");
-		print_f64((*data)(i).pos.y as f64);
+		print_f64(charge.pos().y as f64);
 		print_string(", ");
-		print_f64((*data)(i).pos.z as f64);
+		print_f64(charge.pos().z as f64);
 		print_string("}, ");
-		print_f64((*data)(i).val as f64);
+		print_f64(charge.val() as f64);
 		print_string("}\n");
 	}
 }
