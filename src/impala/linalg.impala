@@ -1,3 +1,11 @@
+fn @add(u: Position, v: Position) -> Position {
+	Position {
+		x: u.x + v.x,
+		y: u.y + v.y,
+		z: u.z + v.z
+	}
+}
+
 fn @cross(u: Position, v: Position) -> Position {
 	Position {
 		x: u.y * v.z - u.z * v.y,
@@ -15,6 +23,30 @@ fn @euclidean(u: Position, v: Position) -> Real {
 	let dy = u.y - v.y;
 	let dz = u.z - v.z;
 	math.sqrt(dx * dx + dy * dy + dz * dz)
+}
+
+fn @neg(u: Position) -> Position {
+	Position {
+		x: -u.x,
+		y: -u.y,
+		z: -u.z
+	}
+}
+
+fn @sdiv(u: Position, a: Real) -> Position {
+	smul(u, one / a)
+}
+
+fn @smul(u: Position, a: Real) -> Position {
+	Position {
+		x: a * u.x,
+		y: a * u.y,
+		z: a * u.z
+	}
+}
+
+fn @sub(u: Position, v: Position) -> Position {
+	add(u, neg(v))
 }
 
 fn @vecnorm(u: Position) -> Real {
