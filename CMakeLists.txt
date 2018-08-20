@@ -27,6 +27,7 @@ include_directories(SYSTEM ${CLIPP_INCLUDE_DIR})
 
 set(AnyBEM_IMPALA_FLAGS "")
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(CMAKE_CXX_FLAGS "-Wall -pedantic -fsanitize=address")
 	list(APPEND AnyBEM_IMPALA_FLAGS "-emit-annotated" "-log-level" "debug")
 endif()
 
