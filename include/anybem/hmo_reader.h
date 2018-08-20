@@ -1,7 +1,7 @@
 #ifndef ANYBEM_HMO_READER_H
 #define ANYBEM_HMO_READER_H
 
-#include "reader.h"
+#include <anybem/reader.h>
 
 namespace anybem {
 

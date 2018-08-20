@@ -1,7 +1,7 @@
 #ifndef ANYBEM_MODEL_H
 #define ANYBEM_MODEL_H
 
-#include "types.h"
+#include <anybem/types.h>
 
 #include <vector>
 

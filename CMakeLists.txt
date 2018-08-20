@@ -22,7 +22,7 @@ endif()
 
 #######################################################################################################################
 # Project configuration
-include_directories(src/cpp)
+include_directories(include)
 include_directories(SYSTEM ${CLIPP_INCLUDE_DIR})
 
 set(AnyBEM_IMPALA_FLAGS "")
@@ -43,15 +43,15 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 
 add_executable(anybem
 	${AnyBEM_PROGRAM}
-	src/cpp/error.h
-	src/cpp/hmo_reader.h
+	include/anybem/error.h
+	include/anybem/hmo_reader.h
+	include/anybem/impala.h
+	include/anybem/model.h
+	include/anybem/reader.h
+	include/anybem/types.h
+	include/anybem/util.h
 	src/cpp/hmo_reader.cpp
-	src/cpp/impala.h
 	src/cpp/main.cpp
-	src/cpp/model.h
-	src/cpp/reader.h
-	src/cpp/types.h
-	src/cpp/util.h
 	src/cpp/util.cpp
 )
 

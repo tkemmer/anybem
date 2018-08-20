@@ -1,6 +1,7 @@
-#include "hmo_reader.h"
-#include "error.h"
-#include "util.h"
+#include <anybem/hmo_reader.h>
+
+#include <anybem/error.h>
+#include <anybem/util.h>
 
 using namespace std;
 using namespace std::string_literals;

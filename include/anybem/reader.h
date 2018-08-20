@@ -1,7 +1,7 @@
 #ifndef ANYBEM_READER_H
 #define ANYBEM_READER_H
 
-#include "model.h"
+#include <anybem/model.h>
 
 #include <string>
 
