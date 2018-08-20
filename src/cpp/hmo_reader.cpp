@@ -14,7 +14,7 @@ namespace anybem {
 		std::vector<TrianglePrimitive> elements {0};
 		std::vector<ChargePrimitive>   charges  {0};
 
-		HMOReaderImpl(const string& filename) {
+		explicit HMOReaderImpl(const string& filename) {
 			ifstream fin(filename);
 			if(fin.rdstate() & ifstream::failbit)
 				throw FileAccessError("Cannot open file "s + filename);
