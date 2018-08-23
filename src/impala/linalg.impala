@@ -37,6 +37,15 @@ fn @sdiv(u: Position, a: Real) -> Position {
 	smul(u, one / a)
 }
 
+/// TODO not really linalg specific
+fn @sign(x: Real) -> Real {
+	if x == zero {
+		zero
+	} else {
+		x / math.fabs(x)
+	}
+}
+
 fn @smul(u: Position, a: Real) -> Position {
 	Position {
 		x: a * u.x,
