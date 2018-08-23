@@ -1,0 +1,191 @@
+// ====================================================================================================================
+// Public interface
+
+/**
+ * Analytical solution for the single-layer Laplace potential for a given triangle and observation point.
+ */
+fn rjasanow_laplacepot_single(xi: Position, elem: Triangle) -> Real {
+	let dist = rjasanow_distance(xi, elem);
+
+	if math.fabs(dist) < etol {
+		rjasanow_laplacepot_elem(xi, elem, dist, rjasanow_laplacepot_single_plane)
+	} else {
+		rjasanow_laplacepot_elem(rjasanow_project(xi, elem), elem, dist, rjasanow_laplacepot_single_space)
+	}
+}
+
+/**
+ * Analytical solution for the double-layer Laplace potential for a given triangle and observation point.
+ */
+fn rjasanow_laplacepot_double(xi: Position, elem: Triangle) -> Real {
+	let dist = rjasanow_distance(xi, elem);
+
+	if math.fabs(dist) < etol {
+		rjasanow_laplacepot_elem(xi, elem, dist, rjasanow_laplacepot_double_plane)
+	} else {
+		rjasanow_laplacepot_elem(rjasanow_project(xi, elem), elem, dist, rjasanow_laplacepot_double_space)
+	}
+}
+
+
+// ====================================================================================================================
+// Potential functions (common aggregators)
+
+/**
+ * Computes the single or double layer Laplace potential of the given triangle for the given observation point `xi`.
+ * The latter needs to be projected onto the surface element plane!
+ */
+fn rjasanow_laplacepot_elem(
+		xi:   Position,
+		elem: Triangle,
+		dist: Real,
+		pot:  RjLaplacePotFn
+	) -> Real {
+
+	rjasanow_laplacepot(xi, elem.v1().pos(), elem.v2().pos(), elem.normal(), dist, pot) +
+	rjasanow_laplacepot(xi, elem.v2().pos(), elem.v3().pos(), elem.normal(), dist, pot) +
+	rjasanow_laplacepot(xi, elem.v3().pos(), elem.v1().pos(), elem.normal(), dist, pot)
+}
+
+
+/**
+ * Computes the single or double layer Laplace potential of the triangle defined by the observation point `xi` and two
+ * nodes `x1` and `x2` of the surface element. `x2` is required to be `x1`'s next neighbor in counterclockwise
+ * direction. Also, `xi` needs to be projected onto the surface element plane.
+ *
+ * Note that the result is premultiplied by 4π!
+ */
+fn rjasanow_laplacepot(
+		xi:  Position,
+		x1:  Position,
+		x2:  Position,
+		n:   Position,
+		d:   Real,
+		pot: RjLaplacePotFn
+	) -> Real {
+
+	// Construct triangle sides. Later on, we will use the height h of the triangle at point ξ as well as the angles
+	// φ1 abd φ2 between h and the triangle sides extending from ξ.
+	let u1 = sub(x1, xi);
+	let u2 = sub(x2, xi);
+	let v  = sub(x2, x1);
+
+	// Compute side lengths
+	let u1norm = vecnorm(u1);
+	let u2norm = vecnorm(u2);
+	let vnorm  = vecnorm(v);
+
+	// Helper function to compute the cosine of the angle between the vectors `u` and `v` with lengths `unorm` and
+	// `vnorm`, respectively.
+	let cos = | u: Position, unorm: Real | dot(u, v) / (unorm * vnorm);
+
+	// Compute the sine of the angle φ1 (φ2) between u1 (u2) and the height, that is, the cosine of the angle θ1 (θ2)
+	// between u1 (u2) and v if θ1 (θ2) is an acute or right angle. Otherwise, compute the sine of -φ1 (-φ2), which is
+	// again the cosine of θ1 (θ2) in these cases.
+	// Note that the equation (as given above) uses a polar coordinate system with ξ being the pole and h giving the
+	// polar axis. The negative angles are needed whenever the corresponding triangle side lies below the polar axis.
+	let sin_phi1 = math.fmax(-one, math.fmin(one, cos(u1, u1norm)));
+	let sin_phi2 = math.fmax(-one, math.fmin(one, cos(u2, u2norm)));
+
+	// Compute the height of the triangle, that is, the cathetus ``c₁`` of a triangle given the hypotenuse ``h`` and
+	// the cosine of the exterior angle ``θ`` between the hypotenuse and the other cathetus ``c₂``.
+	let cathethus = | hyp: Real, cos_theta: Real | math.sqrt(hyp * hyp * (one - cos_theta * cos_theta));
+	let h = cathethus(u1norm, sin_phi1);
+
+	// Check whether the triangle is degenerate
+	let degenerate = || math.fmax(zero, h) < etol              // ξ on the line through v1 and v2 (|φ1| = |φ2| = π/2)
+	                 || one - math.fabs(sin_phi1) < etol       // ξ on the line through v1 and v2 (φ1 = π/2)
+	                 || one - math.fabs(sin_phi2) < etol       // ξ on the line through v1 and v2 (φ2 = π/2)
+	                 || math.fabs(sin_phi1 - sin_phi2) < etol; // v1 and v2 on the line through ξ (φ1 = φ2 = 0)
+
+	// Helper function to determine whether the normal vector of the plane specified by the vectors `u1` and `u2` has
+	// the same orientation as the normal vector `n`. Returns ``1`` if both normals have the same orientation, ``0``
+	// if at least one of the vectors is zero, and ``-1`` otherwise.
+	let nsign = || sign(dot(cross(u1, u2), n));
+
+	// Since the observation point (projection) lies in the same plane as the surface element, we can decide whether
+	// the result of this function is to be added or subtracted from the whole surface triangle's Laplace potential by
+	// checking on which side of v the observation point lies. This is equivalent to checking whether the normal of the
+	// triangle here and the one of the surface element (which are obviously (anti)parallel) are oriented alike.
+	if degenerate() {
+		zero
+	} else {
+		nsign() * pot(sin_phi1, sin_phi2, h, d)
+	}
+}
+
+// ====================================================================================================================
+// Potential functions (specific to relative position and potential type)
+
+type RjLaplacePotFn = fn(Real, Real, Real, Real) -> Real;
+
+/// Single-layer potential, observation point in the surface element plane
+fn rjasanow_laplacepot_single_plane(
+		sin_phi1: Real,
+		sin_phi2: Real,
+		h:        Real,
+		          Real
+	) -> Real {
+
+	one_half * h * math.log(
+		(one + sin_phi2) * (one - sin_phi1) /
+		((one - sin_phi2) * (one + sin_phi1))
+	)
+}
+
+/// Single-layer potential, observation point somewhere else in space
+fn rjasanow_laplacepot_single_space(
+		sin_phi1: Real,
+		sin_phi2: Real,
+		h:        Real,
+		d:        Real
+	) -> Real {
+
+	let d2 = d * d;
+	let chi2 = d2 / (d2 + h * h);
+	let chi = math.sqrt(chi2);
+	let logterm = | sin_phi: Real | {
+		let term1 = math.sqrt(one - chi2 * sin_phi * sin_phi);
+		let term2 = math.sqrt(one - chi2) * sin_phi;
+		(term1 + term2) / (term1 - term2)
+	};
+	one_half * h * math.log(logterm(sin_phi2) / logterm(sin_phi1)) + math.fabs(d) *
+		(math.asin(chi * sin_phi2) - math.asin(sin_phi2) - math.asin(chi * math.asin(sin_phi1)) + math.asin(sin_phi1))
+}
+
+/// Double-layer potential, observation point in the surface element plane
+fn rjasanow_laplacepot_double_plane(
+		Real,
+		Real,
+		Real,
+		Real
+) -> Real {
+
+	zero
+}
+
+/// Double-layer potential, observation point somewhere else in space
+fn rjasanow_laplacepot_double_space(
+		sin_phi1: Real,
+		sin_phi2: Real,
+		h:        Real,
+		d:        Real
+	) -> Real {
+
+	let chi = math.fabs(d) / math.sqrt(d * d + h * h);
+	sign(d) * (math.asin(chi * sin_phi1) - math.asin(sin_phi1) - math.asin(chi * sin_phi2) + math.asin(sin_phi2))
+}
+
+
+// ====================================================================================================================
+// Helper functions
+
+/// Computes the (positive or negative) distance from xi to the surface element plane
+fn rjasanow_distance(xi: Position, elem: Triangle) -> Real {
+	dot(xi, elem.normal()) - elem.dist()
+}
+
+/// Projects xi onto the surface element plane
+fn rjasanow_project(xi: Position, elem: Triangle) -> Position {
+	sub(xi, smul(elem.normal(), rjasanow_distance(xi, elem)))
+}

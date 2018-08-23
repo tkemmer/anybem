@@ -38,6 +38,7 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	src/impala/constants.impala
 	src/impala/model.impala
 	src/impala/linalg.impala
+	src/impala/rjasanow.impala
 	src/impala/born.impala
 	src/impala/export.impala
 )
