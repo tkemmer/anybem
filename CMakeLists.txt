@@ -82,6 +82,7 @@ if(Badhron_FOUND)
 		${Badhron_IMPALA_FILES}
 		${AnyBEM_IMPALA_FILES}
 		test/linalg.impala
+		test/rjasanow.impala
 		test/main.impala
 	)
 
