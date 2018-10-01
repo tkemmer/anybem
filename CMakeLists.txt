@@ -7,6 +7,9 @@ project(AnyBEM CXX)
 ## AnyDSL
 find_package(AnyDSL_runtime REQUIRED)
 
+## Badhron
+find_package(Badhron)
+
 ## Clipp
 set(CLIPP_INCLUDE_DIR "deps/clipp/include" CACHE INTERNAL "Clipp include directory")
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CLIPP_INCLUDE_DIR}")
@@ -31,7 +34,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	list(APPEND AnyBEM_IMPALA_FLAGS "-emit-annotated" "-log-level" "debug")
 endif()
 
-anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
+set(AnyBEM_IMPALA_FILES
 	src/impala/backend/backend_cpu.impala
 	src/impala/import.impala
 	src/impala/types.impala
@@ -43,8 +46,7 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	src/impala/export.impala
 )
 
-add_executable(anybem
-	${AnyBEM_PROGRAM}
+set(AnyBEM_SOURCE_FILES
 	include/anybem/error.h
 	include/anybem/hmo_reader.h
 	include/anybem/impala.h
@@ -53,9 +55,44 @@ add_executable(anybem
 	include/anybem/types.h
 	include/anybem/util.h
 	src/cpp/hmo_reader.cpp
-	src/cpp/main.cpp
 	src/cpp/util.cpp
 )
 
-target_link_libraries(anybem ${AnyDSL_runtime_LIBRARIES})
+
+#######################################################################################################################
+# AnyBEM
+anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
+	${AnyBEM_IMPALA_FILES}
+)
+
+add_executable(anybem
+	${AnyBEM_PROGRAM}
+	${AnyBEM_SOURCE_FILES}
+	src/cpp/main.cpp
+)
+
+target_link_libraries(anybem ${AnyDSL_runtime_LIBRARIES} ${Badhron_LIBRARIES})
 set_target_properties(anybem PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
+
+
+#######################################################################################################################
+# AnyBEM tests
+if(Badhron_FOUND)
+	anydsl_runtime_wrap(AnyBEM_TEST_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
+		${Badhron_IMPALA_FILES}
+		${AnyBEM_IMPALA_FILES}
+		test/main.impala
+	)
+
+	add_executable(anybem_test
+		${AnyBEM_TEST_PROGRAM}
+		${AnyBEM_SOURCE_FILES}
+		test/main.cpp
+	)
+
+	target_link_libraries(anybem_test ${AnyDSL_runtime_LIBRARIES} ${Badhron_LIBRARIES})
+	set_target_properties(anybem_test PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
+
+else()
+	message(STATUS "Badhron has not been found. Disabling AnyBEM test suite.")
+endif()

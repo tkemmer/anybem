@@ -1,0 +1,4 @@
+extern fn main(i32, &[&[u8]]) -> i32 {
+	print_string("AnyBEM test suite");
+	0
+}
