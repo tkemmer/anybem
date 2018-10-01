@@ -1,0 +1,26 @@
+fn linalg_tests(brn: BadhronSuite) -> () {
+	with brn.group("Linear algebra") {
+		let x1 = Position{x: 1., y: 2., z: 3.};
+		let x2 = Position{x: 4., y: 6., z: 8.};
+
+		with brn.subgroup("add") {
+			let res = add(x1, x2);
+			with brn.assert_f64(5.)  { res.x }
+			with brn.assert_f64(8.)  { res.y }
+			with brn.assert_f64(11.) { res.z }
+		}
+
+		with brn.subgroup("cross") {
+			let res = cross(x1, x2);
+			with brn.assert_f64(-2.) { res.x }
+			with brn.assert_f64(-4.) { res.y }
+			with brn.assert_f64(-2.) { res.z }
+		}
+
+		with brn.subgroup("dot") {
+			with brn.assert_f64(40.)  { dot(x1, x2) }
+			with brn.assert_f64(zero) { dot(origin, x1) }
+			with brn.assert_f64(zero) { dot(x1, origin) }
+		}
+	}
+}

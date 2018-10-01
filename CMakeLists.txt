@@ -81,6 +81,7 @@ if(Badhron_FOUND)
 	anydsl_runtime_wrap(AnyBEM_TEST_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 		${Badhron_IMPALA_FILES}
 		${AnyBEM_IMPALA_FILES}
+		test/linalg.impala
 		test/main.impala
 	)
 
