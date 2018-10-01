@@ -4,6 +4,7 @@ static etol     = 1e-10 as Real;
 static zero     = 0 as Real;
 static one      = 1 as Real;
 static one_half = .5 as Real;
+static four_pi  = 12.566370614359172 as Real;
 static origin   = Position {x: zero, y: zero, z: zero};
 
 static default_params = SystemParams{
