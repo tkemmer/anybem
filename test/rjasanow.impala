@@ -6,7 +6,7 @@ fn rjasanow_tests(brn: BadhronSuite) -> () {
 				v3:     || new_node(Position{x: 0., y: 0., z: 1.}),
 				center: || Position{x: 0., y: 1./3., z: 1./3.},
 				normal: || Position{x: 1., y: 0., z: 0.},
-				area:   || .5,
+				area:   || 0.5,
 				dist:   || 0.
 		};
 
@@ -17,6 +17,9 @@ fn rjasanow_tests(brn: BadhronSuite) -> () {
 			with brn.assert_f64(1.) { rjasanow_distance(Position{x: 1., y: 0., z: 0.}, elem) }
 			with brn.assert_f64(1.) { rjasanow_distance(Position{x: 1., y: 1., z: 0.}, elem) }
 			with brn.assert_f64(1.) { rjasanow_distance(Position{x: 1., y: 0., z: 1.}, elem) }
+			with brn.assert_f64(-1.) { rjasanow_distance(Position{x: -1., y: 0., z: 0.}, elem) }
+			with brn.assert_f64(-1.) { rjasanow_distance(Position{x: -1., y: 1., z: 0.}, elem) }
+			with brn.assert_f64(-1.) { rjasanow_distance(Position{x: -1., y: 0., z: 1.}, elem) }
 		}
 
 		with brn.subgroup("rjasanow_project") {
