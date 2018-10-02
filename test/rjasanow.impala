@@ -71,7 +71,19 @@ fn rjasanow_tests(brn: BadhronSuite) -> () {
 				rjasanow_laplacepot_single(Position{x: 1., y: 0., z: 1.}, elem)
 			}
 
-			brn.pending("xi somewhere in space");
+			// (4) xi lies somewhere else in space
+			with brn.assert_f64(four_pi * (
+				0.05486307812003175845441110089494128884416545308420259271 -
+				0.03156675645153950833618064292205638527751593336549
+			)) {
+				rjasanow_laplacepot_single(Position{x: 1., y: -1., z: 0.}, elem)
+			}
+			with brn.assert_f64(four_pi * (
+				2. * 0.035315594609376722705763636889615906447125307241104235442 -
+				2. * 0.0260303288327139057352736693314968773933071931295084
+			)) {
+				rjasanow_laplacepot_single(Position{x: 1., y: -1., z: -1.}, elem)
+			}
 		}
 
 		with brn.subgroup("rjasanow_laplacepot_double") {
