@@ -39,49 +39,40 @@ fn rjasanow_tests(brn: BadhronSuite) -> () {
 
 		with brn.subgroup("rjasanow_laplacepot_single") {
 			// (1) xi is a triangle vertex
-			with brn.assert_f64(four_pi * 0.099189377627951192068415700486459476011275034113019436460) {
+			with brn.assert_f64(1.246450480280461) {
 				rjasanow_laplacepot_single(elem.v1().pos(), elem)
 			}
-			with brn.assert_f64(four_pi * 0.070137481542397515891964948616904961601109053078512490737) {
+			with brn.assert_f64(0.881373587019543) {
 				rjasanow_laplacepot_single(elem.v2().pos(), elem)
 			}
-			with brn.assert_f64(four_pi * 0.070137481542397515891964948616904961601109053078512490737) {
+			with brn.assert_f64(0.881373587019543) {
 				rjasanow_laplacepot_single(elem.v3().pos(), elem)
 			}
 
 			// (2) xi is in the same plane as the triangle
-			with brn.assert_f64(four_pi * 0.029051896085553676176450751869554514410165981034506945723) {
+			with brn.assert_f64(0.36507689326091797) {
 				rjasanow_laplacepot_single(Position{x: 0., y: -1., z: 0.}, elem)
 			}
-			with brn.assert_f64(four_pi * (
-				0.110553267370012295141653085597608171948437903548411687443 -
-				2. * 0.044743379406364904901413439333009046862112643066826198636
-			)) {
+			with brn.assert_f64(0.2647295540813806) {
 				rjasanow_laplacepot_single(Position{x: 0., y: -1., z: -1.}, elem)
 			}
 
 			// (3) xi lies on a line through a vertex, perpendicular to the triangle plane
-			with brn.assert_f64(four_pi * 0.034775298546314300210123433855429220291493953452986787115) {
+			with brn.assert_f64(0.4369992897579713) {
 				rjasanow_laplacepot_single(Position{x: 1., y: 0., z: 0.}, elem)
 			}
-			with brn.assert_f64(four_pi * 0.03156675645153950833618064292205638527751593336549) {
+			with brn.assert_f64(0.3966795606632589) {
 				rjasanow_laplacepot_single(Position{x: 1., y: 1., z: 0.}, elem)
 			}
-			with brn.assert_f64(four_pi * 0.03156675645153950833618064292205638527751593336549) {
+			with brn.assert_f64(0.3966795606632589) {
 				rjasanow_laplacepot_single(Position{x: 1., y: 0., z: 1.}, elem)
 			}
 
 			// (4) xi lies somewhere else in space
-			with brn.assert_f64(four_pi * (
-				0.05486307812003175845441110089494128884416545308420259271 -
-				0.03156675645153950833618064292205638527751593336549
-			)) {
+			with brn.assert_f64(0.2927502120375999) {
 				rjasanow_laplacepot_single(Position{x: 1., y: -1., z: 0.}, elem)
 			}
-			with brn.assert_f64(four_pi * (
-				2. * 0.035315594609376722705763636889615906447125307241104235442 -
-				2. * 0.0260303288327139057352736693314968773933071931295084
-			)) {
+			with brn.assert_f64(0.233364182004741) {
 				rjasanow_laplacepot_single(Position{x: 1., y: -1., z: -1.}, elem)
 			}
 		}
