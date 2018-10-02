@@ -2,25 +2,209 @@ fn linalg_tests(brn: BadhronSuite) -> () {
 	with brn.group("Linear algebra") {
 		let x1 = Position{x: 1., y: 2., z: 3.};
 		let x2 = Position{x: 4., y: 6., z: 8.};
+		let x3 = Position{x: -1., y: -1., z: -1.};
 
 		with brn.subgroup("add") {
-			let res = add(x1, x2);
-			with brn.assert_f64(5.)  { res.x }
-			with brn.assert_f64(8.)  { res.y }
-			with brn.assert_f64(11.) { res.z }
+			let res1 = add(x1, x2);
+			with brn.assert_f64(5.)  { res1.x }
+			with brn.assert_f64(8.)  { res1.y }
+			with brn.assert_f64(11.) { res1.z }
+
+			let res2 = add(x2, x1);
+			with brn.assert_f64(5.)  { res2.x }
+			with brn.assert_f64(8.)  { res2.y }
+			with brn.assert_f64(11.) { res2.z }
+
+			let res3 = add(x1, x3);
+			with brn.assert_f64(0.) { res3.x }
+			with brn.assert_f64(1.) { res3.y }
+			with brn.assert_f64(2.) { res3.z }
+
+			let res4 = add(x3, x1);
+			with brn.assert_f64(0.) { res4.x }
+			with brn.assert_f64(1.) { res4.y }
+			with brn.assert_f64(2.) { res4.z }
+
+			let res5 = add(x1, origin);
+			with brn.assert_f64(x1.x) { res5.x }
+			with brn.assert_f64(x1.y) { res5.y }
+			with brn.assert_f64(x1.z) { res5.z }
+
+			let res6 = add(origin, x1);
+			with brn.assert_f64(x1.x) { res6.x }
+			with brn.assert_f64(x1.y) { res6.y }
+			with brn.assert_f64(x1.z) { res6.z }
 		}
 
 		with brn.subgroup("cross") {
-			let res = cross(x1, x2);
-			with brn.assert_f64(-2.) { res.x }
-			with brn.assert_f64(-4.) { res.y }
-			with brn.assert_f64(-2.) { res.z }
+			let res1 = cross(x1, x2);
+			with brn.assert_f64(-2.) { res1.x }
+			with brn.assert_f64(-4.) { res1.y }
+			with brn.assert_f64(-2.) { res1.z }
+
+			let res2 = cross(x2, x1);
+			with brn.assert_f64(2.) { res2.x }
+			with brn.assert_f64(4.) { res2.y }
+			with brn.assert_f64(2.) { res2.z }
+
+			let res3 = cross(x1, x3);
+			with brn.assert_f64(1.) { res3.x }
+			with brn.assert_f64(2.) { res3.y }
+			with brn.assert_f64(1.) { res3.z }
+
+			let res4 = cross(x3, x1);
+			with brn.assert_f64(-1.) { res4.x }
+			with brn.assert_f64(-2.) { res4.y }
+			with brn.assert_f64(-1.) { res4.z }
+
+			let res5 = cross(x1, origin);
+			with brn.assert_f64(0.) { res5.x }
+			with brn.assert_f64(0.) { res5.y }
+			with brn.assert_f64(0.) { res5.z }
+
+			let res6 = cross(origin, x1);
+			with brn.assert_f64(0.) { res6.x }
+			with brn.assert_f64(0.) { res6.y }
+			with brn.assert_f64(0.) { res6.z }
 		}
 
 		with brn.subgroup("dot") {
 			with brn.assert_f64(40.)  { dot(x1, x2) }
+			with brn.assert_f64(40.)  { dot(x2, x1) }
+			with brn.assert_f64(-6.)  { dot(x1, x3) }
+			with brn.assert_f64(-6.)  { dot(x3, x1) }
 			with brn.assert_f64(zero) { dot(origin, x1) }
 			with brn.assert_f64(zero) { dot(x1, origin) }
+		}
+
+		with brn.subgroup("euclidean") {
+			with brn.assert_f64(7.0710678118654755) { euclidean(x1, x2) }
+			with brn.assert_f64(7.0710678118654755) { euclidean(x2, x1) }
+			with brn.assert_f64(5.385164807134504)  { euclidean(x1, x3) }
+			with brn.assert_f64(5.385164807134504)  { euclidean(x3, x1) }
+			with brn.assert_f64(3.7416573867739413) { euclidean(x1, origin) }
+			with brn.assert_f64(3.7416573867739413) { euclidean(origin, x1) }
+		}
+
+		with brn.subgroup("neg") {
+			let res1 = neg(x1);
+			with brn.assert_f64(-x1.x) { res1.x }
+			with brn.assert_f64(-x1.y) { res1.y }
+			with brn.assert_f64(-x1.z) { res1.z }
+
+			let res2 = neg(x2);
+			with brn.assert_f64(-x2.x) { res2.x }
+			with brn.assert_f64(-x2.y) { res2.y }
+			with brn.assert_f64(-x2.z) { res2.z }
+
+			let res3 = neg(x3);
+			with brn.assert_f64(-x3.x) { res3.x }
+			with brn.assert_f64(-x3.y) { res3.y }
+			with brn.assert_f64(-x3.z) { res3.z }
+
+			let res4 = neg(origin);
+			with brn.assert_f64(0.) { res4.x }
+			with brn.assert_f64(0.) { res4.y }
+			with brn.assert_f64(0.) { res4.z }
+		}
+
+		with brn.subgroup("sdiv") {
+			let res1 = sdiv(x1, 2.);
+			with brn.assert_f64(0.5) { res1.x }
+			with brn.assert_f64(1.)  { res1.y }
+			with brn.assert_f64(1.5) { res1.z }
+
+			let res2 = sdiv(x2, -2.);
+			with brn.assert_f64(-2.) { res2.x }
+			with brn.assert_f64(-3.) { res2.y }
+			with brn.assert_f64(-4.) { res2.z }
+
+			let res3 = sdiv(x3, 2.);
+			with brn.assert_f64(-0.5) { res3.x }
+			with brn.assert_f64(-0.5) { res3.y }
+			with brn.assert_f64(-0.5) { res3.z }
+
+			let res4 = sdiv(origin, 2.);
+			with brn.assert_f64(0.) { res4.x }
+			with brn.assert_f64(0.) { res4.y }
+			with brn.assert_f64(0.) { res4.z }
+		}
+
+		with brn.subgroup("sign") {
+			with brn.assert_f64(0.)  { sign( 0.) }
+			with brn.assert_f64(0.)  { sign(-0.) }
+			with brn.assert_f64(1.)  { sign( 1.) }
+			with brn.assert_f64(1.)  { sign( 2.) }
+			with brn.assert_f64(-1.) { sign(-1.) }
+			with brn.assert_f64(-1.) { sign(-2.) }
+		}
+
+		with brn.subgroup("smul") {
+			let res1 = smul(x1, 2.);
+			with brn.assert_f64(2.) { res1.x }
+			with brn.assert_f64(4.) { res1.y }
+			with brn.assert_f64(6.) { res1.z }
+
+			let res2 = smul(x2, -2.);
+			with brn.assert_f64(-8.)  { res2.x }
+			with brn.assert_f64(-12.) { res2.y }
+			with brn.assert_f64(-16.) { res2.z }
+
+			let res3 = smul(x3, 2.);
+			with brn.assert_f64(-2.) { res3.x }
+			with brn.assert_f64(-2.) { res3.y }
+			with brn.assert_f64(-2.) { res3.z }
+
+			let res4 = smul(origin, 2.);
+			with brn.assert_f64(0.) { res4.x }
+			with brn.assert_f64(0.) { res4.y }
+			with brn.assert_f64(0.) { res4.z }
+		}
+
+		with brn.subgroup("sub") {
+			let res1 = sub(x1, x2);
+			with brn.assert_f64(-3.) { res1.x }
+			with brn.assert_f64(-4.) { res1.y }
+			with brn.assert_f64(-5.) { res1.z }
+
+			let res2 = sub(x2, x1);
+			with brn.assert_f64(3.) { res2.x }
+			with brn.assert_f64(4.) { res2.y }
+			with brn.assert_f64(5.) { res2.z }
+
+			let res3 = sub(x1, x3);
+			with brn.assert_f64(2.) { res3.x }
+			with brn.assert_f64(3.) { res3.y }
+			with brn.assert_f64(4.) { res3.z }
+
+			let res4 = sub(x3, x1);
+			with brn.assert_f64(-2.) { res4.x }
+			with brn.assert_f64(-3.) { res4.y }
+			with brn.assert_f64(-4.) { res4.z }
+
+			let res5 = sub(x1, origin);
+			with brn.assert_f64(x1.x) { res5.x }
+			with brn.assert_f64(x1.y) { res5.y }
+			with brn.assert_f64(x1.z) { res5.z }
+
+			let res6 = sub(origin, x1);
+			with brn.assert_f64(-x1.x) { res6.x }
+			with brn.assert_f64(-x1.y) { res6.y }
+			with brn.assert_f64(-x1.z) { res6.z }
+		}
+
+		with brn.subgroup("vecnorm") {
+			with brn.assert_f64(3.7416573867739413) { vecnorm(x1) }
+			with brn.assert_f64(10.770329614269007) { vecnorm(x2) }
+			with brn.assert_f64(1.7320508075688772) { vecnorm(x3) }
+			with brn.assert_f64(0.) { vecnorm(origin) }
+		}
+
+		with brn.subgroup("vecnorm2") {
+			with brn.assert_f64(14.)  { vecnorm2(x1) }
+			with brn.assert_f64(116.) { vecnorm2(x2) }
+			with brn.assert_f64(3.)   { vecnorm2(x3) }
+			with brn.assert_f64(0.)   { vecnorm2(origin) }
 		}
 	}
 }
