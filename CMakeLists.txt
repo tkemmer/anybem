@@ -83,13 +83,13 @@ if(Badhron_FOUND)
 		${AnyBEM_IMPALA_FILES}
 		test/linalg.impala
 		test/rjasanow.impala
-		test/main.impala
+		test/runtests.impala
 	)
 
 	add_executable(anybem_test
 		${AnyBEM_TEST_PROGRAM}
 		${AnyBEM_SOURCE_FILES}
-		test/main.cpp
+		test/runtests.cpp
 	)
 
 	target_link_libraries(anybem_test ${AnyDSL_runtime_LIBRARIES} ${Badhron_LIBRARIES})
