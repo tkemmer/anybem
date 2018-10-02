@@ -150,7 +150,7 @@ fn rjasanow_laplacepot_single_space(
 		(term1 + term2) / (term1 - term2)
 	};
 	one_half * h * math.log(logterm(sin_phi2) / logterm(sin_phi1)) + math.fabs(d) *
-		(math.asin(chi * sin_phi2) - math.asin(sin_phi2) - math.asin(chi * math.asin(sin_phi1)) + math.asin(sin_phi1))
+		(math.asin(chi * sin_phi2) - math.asin(sin_phi2) - math.asin(chi * sin_phi1) + math.asin(sin_phi1))
 }
 
 /// Double-layer potential, observation point in the surface element plane
