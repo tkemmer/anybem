@@ -1,6 +1,6 @@
 extern fn main(i32, &[&[u8]]) -> i32 {
-	let brn = badhron_suite();
-	linalg_tests(brn);
-	rjasanow_tests(brn);
-	brn.exit_status()
+	with brn in badhron_suite() {
+		linalg_tests(brn);
+		rjasanow_tests(brn);
+	}
 }
