@@ -23,18 +23,15 @@ fn rjasanow_tests(brn: BadhronSuite) -> () {
 		}
 
 		with brn.subgroup("rjasanow_project") {
-			let p1 = rjasanow_project(Position{x: 1., y: 0., z: 0.}, elem);
-			with brn.assert_f64(elem.v1().x()) { p1.x }
-			with brn.assert_f64(elem.v1().y()) { p1.y }
-			with brn.assert_f64(elem.v1().z()) { p1.z }
-			let p2 = rjasanow_project(Position{x: 1., y: 1., z: 0.}, elem);
-			with brn.assert_f64(elem.v2().x()) { p2.x }
-			with brn.assert_f64(elem.v2().y()) { p2.y }
-			with brn.assert_f64(elem.v2().z()) { p2.z }
-			let p3 = rjasanow_project(Position{x: 1., y: 0., z: 1.}, elem);
-			with brn.assert_f64(elem.v3().x()) { p3.x }
-			with brn.assert_f64(elem.v3().y()) { p3.y }
-			with brn.assert_f64(elem.v3().z()) { p3.z }
+			with brn.assert() {
+				assert_position(elem.v1().pos(), rjasanow_project(Position{x: 1., y: 0., z: 0.}, elem))
+			}
+			with brn.assert() {
+				assert_position(elem.v2().pos(), rjasanow_project(Position{x: 1., y: 1., z: 0.}, elem))
+			}
+			with brn.assert() {
+				assert_position(elem.v3().pos(), rjasanow_project(Position{x: 1., y: 0., z: 1.}, elem))
+			}
 		}
 
 		with brn.subgroup("rjasanow_laplacepot_single") {
