@@ -1,0 +1,34 @@
+fn radon_tests(brn: BadhronSuite) -> () {
+	with brn.group("Radon") {
+		with brn.subgroup("radon_regyukawapot_single") {
+			let x   = Position{x: one, y: one, z: one};
+			let yuk = 7 as Real;
+
+			// x --> xi
+			with brn.assert_f64(-yuk) {
+				radon_regyukawapot_single(x, x, origin, yuk)
+			}
+
+			// xi not in origin (no cancellation)
+			with brn.assert_f64(-0.28867513458631466) {
+				radon_regyukawapot_single(x, neg(x), origin, yuk)
+			}
+
+			// xi in origin (no cancellation)
+			with brn.assert_f64(-0.5773471366352675) {
+				radon_regyukawapot_single(x, origin, origin, yuk)
+			}
+
+			// xi in origin (potential cancellation)
+			with brn.assert_f64(-6.957735736640796) {
+				radon_regyukawapot_single(smul(x, 0.001 as Real), origin, origin, yuk)
+			}
+			with brn.assert_f64(-6.995758190001751) {
+				radon_regyukawapot_single(smul(x, 0.0001 as Real), origin, origin, yuk)
+			}
+			with brn.assert_f64(-6.999575664701625) {
+				radon_regyukawapot_single(smul(x, 0.00001 as Real), origin, origin, yuk)
+			}
+		}
+	}
+}

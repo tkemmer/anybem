@@ -16,6 +16,7 @@ fn assert_position(exp: Position, obs: Position) -> BadhronCheckFn {
 extern fn main(i32, &[&[u8]]) -> i32 {
 	with brn in badhron_suite() {
 		linalg_tests(brn);
+		radon_tests(brn);
 		rjasanow_tests(brn);
 	}
 }

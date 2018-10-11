@@ -1,0 +1,75 @@
+struct QuadPoint2D {
+	x:      Real,
+	y:      Real,
+	weight: Real
+}
+
+static quadrature_points_triangle = [
+	QuadPoint2D{x: 0.3333333333333333  as Real, y: 0.3333333333333333  as Real, weight: 0.1125 as Real},
+	QuadPoint2D{x: 0.47014206410511505 as Real, y: 0.05971587178976981 as Real, weight: 0.06619707639425308 as Real},
+	QuadPoint2D{x: 0.05971587178976981 as Real, y: 0.47014206410511505 as Real, weight: 0.06619707639425308 as Real},
+	QuadPoint2D{x: 0.47014206410511505 as Real, y: 0.47014206410511505 as Real, weight: 0.06619707639425308 as Real},
+	QuadPoint2D{x: 0.10128650732345633 as Real, y: 0.7974269853530872  as Real, weight: 0.06296959027241358 as Real},
+	QuadPoint2D{x: 0.7974269853530872  as Real, y: 0.10128650732345633 as Real, weight: 0.06296959027241358 as Real},
+	QuadPoint2D{x: 0.10128650732345633 as Real, y: 0.10128650732345633 as Real, weight: 0.06296959027241358 as Real}
+];
+
+fn @radon_cubature_point(ref: QuadPoint2D, elem: Triangle) -> Position {
+	let u = sub(elem.v2().pos(), elem.v1().pos());
+	let v = sub(elem.v3().pos(), elem.v1().pos());
+	Position {
+		x: ref.x * u.x + ref.y * v.x + elem.v1().x(),
+		y: ref.x * u.y + ref.y * v.y + elem.v1().y(),
+		z: ref.x * u.z + ref.y * v.z + elem.v1().z()
+	}
+}
+
+type RadonPotFn = fn(Position, Position, Position, Real) -> Real;
+
+fn radon_regyukawapot_elem(
+	xi:   Position,
+	elem: Triangle,
+	yuk:  Real,
+	pot:  RadonPotFn,
+) -> Real {
+
+	let mut sum = zero;
+	for i in range(0, 7) {
+		let qpt = quadrature_points_triangle(i);
+		let cpt = radon_cubature_point(qpt, elem);
+		sum += pot(cpt, xi, elem.normal(), yuk) * qpt.weight;
+	}
+	sum
+}
+
+fn radon_regyukawapot_single(
+	x:   Position,
+	xi:  Position,
+	     Position,
+	yuk: Real
+) -> Real {
+
+	let rnorm = euclidean(x, xi);
+	let snorm = yuk * rnorm;
+
+	if rnorm < etol {
+		-yuk
+	} else if snorm < 0.1 as Real {
+		let mut term = -snorm;
+		let mut tsum = zero;
+		let     tol  = etol * math.fabs(term);
+
+		for i in range(1, 16) {
+			if math.fabs(term) <= tol {
+				break()
+			}
+
+			tsum += term;
+			term *= -snorm / (i as Real + one)
+		}
+
+		tsum / rnorm
+	} else {
+		(math.exp(-snorm) - one) / rnorm
+	}
+}

@@ -41,6 +41,7 @@ set(AnyBEM_IMPALA_FILES
 	src/impala/constants.impala
 	src/impala/model.impala
 	src/impala/linalg.impala
+	src/impala/radon.impala
 	src/impala/rjasanow.impala
 	src/impala/born.impala
 	src/impala/export.impala
@@ -82,6 +83,7 @@ if(Badhron_FOUND)
 		${Badhron_IMPALA_FILES}
 		${AnyBEM_IMPALA_FILES}
 		test/linalg.impala
+		test/radon.impala
 		test/rjasanow.impala
 		test/runtests.impala
 	)
