@@ -73,3 +73,36 @@ fn radon_regyukawapot_single(
 		(math.exp(-snorm) - one) / rnorm
 	}
 }
+
+fn radon_regyukawapot_double(
+	x:   Position,
+	xi:  Position,
+	n:   Position,
+	yuk: Real
+) -> Real {
+
+	let rnorm = euclidean(x, xi);
+	let snorm = yuk * rnorm;
+	let cosovernorm2 = dot(sub(x, xi), n) / (rnorm * rnorm * rnorm);
+
+	if rnorm < etol {
+		zero
+	} else if snorm < 0.1 as Real {
+		let mut term = one_half * snorm * snorm;
+		let mut tsum = zero;
+		let     tol  = etol * math.fabs(term);
+
+		for i in range(2, 17) {
+			if math.fabs(term) <= tol {
+				break()
+			}
+
+			tsum += term * (i as Real - one);
+			term *= -snorm / (i as Real + one)
+		}
+
+		tsum * cosovernorm2
+	} else {
+		(one - (one + snorm) * math.exp(-snorm)) * cosovernorm2
+	}
+}
