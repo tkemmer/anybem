@@ -22,8 +22,8 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CLIPP_INCLUDE_DIR}")
 	message(STATUS "Fetching dependency Clipp")
 	find_program(GIT_CMD git REQUIRED)
 	execute_process(
-		COMMAND ${GIT_CMD} submodule update --init -- deps/clipp
-		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMAND "${GIT_CMD}" submodule update --init -- deps/clipp
+		WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 		OUTPUT_QUIET
 	)
 endif()
@@ -31,7 +31,7 @@ endif()
 #######################################################################################################################
 # Project configuration
 include_directories(include)
-include_directories(SYSTEM ${CLIPP_INCLUDE_DIR})
+include_directories(SYSTEM "${CLIPP_INCLUDE_DIR}")
 
 # Default properties for all targets
 set(CMAKE_CXX_STANDARD 14)
