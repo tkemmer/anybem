@@ -29,8 +29,3 @@ add_library(libanybem SHARED
 	cpp/util.cpp
 )
 target_link_libraries(libanybem PUBLIC ${AnyDSL_runtime_LIBRARIES})
-
-add_executable(anybem
-	cpp/main.cpp
-)
-target_link_libraries(anybem libanybem)
