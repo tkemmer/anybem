@@ -12,26 +12,25 @@ set(AnyBEM_IMPALA_FILES
 )
 set(AnyBEM_IMPALA_FILES ${AnyBEM_IMPALA_FILES} PARENT_SCOPE)
 
-set(AnyBEM_SOURCE_FILES
-	"${PROJECT_SOURCE_DIR}/include/anybem/error.h"
-	"${PROJECT_SOURCE_DIR}/include/anybem/hmo_reader.h"
-	"${PROJECT_SOURCE_DIR}/include/anybem/impala.h"
-	"${PROJECT_SOURCE_DIR}/include/anybem/model.h"
-	"${PROJECT_SOURCE_DIR}/include/anybem/reader.h"
-	"${PROJECT_SOURCE_DIR}/include/anybem/types.h"
-	"${PROJECT_SOURCE_DIR}/include/anybem/util.h"
-	"${PROJECT_SOURCE_DIR}/src/cpp/hmo_reader.cpp"
-	"${PROJECT_SOURCE_DIR}/src/cpp/util.cpp"
-)
-set(AnyBEM_SOURCE_FILES ${AnyBEM_SOURCE_FILES} PARENT_SCOPE)
-
 anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	${AnyBEM_IMPALA_FILES}
 )
 
-add_executable(anybem
+add_library(libanybem SHARED
 	${AnyBEM_PROGRAM}
-	${AnyBEM_SOURCE_FILES}
+	../include/anybem/error.h
+	../include/anybem/hmo_reader.h
+	../include/anybem/impala.h
+	../include/anybem/model.h
+	../include/anybem/reader.h
+	../include/anybem/types.h
+	../include/anybem/util.h
+	cpp/hmo_reader.cpp
+	cpp/util.cpp
+)
+target_link_libraries(libanybem PUBLIC ${AnyDSL_runtime_LIBRARIES})
+
+add_executable(anybem
 	cpp/main.cpp
 )
-target_link_libraries(anybem ${AnyDSL_runtime_LIBRARIES})
+target_link_libraries(anybem libanybem)
