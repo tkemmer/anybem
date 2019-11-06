@@ -28,11 +28,15 @@ if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CLIPP_INCLUDE_DIR}")
 	)
 endif()
 
-
 #######################################################################################################################
 # Project configuration
 include_directories(include)
 include_directories(SYSTEM ${CLIPP_INCLUDE_DIR})
+
+# Default properties for all targets
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(AnyBEM_IMPALA_FLAGS "")
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
