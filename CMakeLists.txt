@@ -45,28 +45,28 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 set(AnyBEM_IMPALA_FILES
-	src/impala/backend/backend_cpu.impala
-	src/impala/import.impala
-	src/impala/types.impala
-	src/impala/constants.impala
-	src/impala/model.impala
-	src/impala/linalg.impala
-	src/impala/radon.impala
-	src/impala/rjasanow.impala
-	src/impala/born.impala
-	src/impala/export.impala
+	"${PROJECT_SOURCE_DIR}/src/impala/backend/backend_cpu.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/import.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/types.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/constants.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/model.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/linalg.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/radon.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/rjasanow.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/born.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/export.impala"
 )
 
 set(AnyBEM_SOURCE_FILES
-	include/anybem/error.h
-	include/anybem/hmo_reader.h
-	include/anybem/impala.h
-	include/anybem/model.h
-	include/anybem/reader.h
-	include/anybem/types.h
-	include/anybem/util.h
-	src/cpp/hmo_reader.cpp
-	src/cpp/util.cpp
+	"${PROJECT_SOURCE_DIR}/include/anybem/error.h"
+	"${PROJECT_SOURCE_DIR}/include/anybem/hmo_reader.h"
+	"${PROJECT_SOURCE_DIR}/include/anybem/impala.h"
+	"${PROJECT_SOURCE_DIR}/include/anybem/model.h"
+	"${PROJECT_SOURCE_DIR}/include/anybem/reader.h"
+	"${PROJECT_SOURCE_DIR}/include/anybem/types.h"
+	"${PROJECT_SOURCE_DIR}/include/anybem/util.h"
+	"${PROJECT_SOURCE_DIR}/src/cpp/hmo_reader.cpp"
+	"${PROJECT_SOURCE_DIR}/src/cpp/util.cpp"
 )
 
 
