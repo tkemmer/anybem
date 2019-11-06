@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.12...3.14)
 project(AnyBEM CXX)
 
 #######################################################################################################################
@@ -94,7 +94,7 @@ if(Badhron_FOUND)
 		test/runtests.cpp
 	)
 
-	target_link_libraries(anybem_test ${AnyDSL_runtime_LIBRARIES} ${Badhron_LIBRARIES})
+	target_link_libraries(anybem_test ${Badhron_LIBRARIES})
 	set_target_properties(anybem_test PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
 
 else()
