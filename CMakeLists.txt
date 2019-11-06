@@ -13,9 +13,6 @@ project(AnyBEM
 ## AnyDSL
 find_package(AnyDSL_runtime REQUIRED)
 
-## Badhron
-find_package(Badhron)
-
 ## Clipp
 set(CLIPP_INCLUDE_DIR "deps/clipp/include" CACHE INTERNAL "Clipp include directory")
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CLIPP_INCLUDE_DIR}")
@@ -85,28 +82,8 @@ add_executable(anybem
 target_link_libraries(anybem ${AnyDSL_runtime_LIBRARIES} ${Badhron_LIBRARIES})
 set_target_properties(anybem PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
 
-
-#######################################################################################################################
-# AnyBEM tests
-if(Badhron_FOUND)
-	anydsl_runtime_wrap(AnyBEM_TEST_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
-		${Badhron_IMPALA_FILES}
-		${AnyBEM_IMPALA_FILES}
-		test/linalg.impala
-		test/radon.impala
-		test/rjasanow.impala
-		test/runtests.impala
-	)
-
-	add_executable(anybem_test
-		${AnyBEM_TEST_PROGRAM}
-		${AnyBEM_SOURCE_FILES}
-		test/runtests.cpp
-	)
-
-	target_link_libraries(anybem_test ${Badhron_LIBRARIES})
-	set_target_properties(anybem_test PROPERTIES CXX_STANDARD 14 CXX_STANDARD_REQUIRED ON)
-
-else()
-	message(STATUS "Badhron has not been found. Disabling AnyBEM test suite.")
+# Tests
+include(CTest)
+if(BUILD_TESTING)
+	add_subdirectory(test)
 endif()
