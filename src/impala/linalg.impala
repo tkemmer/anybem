@@ -9,7 +9,7 @@ fn @add(u: Position, v: Position) -> Position {
 fn @cross(u: Position, v: Position) -> Position {
 	Position {
 		x: u.y * v.z - u.z * v.y,
-		y: u.x * v.z - u.z * v.x,
+		y: u.z * v.x - u.x * v.z,
 		z: u.x * v.y - u.y * v.x
 	}
 }

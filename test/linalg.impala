@@ -14,10 +14,10 @@ fn linalg_tests(brn: BadhronSuite) -> () {
 		}
 
 		with brn.subgroup("cross") {
-			with brn.assert() { assert_position(Position{x: -2., y: -4., z: -2.}, cross(x1, x2)) }
-			with brn.assert() { assert_position(Position{x:  2., y:  4., z:  2.}, cross(x2, x1)) }
-			with brn.assert() { assert_position(Position{x:  1., y:  2., z:  1.}, cross(x1, x3)) }
-			with brn.assert() { assert_position(Position{x: -1., y: -2., z: -1.}, cross(x3, x1)) }
+			with brn.assert() { assert_position(Position{x: -2., y:  4., z: -2.}, cross(x1, x2)) }
+			with brn.assert() { assert_position(Position{x:  2., y: -4., z:  2.}, cross(x2, x1)) }
+			with brn.assert() { assert_position(Position{x:  1., y: -2., z:  1.}, cross(x1, x3)) }
+			with brn.assert() { assert_position(Position{x: -1., y:  2., z: -1.}, cross(x3, x1)) }
 			with brn.assert() { assert_position(Position{x:  0., y:  0., z:  0.}, cross(x1, origin)) }
 			with brn.assert() { assert_position(Position{x:  0., y:  0., z:  0.}, cross(origin, x1)) }
 		}
