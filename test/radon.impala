@@ -35,7 +35,7 @@ fn radon_tests(brn: BadhronSuite) -> () {
 			let n = Position{x: one, y: zero, z: zero};
 
 			// x --> xi
-			with brn.assert_f64(0.0) {
+			with brn.assert_f64(14.145081595145832) {
 				radon_regyukawapot_double(x, x, n, yuk)
 			}
 

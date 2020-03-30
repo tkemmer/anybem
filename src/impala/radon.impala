@@ -86,7 +86,7 @@ fn radon_regyukawapot_double(
 	let cosovernorm2 = dot(sub(x, xi), n) / (rnorm * rnorm * rnorm);
 
 	if rnorm < etol {
-		zero
+		yuk * yuk / (2 as Real) / math.sqrt(3 as Real)
 	} else if snorm < 0.1 as Real {
 		let mut term = one_half * snorm * snorm;
 		let mut tsum = zero;
