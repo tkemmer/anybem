@@ -1,5 +1,5 @@
-fn linalg_tests(brn: BadhronSuite) -> () {
-	with brn.group("Linear algebra") {
+fn math_tests(brn: BadhronSuite) -> () {
+	with brn.group("Math helpers") {
 		let x1 = Position{x: 1., y: 2., z: 3.};
 		let x2 = Position{x: 4., y: 6., z: 8.};
 		let x3 = Position{x: -1., y: -1., z: -1.};
