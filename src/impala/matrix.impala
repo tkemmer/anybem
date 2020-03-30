@@ -2,6 +2,7 @@ struct LaplacePotMat {
 	loc:      LocalityType,
 	xis:      fn()             -> NodeBuffer,
 	elements: fn()             -> SurfaceElementBuffer,
+	size:     fn()             -> (Index, Index),
 	get:      fn(Index, Index) -> Real
 }
 
@@ -10,6 +11,7 @@ fn new_laplace_potmat(loc: LocalityType, xis: NodeBuffer, elements: SurfaceEleme
 		loc:      loc,
 		xis:      ||    xis,
 		elements: ||    elements,
+		size:     ||    (xis.size(), elements.size()),
 		get:      |i,j| if loc == SingleLayer {
 			laplacepot_single(xis.get(i).pos(), elements.get(j))
 		} else {
@@ -19,9 +21,8 @@ fn new_laplace_potmat(loc: LocalityType, xis: NodeBuffer, elements: SurfaceEleme
 }
 
 fn dump_laplace_potmat(mat: LaplacePotMat) -> () {
-	print_index(mat.xis().size());
-	print_string(" x ");
-	print_index(mat.elements().size());
+	let (r, c) = mat.size();
+	print_index(r); print_string(" x "); print_index(c);
 	print_string(" LaplacePotMat");
 	if mat.loc == SingleLayer { print_string("{SingleLayer}"); } else { print_string("{DoubleLayer}"); }
 	print_string("\n");
