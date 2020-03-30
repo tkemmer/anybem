@@ -61,3 +61,25 @@ fn dump_potential_matrix(mat: PotentialMatrix) -> () {
 	if mat.loc == SingleLayer { print_string("{SingleLayer}"); } else { print_string("{DoubleLayer}"); }
 	print_string("\n");
 }
+
+struct Vector{
+	size: fn()            -> Index,
+	get:  fn(Index)       -> Real,
+	set:  fn(Index, Real) -> ()
+}
+
+fn new_vector(buf: Buffer) -> Vector {
+	let size = buf.size / (sizeof[Real]() as i64);
+	Vector {
+		size: @||         size,
+		get:  @|idx|      bitcast[&[Real]](buf.data)(idx),
+		set:  @|idx, val| bitcast[&mut[Real]](buf.data)(idx) = val
+	}
+}
+
+fn fill_vector(vec: Vector, val: Real) -> Vector {
+	for i in range(0, vec.size() as i32) {
+		vec.set(i as Index, val)
+	}
+	vec
+}
