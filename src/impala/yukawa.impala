@@ -42,7 +42,23 @@ fn _reyukawapot_elem(
 	sum
 }
 
-fn reyukawapot_single(
+fn @reyukawapot_single(
+	xi:   Position,
+	elem: Triangle,
+	yuk:  Real
+) -> Real {
+	_reyukawapot_elem(xi, elem, yuk, _reyukawapot_single)
+}
+
+fn @reyukawapot_double(
+	xi:   Position,
+	elem: Triangle,
+	yuk:  Real
+) -> Real {
+	_reyukawapot_elem(xi, elem, yuk, _reyukawapot_double)
+}
+
+fn _reyukawapot_single(
 	x:   Position,
 	xi:  Position,
 	     Position,
@@ -74,7 +90,7 @@ fn reyukawapot_single(
 	}
 }
 
-fn reyukawapot_double(
+fn _reyukawapot_double(
 	x:   Position,
 	xi:  Position,
 	n:   Position,

@@ -3,61 +3,61 @@ fn yukawa_tests(brn: BadhronSuite) -> () {
 		let x   = Position{x: one, y: one, z: one};
 		let yuk = 7 as Real;
 
-		with brn.subgroup("reyukawapot_single") {
+		with brn.subgroup("_reyukawapot_single") {
 			// x --> xi
 			with brn.assert_f64(-yuk) {
-				reyukawapot_single(x, x, origin, yuk)
+				_reyukawapot_single(x, x, origin, yuk)
 			}
 
 			// xi not in origin (no cancellation)
 			with brn.assert_f64(-0.28867513458631466) {
-				reyukawapot_single(x, neg(x), origin, yuk)
+				_reyukawapot_single(x, neg(x), origin, yuk)
 			}
 
 			// xi in origin (no cancellation)
 			with brn.assert_f64(-0.5773471366352675) {
-				reyukawapot_single(x, origin, origin, yuk)
+				_reyukawapot_single(x, origin, origin, yuk)
 			}
 
 			// xi in origin (potential cancellation)
 			with brn.assert_f64(-6.957735736640796) {
-				reyukawapot_single(smul(x, 0.001 as Real), origin, origin, yuk)
+				_reyukawapot_single(smul(x, 0.001 as Real), origin, origin, yuk)
 			}
 			with brn.assert_f64(-6.995758190001751) {
-				reyukawapot_single(smul(x, 0.0001 as Real), origin, origin, yuk)
+				_reyukawapot_single(smul(x, 0.0001 as Real), origin, origin, yuk)
 			}
 			with brn.assert_f64(-6.999575664701625) {
-				reyukawapot_single(smul(x, 0.00001 as Real), origin, origin, yuk)
+				_reyukawapot_single(smul(x, 0.00001 as Real), origin, origin, yuk)
 			}
 		}
 
-		with brn.subgroup("reyukawapot_double") {
+		with brn.subgroup("_reyukawapot_double") {
 			let n = Position{x: one, y: zero, z: zero};
 
 			// x --> xi
 			with brn.assert_f64(14.145081595145832) {
-				reyukawapot_double(x, x, n, yuk)
+				_reyukawapot_double(x, x, n, yuk)
 			}
 
 			// xi not in origin (no cancellation)
 			with brn.assert_f64(0.048112522396707304) {
-				reyukawapot_double(x, neg(x), n, yuk)
+				_reyukawapot_double(x, neg(x), n, yuk)
 			}
 
 			// xi in origin (no cancellation)
 			with brn.assert_f64(0.19243638547737502) {
-				reyukawapot_double(x, origin, n, yuk)
+				_reyukawapot_double(x, origin, n, yuk)
 			}
 
 			// xi in origin (potential cancellation)
 			with brn.assert_f64(14.031266417097603) {
-				reyukawapot_double(smul(x, 0.001 as Real), origin, n, yuk)
+				_reyukawapot_double(smul(x, 0.001 as Real), origin, n, yuk)
 			}
 			with brn.assert_f64(14.133653458449709) {
-				reyukawapot_double(smul(x, 0.0001 as Real), origin, n, yuk)
+				_reyukawapot_double(smul(x, 0.0001 as Real), origin, n, yuk)
 			}
 			with brn.assert_f64(14.143938313793992) {
-				reyukawapot_double(smul(x, 0.00001 as Real), origin, n, yuk)
+				_reyukawapot_double(smul(x, 0.00001 as Real), origin, n, yuk)
 			}
 		}
 	}
