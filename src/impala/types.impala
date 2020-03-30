@@ -1,8 +1,0 @@
-type Index    = i64;
-type Real     = f64;
-
-struct Position {
-	x: Real,
-	y: Real,
-	z: Real
-}

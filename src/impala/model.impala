@@ -314,6 +314,13 @@ struct SystemParams {
 	lambda:   Real
 }
 
+static default_params = SystemParams{
+	epsOmega: 2   as Real,
+	epsSigma: 78  as Real,
+	epsInf:   1.8 as Real,
+	lambda:   20  as Real
+};
+
 fn dump_system_params(params: SystemParams) -> () {
 	print_string("System parameters:\n");
 	print_string(" * epsOmega: "); print_f64(params.epsOmega as f64); print_string("\n");
