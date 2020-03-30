@@ -4,26 +4,26 @@
 /**
  * Analytical solution for the single-layer Laplace potential for a given triangle and observation point.
  */
-fn rjasanow_laplacepot_single(xi: Position, elem: Triangle) -> Real {
-	let dist = rjasanow_distance(xi, elem);
+fn laplacepot_single(xi: Position, elem: Triangle) -> Real {
+	let dist = _laplacepot_distance(xi, elem);
 
 	if math.fabs(dist) < etol {
-		rjasanow_laplacepot_elem(xi, elem, dist, rjasanow_laplacepot_single_plane)
+		_laplacepot_elem(xi, elem, dist, _laplacepot_single_plane)
 	} else {
-		rjasanow_laplacepot_elem(rjasanow_project(xi, elem), elem, dist, rjasanow_laplacepot_single_space)
+		_laplacepot_elem(_laplacepot_project(xi, elem), elem, dist, _laplacepot_single_space)
 	}
 }
 
 /**
  * Analytical solution for the double-layer Laplace potential for a given triangle and observation point.
  */
-fn rjasanow_laplacepot_double(xi: Position, elem: Triangle) -> Real {
-	let dist = rjasanow_distance(xi, elem);
+fn laplacepot_double(xi: Position, elem: Triangle) -> Real {
+	let dist = _laplacepot_distance(xi, elem);
 
 	if math.fabs(dist) < etol {
-		rjasanow_laplacepot_elem(xi, elem, dist, rjasanow_laplacepot_double_plane)
+		_laplacepot_elem(xi, elem, dist, _laplacepot_double_plane)
 	} else {
-		rjasanow_laplacepot_elem(rjasanow_project(xi, elem), elem, dist, rjasanow_laplacepot_double_space)
+		_laplacepot_elem(_laplacepot_project(xi, elem), elem, dist, _laplacepot_double_space)
 	}
 }
 
@@ -35,16 +35,16 @@ fn rjasanow_laplacepot_double(xi: Position, elem: Triangle) -> Real {
  * Computes the single or double layer Laplace potential of the given triangle for the given observation point `xi`.
  * The latter needs to be projected onto the surface element plane!
  */
-fn rjasanow_laplacepot_elem(
+fn _laplacepot_elem(
 		xi:   Position,
 		elem: Triangle,
 		dist: Real,
-		pot:  RjLaplacePotFn
+		pot:  LaplacePotFn
 	) -> Real {
 
-	rjasanow_laplacepot(xi, elem.v1().pos(), elem.v2().pos(), elem.normal(), dist, pot) +
-	rjasanow_laplacepot(xi, elem.v2().pos(), elem.v3().pos(), elem.normal(), dist, pot) +
-	rjasanow_laplacepot(xi, elem.v3().pos(), elem.v1().pos(), elem.normal(), dist, pot)
+	_laplacepot(xi, elem.v1().pos(), elem.v2().pos(), elem.normal(), dist, pot) +
+	_laplacepot(xi, elem.v2().pos(), elem.v3().pos(), elem.normal(), dist, pot) +
+	_laplacepot(xi, elem.v3().pos(), elem.v1().pos(), elem.normal(), dist, pot)
 }
 
 
@@ -55,13 +55,13 @@ fn rjasanow_laplacepot_elem(
  *
  * Note that the result is premultiplied by 4π!
  */
-fn rjasanow_laplacepot(
+fn _laplacepot(
 		xi:  Position,
 		x1:  Position,
 		x2:  Position,
 		n:   Position,
 		d:   Real,
-		pot: RjLaplacePotFn
+		pot: LaplacePotFn
 	) -> Real {
 
 	// Construct triangle sides. Later on, we will use the height h of the triangle at point ξ as well as the angles
@@ -117,10 +117,10 @@ fn rjasanow_laplacepot(
 // ====================================================================================================================
 // Potential functions (specific to relative position and potential type)
 
-type RjLaplacePotFn = fn(Real, Real, Real, Real) -> Real;
+type LaplacePotFn = fn(Real, Real, Real, Real) -> Real;
 
 /// Single-layer potential, observation point in the surface element plane
-fn rjasanow_laplacepot_single_plane(
+fn _laplacepot_single_plane(
 		sin_phi1: Real,
 		sin_phi2: Real,
 		h:        Real,
@@ -134,7 +134,7 @@ fn rjasanow_laplacepot_single_plane(
 }
 
 /// Single-layer potential, observation point somewhere else in space
-fn rjasanow_laplacepot_single_space(
+fn _laplacepot_single_space(
 		sin_phi1: Real,
 		sin_phi2: Real,
 		h:        Real,
@@ -154,7 +154,7 @@ fn rjasanow_laplacepot_single_space(
 }
 
 /// Double-layer potential, observation point in the surface element plane
-fn rjasanow_laplacepot_double_plane(
+fn _laplacepot_double_plane(
 		Real,
 		Real,
 		Real,
@@ -165,7 +165,7 @@ fn rjasanow_laplacepot_double_plane(
 }
 
 /// Double-layer potential, observation point somewhere else in space
-fn rjasanow_laplacepot_double_space(
+fn _laplacepot_double_space(
 		sin_phi1: Real,
 		sin_phi2: Real,
 		h:        Real,
@@ -181,11 +181,11 @@ fn rjasanow_laplacepot_double_space(
 // Helper functions
 
 /// Computes the (positive or negative) distance from xi to the surface element plane
-fn rjasanow_distance(xi: Position, elem: Triangle) -> Real {
+fn _laplacepot_distance(xi: Position, elem: Triangle) -> Real {
 	dot(xi, elem.normal()) - elem.dist()
 }
 
 /// Projects xi onto the surface element plane
-fn rjasanow_project(xi: Position, elem: Triangle) -> Position {
-	sub(xi, smul(elem.normal(), rjasanow_distance(xi, elem)))
+fn _laplacepot_project(xi: Position, elem: Triangle) -> Position {
+	sub(xi, smul(elem.normal(), _laplacepot_distance(xi, elem)))
 }

@@ -5,7 +5,7 @@ anydsl_runtime_wrap(AnyBEM_TEST_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILE
 	${AnyBEM_IMPALA_FILES}
 	linalg.impala
 	radon.impala
-	rjasanow.impala
+	laplace.impala
 	runtests.impala
 )
 
