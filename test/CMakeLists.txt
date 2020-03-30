@@ -4,7 +4,7 @@ anydsl_runtime_wrap(AnyBEM_TEST_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILE
 	${Badhron_IMPALA_FILES}
 	${AnyBEM_IMPALA_FILES}
 	math.impala
-	radon.impala
+	yukawa.impala
 	laplace.impala
 	runtests.impala
 )

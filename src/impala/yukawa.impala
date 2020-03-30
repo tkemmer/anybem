@@ -4,7 +4,7 @@ struct QuadPoint2D {
 	weight: Real
 }
 
-static quadrature_points_triangle = [
+static _quadrature_points_triangle = [
 	QuadPoint2D{x: 0.3333333333333333  as Real, y: 0.3333333333333333  as Real, weight: 0.1125 as Real},
 	QuadPoint2D{x: 0.47014206410511505 as Real, y: 0.05971587178976981 as Real, weight: 0.06619707639425308 as Real},
 	QuadPoint2D{x: 0.05971587178976981 as Real, y: 0.47014206410511505 as Real, weight: 0.06619707639425308 as Real},
@@ -14,7 +14,7 @@ static quadrature_points_triangle = [
 	QuadPoint2D{x: 0.10128650732345633 as Real, y: 0.10128650732345633 as Real, weight: 0.06296959027241358 as Real}
 ];
 
-fn @radon_cubature_point(ref: QuadPoint2D, elem: Triangle) -> Position {
+fn @_quadrature_point(ref: QuadPoint2D, elem: Triangle) -> Position {
 	let u = sub(elem.v2().pos(), elem.v1().pos());
 	let v = sub(elem.v3().pos(), elem.v1().pos());
 	Position {
@@ -24,25 +24,25 @@ fn @radon_cubature_point(ref: QuadPoint2D, elem: Triangle) -> Position {
 	}
 }
 
-type RadonPotFn = fn(Position, Position, Position, Real) -> Real;
+type YukawaPotFn = fn(Position, Position, Position, Real) -> Real;
 
-fn radon_regyukawapot_elem(
+fn _reyukawapot_elem(
 	xi:   Position,
 	elem: Triangle,
 	yuk:  Real,
-	pot:  RadonPotFn,
+	pot:  YukawaPotFn,
 ) -> Real {
 
 	let mut sum = zero;
 	for i in range(0, 7) {
-		let qpt = quadrature_points_triangle(i);
-		let cpt = radon_cubature_point(qpt, elem);
+		let qpt = _quadrature_points_triangle(i);
+		let cpt = _quadrature_point(qpt, elem);
 		sum += pot(cpt, xi, elem.normal(), yuk) * qpt.weight;
 	}
 	sum
 }
 
-fn radon_regyukawapot_single(
+fn reyukawapot_single(
 	x:   Position,
 	xi:  Position,
 	     Position,
@@ -74,7 +74,7 @@ fn radon_regyukawapot_single(
 	}
 }
 
-fn radon_regyukawapot_double(
+fn reyukawapot_double(
 	x:   Position,
 	xi:  Position,
 	n:   Position,

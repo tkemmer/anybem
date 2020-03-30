@@ -1,63 +1,63 @@
-fn radon_tests(brn: BadhronSuite) -> () {
-	with brn.group("Radon") {
+fn yukawa_tests(brn: BadhronSuite) -> () {
+	with brn.group("Yukawa potentials") {
 		let x   = Position{x: one, y: one, z: one};
 		let yuk = 7 as Real;
 
-		with brn.subgroup("radon_regyukawapot_single") {
+		with brn.subgroup("reyukawapot_single") {
 			// x --> xi
 			with brn.assert_f64(-yuk) {
-				radon_regyukawapot_single(x, x, origin, yuk)
+				reyukawapot_single(x, x, origin, yuk)
 			}
 
 			// xi not in origin (no cancellation)
 			with brn.assert_f64(-0.28867513458631466) {
-				radon_regyukawapot_single(x, neg(x), origin, yuk)
+				reyukawapot_single(x, neg(x), origin, yuk)
 			}
 
 			// xi in origin (no cancellation)
 			with brn.assert_f64(-0.5773471366352675) {
-				radon_regyukawapot_single(x, origin, origin, yuk)
+				reyukawapot_single(x, origin, origin, yuk)
 			}
 
 			// xi in origin (potential cancellation)
 			with brn.assert_f64(-6.957735736640796) {
-				radon_regyukawapot_single(smul(x, 0.001 as Real), origin, origin, yuk)
+				reyukawapot_single(smul(x, 0.001 as Real), origin, origin, yuk)
 			}
 			with brn.assert_f64(-6.995758190001751) {
-				radon_regyukawapot_single(smul(x, 0.0001 as Real), origin, origin, yuk)
+				reyukawapot_single(smul(x, 0.0001 as Real), origin, origin, yuk)
 			}
 			with brn.assert_f64(-6.999575664701625) {
-				radon_regyukawapot_single(smul(x, 0.00001 as Real), origin, origin, yuk)
+				reyukawapot_single(smul(x, 0.00001 as Real), origin, origin, yuk)
 			}
 		}
 
-		with brn.subgroup("radon_regyukawapot_double") {
+		with brn.subgroup("reyukawapot_double") {
 			let n = Position{x: one, y: zero, z: zero};
 
 			// x --> xi
 			with brn.assert_f64(14.145081595145832) {
-				radon_regyukawapot_double(x, x, n, yuk)
+				reyukawapot_double(x, x, n, yuk)
 			}
 
 			// xi not in origin (no cancellation)
 			with brn.assert_f64(0.048112522396707304) {
-				radon_regyukawapot_double(x, neg(x), n, yuk)
+				reyukawapot_double(x, neg(x), n, yuk)
 			}
 
 			// xi in origin (no cancellation)
 			with brn.assert_f64(0.19243638547737502) {
-				radon_regyukawapot_double(x, origin, n, yuk)
+				reyukawapot_double(x, origin, n, yuk)
 			}
 
 			// xi in origin (potential cancellation)
 			with brn.assert_f64(14.031266417097603) {
-				radon_regyukawapot_double(smul(x, 0.001 as Real), origin, n, yuk)
+				reyukawapot_double(smul(x, 0.001 as Real), origin, n, yuk)
 			}
 			with brn.assert_f64(14.133653458449709) {
-				radon_regyukawapot_double(smul(x, 0.0001 as Real), origin, n, yuk)
+				reyukawapot_double(smul(x, 0.0001 as Real), origin, n, yuk)
 			}
 			with brn.assert_f64(14.143938313793992) {
-				radon_regyukawapot_double(smul(x, 0.00001 as Real), origin, n, yuk)
+				reyukawapot_double(smul(x, 0.00001 as Real), origin, n, yuk)
 			}
 		}
 	}

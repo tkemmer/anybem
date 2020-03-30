@@ -5,7 +5,7 @@ set(AnyBEM_IMPALA_FILES
 	"${PROJECT_SOURCE_DIR}/src/impala/constants.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/model.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/math.impala"
-	"${PROJECT_SOURCE_DIR}/src/impala/radon.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/yukawa.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/laplace.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/born.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/export.impala"
