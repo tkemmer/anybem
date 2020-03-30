@@ -4,10 +4,6 @@ static print_index = print_i64;
 type Real  = f64;
 static print_real  = print_f64;
 
-type LocalityType = bool;
-static SingleLayer = true;
-static DoubleLayer = false;
-
 struct Position {
 	x: Real,
 	y: Real,

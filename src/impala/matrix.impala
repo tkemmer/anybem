@@ -1,4 +1,13 @@
-struct LaplacePotMat {
+type PotentialType = bool;
+static Laplace = true;
+static ReYukawa = false;
+
+type LocalityType = bool;
+static SingleLayer = true;
+static DoubleLayer = false;
+
+struct PotentialMatrix {
+	pot:      PotentialType,
 	loc:      LocalityType,
 	xis:      fn()             -> NodeBuffer,
 	elements: fn()             -> SurfaceElementBuffer,
@@ -6,8 +15,13 @@ struct LaplacePotMat {
 	get:      fn(Index, Index) -> Real
 }
 
-fn new_laplace_potmat(loc: LocalityType, xis: NodeBuffer, elements: SurfaceElementBuffer) -> LaplacePotMat {
-	LaplacePotMat {
+fn new_laplace_potential_matrix(
+	loc:      LocalityType,
+	xis:      NodeBuffer,
+	elements: SurfaceElementBuffer
+) -> PotentialMatrix {
+	PotentialMatrix {
+		pot:      Laplace,
 		loc:      loc,
 		xis:      ||    xis,
 		elements: ||    elements,
@@ -20,10 +34,30 @@ fn new_laplace_potmat(loc: LocalityType, xis: NodeBuffer, elements: SurfaceEleme
 	}
 }
 
-fn dump_laplace_potmat(mat: LaplacePotMat) -> () {
+fn new_reyukawa_potential_matrix(
+	loc:      LocalityType,
+	xis:      NodeBuffer,
+	elements: SurfaceElementBuffer,
+	yuk:      Real
+) -> PotentialMatrix {
+	PotentialMatrix {
+		pot:      ReYukawa,
+		loc:      loc,
+		xis:      ||    xis,
+		elements: ||    elements,
+		size:     ||    (xis.size(), elements.size()),
+		get:      |i,j| if loc == SingleLayer {
+			reyukawapot_single(xis.get(i).pos(), elements.get(j), yuk)
+		} else {
+			reyukawapot_double(xis.get(i).pos(), elements.get(j), yuk)
+		}
+	}
+}
+
+fn dump_potential_matrix(mat: PotentialMatrix) -> () {
 	let (r, c) = mat.size();
 	print_index(r); print_string(" x "); print_index(c);
-	print_string(" LaplacePotMat");
+	if mat.pot == Laplace { print_string(" LaplacePotMatrix"); } else { print_string(" ReYukawaPotMatrix"); }
 	if mat.loc == SingleLayer { print_string("{SingleLayer}"); } else { print_string("{DoubleLayer}"); }
 	print_string("\n");
 }
