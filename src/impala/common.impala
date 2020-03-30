@@ -14,6 +14,12 @@ struct Position {
 	z: Real
 }
 
+fn print_position(pos: Position) -> () {
+	print_string("Position{");
+	print_real(pos.x); print_string(", "); print_real(pos.y); print_string(", "); print_real(pos.x);
+	print_string("}");
+}
+
 static eps0     = 8.854187817620389e-12 as Real;
 static potpref  = 14.399639772478396    as Real;
 static etol     = 1e-10 as Real;

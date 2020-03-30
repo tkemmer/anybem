@@ -68,13 +68,9 @@ fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 		let node = nodes.get(i as Index);
 		print_string("    - Node ");
 		print_i32(i);
-		print_string(": {");
-		print_real(node.x());
-		print_string(", ");
-		print_real(node.y());
-		print_string(", ");
-		print_real(node.z());
-		print_string("}\n");
+		print_string(": ");
+		print_position(node.pos());
+		print_string("\n");
 	}
 }
 
@@ -169,31 +165,11 @@ fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 		print_string("    - Element ");
 		print_i32(i);
 		print_string(":\n");
-		print_string("       - v1:     {");
-		print_real(elem.v1().x()); print_string(", ");
-		print_real(elem.v1().y()); print_string(", ");
-		print_real(elem.v1().z());
-		print_string("}\n");
-		print_string("       - v2:     {");
-		print_real(elem.v2().x()); print_string(", ");
-		print_real(elem.v2().y()); print_string(", ");
-		print_real(elem.v2().z());
-		print_string("}\n");
-		print_string("       - v3:     {");
-		print_real(elem.v3().x()); print_string(", ");
-		print_real(elem.v3().y()); print_string(", ");
-		print_real(elem.v3().z());
-		print_string("}\n");
-		print_string("       - center: {");
-		print_real(elem.center().x); print_string(", ");
-		print_real(elem.center().y); print_string(", ");
-		print_real(elem.center().z);
-		print_string("}\n");
-		print_string("       - normal: {");
-		print_real(elem.normal().x); print_string(", ");
-		print_real(elem.normal().y); print_string(", ");
-		print_real(elem.normal().z);
-		print_string("}\n");
+		print_string("       - v1:     "); print_position(elem.v1().pos()); print_string("\n");
+		print_string("       - v2:     "); print_position(elem.v2().pos()); print_string("\n");
+		print_string("       - v3:     "); print_position(elem.v3().pos()); print_string("\n");
+		print_string("       - center: "); print_position(elem.center()); print_string("\n");
+		print_string("       - normal: "); print_position(elem.normal()); print_string("\n");
 		print_string("       - area:   "); print_real(elem.area()); print_string("\n");
 		print_string("       - dist:   "); print_real(elem.dist()); print_string("\n");
 	}
@@ -291,14 +267,8 @@ fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 		let charge = charges.get(i as Index);
 		print_string("    - Charge ");
 		print_i32(i);
-		print_string(": { {");
-		print_real(charge.pos().x);
-		print_string(", ");
-		print_real(charge.pos().y);
-		print_string(", ");
-		print_real(charge.pos().z);
-		print_string("}, ");
-		print_real(charge.val());
+		print_string(": { ");
+		print_position(charge.pos()); print_string(", "); print_real(charge.val());
 		print_string("}\n");
 	}
 }
