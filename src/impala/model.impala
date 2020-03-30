@@ -61,7 +61,7 @@ fn to_node_buffer(proto: NodeBufferPrototype) -> NodeBuffer {
 fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 	print_string("Node buffer stats:\n");
 	print_string(" * Device: "); print_i32(nodes.device()); print_string("\n");
-	print_string(" * Size:   "); print_i64(nodes.size() as i64); print_string(" nodes\n");
+	print_string(" * Size:   "); print_index(nodes.size()); print_string(" nodes\n");
 	print_string(" * Memory: "); print_i64(nodes.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(nodes.size() as i32, head_max)) {
@@ -69,11 +69,11 @@ fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 		print_string("    - Node ");
 		print_i32(i);
 		print_string(": {");
-		print_f64(node.x() as f64);
+		print_real(node.x());
 		print_string(", ");
-		print_f64(node.y() as f64);
+		print_real(node.y());
 		print_string(", ");
-		print_f64(node.z() as f64);
+		print_real(node.z());
 		print_string("}\n");
 	}
 }
@@ -161,7 +161,7 @@ fn to_triangle_buffer(proto: TriangleBufferPrototype, nodes: NodeBuffer) -> Tria
 fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 	print_string("Surface element buffer stats:\n");
 	print_string(" * Device: "); print_i32(elements.device()); print_string("\n");
-	print_string(" * Size:   "); print_i64(elements.size() as i64); print_string(" elements\n");
+	print_string(" * Size:   "); print_index(elements.size()); print_string(" elements\n");
 	print_string(" * Memory: "); print_i64(elements.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(elements.size() as i32, head_max)) {
@@ -170,32 +170,32 @@ fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 		print_i32(i);
 		print_string(":\n");
 		print_string("       - v1:     {");
-		print_f64(elem.v1().x() as f64); print_string(", ");
-		print_f64(elem.v1().y() as f64); print_string(", ");
-		print_f64(elem.v1().z() as f64);
+		print_real(elem.v1().x()); print_string(", ");
+		print_real(elem.v1().y()); print_string(", ");
+		print_real(elem.v1().z());
 		print_string("}\n");
 		print_string("       - v2:     {");
-		print_f64(elem.v2().x() as f64); print_string(", ");
-		print_f64(elem.v2().y() as f64); print_string(", ");
-		print_f64(elem.v2().z() as f64);
+		print_real(elem.v2().x()); print_string(", ");
+		print_real(elem.v2().y()); print_string(", ");
+		print_real(elem.v2().z());
 		print_string("}\n");
 		print_string("       - v3:     {");
-		print_f64(elem.v3().x() as f64); print_string(", ");
-		print_f64(elem.v3().y() as f64); print_string(", ");
-		print_f64(elem.v3().z() as f64);
+		print_real(elem.v3().x()); print_string(", ");
+		print_real(elem.v3().y()); print_string(", ");
+		print_real(elem.v3().z());
 		print_string("}\n");
 		print_string("       - center: {");
-		print_f64(elem.center().x as f64); print_string(", ");
-		print_f64(elem.center().y as f64); print_string(", ");
-		print_f64(elem.center().z as f64);
+		print_real(elem.center().x); print_string(", ");
+		print_real(elem.center().y); print_string(", ");
+		print_real(elem.center().z);
 		print_string("}\n");
 		print_string("       - normal: {");
-		print_f64(elem.normal().x as f64); print_string(", ");
-		print_f64(elem.normal().y as f64); print_string(", ");
-		print_f64(elem.normal().z as f64);
+		print_real(elem.normal().x); print_string(", ");
+		print_real(elem.normal().y); print_string(", ");
+		print_real(elem.normal().z);
 		print_string("}\n");
-		print_string("       - area:   "); print_f64(elem.area() as f64); print_string("\n");
-		print_string("       - dist:   "); print_f64(elem.dist() as f64); print_string("\n");
+		print_string("       - area:   "); print_real(elem.area()); print_string("\n");
+		print_string("       - dist:   "); print_real(elem.dist()); print_string("\n");
 	}
 }
 
@@ -284,7 +284,7 @@ fn to_charge_buffer(proto: ChargeBufferPrototype) -> ChargeBuffer {
 fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 	print_string("Charge buffer stats:\n");
 	print_string(" * Device: "); print_i32(charges.device()); print_string("\n");
-	print_string(" * Size:   "); print_i64(charges.size() as i64); print_string(" charges\n");
+	print_string(" * Size:   "); print_index(charges.size()); print_string(" charges\n");
 	print_string(" * Memory: "); print_i64(charges.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
 	for i in range(0, math.min(charges.size() as i32, head_max)) {
@@ -292,13 +292,13 @@ fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 		print_string("    - Charge ");
 		print_i32(i);
 		print_string(": { {");
-		print_f64(charge.pos().x as f64);
+		print_real(charge.pos().x);
 		print_string(", ");
-		print_f64(charge.pos().y as f64);
+		print_real(charge.pos().y);
 		print_string(", ");
-		print_f64(charge.pos().z as f64);
+		print_real(charge.pos().z);
 		print_string("}, ");
-		print_f64(charge.val() as f64);
+		print_real(charge.val());
 		print_string("}\n");
 	}
 }
@@ -323,10 +323,10 @@ static default_params = SystemParams{
 
 fn dump_system_params(params: SystemParams) -> () {
 	print_string("System parameters:\n");
-	print_string(" * epsOmega: "); print_f64(params.epsOmega as f64); print_string("\n");
-	print_string(" * epsSigma: "); print_f64(params.epsSigma as f64); print_string("\n");
-	print_string(" * epsInf:   "); print_f64(params.epsInf as f64); print_string("\n");
-	print_string(" * lambda:   "); print_f64(params.lambda as f64); print_string("\n");
+	print_string(" * epsOmega: "); print_real(params.epsOmega); print_string("\n");
+	print_string(" * epsSigma: "); print_real(params.epsSigma); print_string("\n");
+	print_string(" * epsInf:   "); print_real(params.epsInf); print_string("\n");
+	print_string(" * lambda:   "); print_real(params.lambda); print_string("\n");
 }
 
 

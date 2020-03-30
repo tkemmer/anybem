@@ -19,9 +19,9 @@ fn new_laplace_potmat(loc: LocalityType, xis: NodeBuffer, elements: SurfaceEleme
 }
 
 fn dump_laplace_potmat(mat: LaplacePotMat) -> () {
-	print_i64(mat.xis().size());
+	print_index(mat.xis().size());
 	print_string(" x ");
-	print_i64(mat.elements().size());
+	print_index(mat.elements().size());
 	print_string(" LaplacePotMat");
 	if mat.loc == SingleLayer { print_string("{SingleLayer}"); } else { print_string("{DoubleLayer}"); }
 	print_string("\n");
