@@ -1,5 +1,9 @@
-type Index    = i64;
-type Real     = f64;
+type Index = i64;
+type Real  = f64;
+
+type LocalityType = bool;
+static SingleLayer = true;
+static DoubleLayer = false;
 
 struct Position {
 	x: Real,
