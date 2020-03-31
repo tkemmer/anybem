@@ -79,9 +79,9 @@ fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 // Elements
 
 struct Triangle {
-	v1:     fn() -> Node,       // first node
-	v2:     fn() -> Node,       // second node
-	v3:     fn() -> Node,       // third node
+	v1:     fn() -> Position,   // first node
+	v2:     fn() -> Position,   // second node
+	v3:     fn() -> Position,   // third node
 	center: fn() -> Position,   // centroid
 	normal: fn() -> Position,   // unit normal vector
 	area:   fn() -> Real,       // surface area
@@ -112,12 +112,12 @@ struct TriangleBufferPrototype {
 }
 
 fn new_triangle(elem: TrianglePrimitive, nodes: NodeBuffer) -> Triangle {
-	let v1 = nodes.get(elem.v1);
-	let v2 = nodes.get(elem.v2);
-	let v3 = nodes.get(elem.v3);
+	let v1 = nodes.get(elem.v1).pos();
+	let v2 = nodes.get(elem.v2).pos();
+	let v3 = nodes.get(elem.v3).pos();
 	let unscaled_normal = cross(
-		sub(v2.pos(), v1.pos()),
-		sub(v3.pos(), v1.pos())
+		sub(v2, v1),
+		sub(v3, v1)
 	);
 	let vnorm = vecnorm(unscaled_normal);
 	let unit_normal = sdiv(unscaled_normal, vnorm);
@@ -125,10 +125,10 @@ fn new_triangle(elem: TrianglePrimitive, nodes: NodeBuffer) -> Triangle {
 		v1:     || v1,
 		v2:     || v2,
 		v3:     || v3,
-		center: || sdiv(add(v1.pos(), add(v2.pos(), v3.pos())), 3 as Real),
+		center: || sdiv(add(v1, add(v2, v3)), 3 as Real),
 		normal: || unit_normal,
 		area:   || vnorm / 2 as Real,
-		dist:   || dot(unit_normal, v1.pos())
+		dist:   || dot(unit_normal, v1)
 	}
 }
 
@@ -165,9 +165,9 @@ fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 		print_string("    - Element ");
 		print_i32(i);
 		print_string(":\n");
-		print_string("       - v1:     "); print_position(elem.v1().pos()); print_string("\n");
-		print_string("       - v2:     "); print_position(elem.v2().pos()); print_string("\n");
-		print_string("       - v3:     "); print_position(elem.v3().pos()); print_string("\n");
+		print_string("       - v1:     "); print_position(elem.v1()); print_string("\n");
+		print_string("       - v2:     "); print_position(elem.v2()); print_string("\n");
+		print_string("       - v3:     "); print_position(elem.v3()); print_string("\n");
 		print_string("       - center: "); print_position(elem.center()); print_string("\n");
 		print_string("       - normal: "); print_position(elem.normal()); print_string("\n");
 		print_string("       - area:   "); print_real(elem.area()); print_string("\n");

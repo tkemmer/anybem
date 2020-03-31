@@ -42,9 +42,9 @@ fn _laplacepot_elem(
 		pot:  LaplacePotFn
 	) -> Real {
 
-	_laplacepot(xi, elem.v1().pos(), elem.v2().pos(), elem.normal(), dist, pot) +
-	_laplacepot(xi, elem.v2().pos(), elem.v3().pos(), elem.normal(), dist, pot) +
-	_laplacepot(xi, elem.v3().pos(), elem.v1().pos(), elem.normal(), dist, pot)
+	_laplacepot(xi, elem.v1(), elem.v2(), elem.normal(), dist, pot) +
+	_laplacepot(xi, elem.v2(), elem.v3(), elem.normal(), dist, pot) +
+	_laplacepot(xi, elem.v3(), elem.v1(), elem.normal(), dist, pot)
 }
 
 

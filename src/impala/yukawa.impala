@@ -15,12 +15,12 @@ static _quadrature_points_triangle = [
 ];
 
 fn @_quadrature_point(ref: QuadPoint2D, elem: Triangle) -> Position {
-	let u = sub(elem.v2().pos(), elem.v1().pos());
-	let v = sub(elem.v3().pos(), elem.v1().pos());
+	let u = sub(elem.v2(), elem.v1());
+	let v = sub(elem.v3(), elem.v1());
 	Position {
-		x: ref.x * u.x + ref.y * v.x + elem.v1().x(),
-		y: ref.x * u.y + ref.y * v.y + elem.v1().y(),
-		z: ref.x * u.z + ref.y * v.z + elem.v1().z()
+		x: ref.x * u.x + ref.y * v.x + elem.v1().x,
+		y: ref.x * u.y + ref.y * v.y + elem.v1().y,
+		z: ref.x * u.z + ref.y * v.z + elem.v1().z
 	}
 }
 
