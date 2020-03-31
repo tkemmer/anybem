@@ -75,6 +75,7 @@ fn @_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () {
 }
 
 struct RealVector{
+	buf:  fn()            -> Buffer,
 	size: fn()            -> Index,
 	get:  fn(Index)       -> Real,
 	set:  fn(Index, Real) -> ()
@@ -82,6 +83,7 @@ struct RealVector{
 
 fn new_real_vector(buf: Buffer) -> RealVector {
 	RealVector {
+		buf:  @||         buf,
 		size: @||         buf.size / (sizeof[Real]() as i64),
 		get:  @|idx|      _buf_get_real(buf, idx),
 		set:  @|idx, val| _buf_set_real(buf, idx, val)
