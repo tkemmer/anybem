@@ -27,6 +27,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 set(AnyBEM_BACKEND "cpu" CACHE STRING "Backend to be used for matrix multiplication: cpu or cuda")
+set(AnyBEM_PLATFORM "acc")
+if(AnyBEM_BACKEND STREQUAL "cpu")
+	set(AnyBEM_PLATFORM "cpu")
+endif()
 
 add_subdirectory(src)
 add_subdirectory(tools/cli)

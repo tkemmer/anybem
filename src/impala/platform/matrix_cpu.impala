@@ -1,0 +1,17 @@
+static real_vector_context = real_vector_context_cpu;
+static position_vector_context = position_vector_context_cpu;
+static triangle_vector_context = triangle_vector_context_cpu;
+static potential_matrix_context = potential_matrix_context_cpu;
+
+fn @real_vector_context_cpu(vec: RealVector, body: fn(RealVector) -> ()) -> () { @@body(vec) }
+fn @position_vector_context_cpu(vec: PositionVector, body: fn(PositionVector) -> ()) -> () { @@body(vec) }
+fn @triangle_vector_context_cpu(vec: TriangleVector, body: fn(TriangleVector) -> ()) -> () { @@body(vec) }
+fn @potential_matrix_context_cpu(mat: PotentialMatrix, body: fn(PotentialMatrix) -> ()) -> () { @@body(mat) }
+
+static each_row = each_row_cpu;
+
+fn @each_row_cpu(A: PotentialMatrix, body: fn(i32) -> ()) -> () {
+	for i in parallel(0, 0, A.size()(0) as i32) { // TODO
+		@@body(i)
+	}
+}
