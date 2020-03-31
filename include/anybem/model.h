@@ -41,9 +41,9 @@ namespace anybem {
 	// Elements
 
 	struct TrianglePrimitive {
-		index_t v1;   // index of first node in node buffer
-		index_t v2;   // index of second node in node buffer
-		index_t v3;   // index of third node in node buffer
+		Position v1;
+		Position v2;
+		Position v3;
 	};
 
 	class TriangleBuffer final {

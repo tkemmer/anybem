@@ -133,7 +133,7 @@ namespace anybem {
 						"Corrupt HMO file: invalid v3 index "s + to_string(v3) + " in element no. "s + to_string(i)
 					};
 				}
-				elements.push_back({--v1, --v2, --v3});
+				elements.push_back({nodes[--v1], nodes[--v2], nodes[--v3]});
 			}
 
 			if(!next_line_matches(fin, "END_ELEM_DATA"s)) {
