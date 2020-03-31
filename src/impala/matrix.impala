@@ -9,7 +9,7 @@ static DoubleLayer = false;
 struct PotentialMatrix {
 	pot:      PotentialType,
 	loc:      LocalityType,
-	xis:      fn()             -> NodeBuffer,
+	xis:      fn()             -> PositionVector,
 	elements: fn()             -> SurfaceElementBuffer,
 	size:     fn()             -> (Index, Index),
 	get:      fn(Index, Index) -> Real
@@ -17,7 +17,7 @@ struct PotentialMatrix {
 
 fn new_laplace_potential_matrix(
 	loc:      LocalityType,
-	xis:      NodeBuffer,
+	xis:      PositionVector,
 	elements: SurfaceElementBuffer
 ) -> PotentialMatrix {
 	PotentialMatrix {
@@ -27,16 +27,16 @@ fn new_laplace_potential_matrix(
 		elements: ||    elements,
 		size:     ||    (xis.size(), elements.size()),
 		get:      |i,j| if loc == SingleLayer {
-			laplacepot_single(xis.get(i).pos(), elements.get(j))
+			laplacepot_single(xis.get(i), elements.get(j))
 		} else {
-			laplacepot_double(xis.get(i).pos(), elements.get(j))
+			laplacepot_double(xis.get(i), elements.get(j))
 		}
 	}
 }
 
 fn new_reyukawa_potential_matrix(
 	loc:      LocalityType,
-	xis:      NodeBuffer,
+	xis:      PositionVector,
 	elements: SurfaceElementBuffer,
 	yuk:      Real
 ) -> PotentialMatrix {
@@ -47,9 +47,9 @@ fn new_reyukawa_potential_matrix(
 		elements: ||    elements,
 		size:     ||    (xis.size(), elements.size()),
 		get:      |i,j| if loc == SingleLayer {
-			reyukawapot_single(xis.get(i).pos(), elements.get(j), yuk)
+			reyukawapot_single(xis.get(i), elements.get(j), yuk)
 		} else {
-			reyukawapot_double(xis.get(i).pos(), elements.get(j), yuk)
+			reyukawapot_double(xis.get(i), elements.get(j), yuk)
 		}
 	}
 }
