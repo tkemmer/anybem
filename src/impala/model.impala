@@ -74,6 +74,14 @@ fn to_triangle_buffer(proto: TriangleBufferPrototype) -> TriangleBuffer {
 	new_triangle_buffer(elements)
 }
 
+fn print_triangle(elem: Triangle) -> () {
+	print_string("Triangle{ ");
+	print_position(elem.v1()); print_string(", ");
+	print_position(elem.v2()); print_string(", ");
+	print_position(elem.v3());
+	print_string(" }");
+}
+
 fn print_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 	print_string("Surface element buffer stats:\n");
 	print_string(" * Device: "); print_i32(elements.device()); print_string("\n");
