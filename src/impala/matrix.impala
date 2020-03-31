@@ -54,7 +54,7 @@ fn new_reyukawa_potential_matrix(
 	}
 }
 
-fn dump_potential_matrix(mat: PotentialMatrix) -> () {
+fn print_potential_matrix(mat: PotentialMatrix) -> () {
 	let (r, c) = mat.size();
 	print_index(r); print_string(" x "); print_index(c);
 	if mat.pot == Laplace { print_string(" LaplacePotMatrix"); } else { print_string(" ReYukawaPotMatrix"); }
@@ -97,7 +97,7 @@ fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
 	vec
 }
 
-fn dump_real_vector(vec: RealVector) -> () {
+fn print_real_vector(vec: RealVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Real]:\n");
 	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
 		print_string(" "); print_real(vec.get(i as Index)); print_string("\n");
@@ -134,7 +134,7 @@ fn new_position_vector(buf: Buffer) -> PositionVector {
 	}
 }
 
-fn dump_position_vector(vec: PositionVector) -> () {
+fn print_position_vector(vec: PositionVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Position]:\n");
 	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
 		print_string(" "); print_position(vec.get(i as Index)); print_string("\n");

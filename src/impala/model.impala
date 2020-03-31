@@ -74,7 +74,7 @@ fn to_triangle_buffer(proto: TriangleBufferPrototype) -> TriangleBuffer {
 	new_triangle_buffer(elements)
 }
 
-fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
+fn print_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 	print_string("Surface element buffer stats:\n");
 	print_string(" * Device: "); print_i32(elements.device()); print_string("\n");
 	print_string(" * Size:   "); print_index(elements.size()); print_string(" elements\n");
@@ -104,7 +104,7 @@ type SurfaceElementBufferPrototype = TriangleBufferPrototype;
 static new_surface_element = new_triangle;
 static new_surface_element_buffer = new_triangle_buffer;
 static to_surface_element_buffer = to_triangle_buffer;
-static dump_surface_element_buffer = dump_triangle_buffer;
+static print_surface_element_buffer = print_triangle_buffer;
 
 
 // ====================================================================================================================
@@ -166,7 +166,7 @@ fn to_charge_buffer(proto: ChargeBufferPrototype) -> ChargeBuffer {
 	new_charge_buffer(charges)
 }
 
-fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
+fn print_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 	print_string("Charge buffer stats:\n");
 	print_string(" * Device: "); print_i32(charges.device()); print_string("\n");
 	print_string(" * Size:   "); print_index(charges.size()); print_string(" charges\n");
@@ -200,7 +200,7 @@ static default_params = SystemParams{
 	lambda:   20  as Real
 };
 
-fn dump_system_params(params: SystemParams) -> () {
+fn print_system_params(params: SystemParams) -> () {
 	print_string("System parameters:\n");
 	print_string(" * epsOmega: "); print_real(params.epsOmega); print_string("\n");
 	print_string(" * epsSigma: "); print_real(params.epsSigma); print_string("\n");
