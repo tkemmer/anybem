@@ -64,7 +64,7 @@ fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
 	print_string(" * Size:   "); print_index(nodes.size()); print_string(" nodes\n");
 	print_string(" * Memory: "); print_i64(nodes.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	for i in range(0, math.min(nodes.size() as i32, head_max)) {
+	for i in range(0, cpu_intrinsics.min(nodes.size() as i32, head_max)) {
 		let node = nodes.get(i as Index);
 		print_string("    - Node ");
 		print_i32(i);
@@ -160,7 +160,7 @@ fn dump_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 	print_string(" * Size:   "); print_index(elements.size()); print_string(" elements\n");
 	print_string(" * Memory: "); print_i64(elements.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	for i in range(0, math.min(elements.size() as i32, head_max)) {
+	for i in range(0, cpu_intrinsics.min(elements.size() as i32, head_max)) {
 		let elem = elements.get(i as Index);
 		print_string("    - Element ");
 		print_i32(i);
@@ -263,7 +263,7 @@ fn dump_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
 	print_string(" * Size:   "); print_index(charges.size()); print_string(" charges\n");
 	print_string(" * Memory: "); print_i64(charges.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	for i in range(0, math.min(charges.size() as i32, head_max)) {
+	for i in range(0, cpu_intrinsics.min(charges.size() as i32, head_max)) {
 		let charge = charges.get(i as Index);
 		print_string("    - Charge ");
 		print_i32(i);
