@@ -8,36 +8,6 @@
 namespace anybem {
 
 	// ================================================================================================================
-	// Nodes
-
-	using NodePrimitive = Position;
-
-	class NodeBuffer final {
-	public:
-		struct Prototype {
-			NodePrimitive* data;
-			index_t        len;
-		};
-
-		explicit NodeBuffer(std::vector<NodePrimitive>&& nodes) :
-			nodes_{nodes} {
-		}
-
-		NodeBuffer(NodeBuffer&&) = default;
-		NodeBuffer& operator=(NodeBuffer&&) = default;
-
-		~NodeBuffer() noexcept = default;
-
-		Prototype prototype() { return {nodes_.data(), size()}; }
-
-		index_t size() const noexcept { return nodes_.size(); }
-
-	private:
-		std::vector<NodePrimitive> nodes_;
-	};
-
-
-	// ================================================================================================================
 	// Elements
 
 	struct TrianglePrimitive {
@@ -131,25 +101,21 @@ namespace anybem {
 	public:
 
 		struct Prototype {
-			NodeBuffer::Prototype           nodes;
 			SurfaceElementBuffer::Prototype elements;
 			ChargeBuffer::Prototype         charges;
 			SystemParams                    params;
 		};
 
-		SurfaceModel(NodeBuffer&& nodes, SurfaceElementBuffer&& elements) :
-			nodes_{std::move(nodes)},
+		explicit SurfaceModel(SurfaceElementBuffer&& elements) :
 			elements_{std::move(elements)},
 			charges_{},
 			params_{default_params} {
 		}
 
 		SurfaceModel(
-			NodeBuffer&& nodes,
 			SurfaceElementBuffer&& elements,
 			ChargeBuffer&& charges
 		) :
-			nodes_{std::move(nodes)},
 			elements_{std::move(elements)},
 			charges_{std::move(charges)},
 			params_{default_params} {
@@ -162,7 +128,6 @@ namespace anybem {
 
 		Prototype prototype() {
 			return {
-				nodes_.prototype(),
 				elements_.prototype(),
 				charges_.prototype(),
 				params_
@@ -172,12 +137,10 @@ namespace anybem {
 		void charges(ChargeBuffer&& charges) noexcept { charges_ = std::move(charges); }
 		void params(SystemParams params) noexcept { params_ = params; }
 
-		index_t node_count() const noexcept { return nodes_.size(); }
 		index_t element_count() const noexcept { return elements_.size(); }
 		index_t charge_count() const noexcept { return charges_.size(); }
 
 	private:
-		NodeBuffer           nodes_;
 		SurfaceElementBuffer elements_;
 		ChargeBuffer         charges_;
 		SystemParams         params_;

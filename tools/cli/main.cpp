@@ -38,7 +38,6 @@ int main(int argc, char** argv) {
 	surf.params(params);
 
 	cout << "HMO file statistics:\n"s
-	     << " * Nodes:    "s << to_string(surf.node_count()) << "\n"s
 	     << " * Elements: "s << to_string(surf.element_count()) << "\n"s
 	     << " * Charges:  "s << to_string(surf.charge_count()) << "\n"s
 	     << "\n"s;

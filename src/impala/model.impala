@@ -1,81 +1,4 @@
 // ====================================================================================================================
-// Nodes
-
-struct Node {
-	pos: fn() -> Position,
-	x:   fn() -> Real,
-	y:   fn() -> Real,
-	z:   fn() -> Real
-}
-
-type NodePrimitive = Position;
-
-struct NodeBuffer {
-	device: fn()      -> i32,
-	get:    fn(Index) -> Node,
-	memory: fn()      -> i64,
-	size:   fn()      -> Index
-}
-
-struct NodeBufferPrimitive {
-	buf: Buffer,
-	len: Index
-}
-
-struct NodeBufferPrototype {
-	data: &[NodePrimitive],
-	len:  Index
-}
-
-fn new_node(node: NodePrimitive) -> Node {
-	Node {
-		pos: || node,
-		x:   || node.x,
-		y:   || node.y,
-		z:   || node.z
-	}
-}
-
-fn new_node_buffer(nodes: NodeBufferPrimitive) -> NodeBuffer {
-	NodeBuffer {
-		device: ||    nodes.buf.device,
-		get:    |idx| new_node(bitcast[&[NodePrimitive]](nodes.buf.data)(idx)),
-		memory: ||    nodes.buf.size,
-		size:   ||    nodes.len
-	}
-}
-
-fn to_node_buffer(proto: NodeBufferPrototype) -> NodeBuffer {
-	let buf = Buffer {
-		device: 0,
-		data:   bitcast[&[i8]](proto.data),
-		size:   (proto.len as i64) * (sizeof[NodePrimitive]() as i64)
-	};
-	let nodes = NodeBufferPrimitive {
-		buf: buf,
-		len: proto.len
-	};
-	new_node_buffer(nodes)
-}
-
-fn dump_node_buffer(nodes: NodeBuffer, head_max: i32) -> () {
-	print_string("Node buffer stats:\n");
-	print_string(" * Device: "); print_i32(nodes.device()); print_string("\n");
-	print_string(" * Size:   "); print_index(nodes.size()); print_string(" nodes\n");
-	print_string(" * Memory: "); print_i64(nodes.memory()); print_string(" bytes\n");
-	print_string(" * Head:\n");
-	for i in range(0, cpu_intrinsics.min(nodes.size() as i32, head_max)) {
-		let node = nodes.get(i as Index);
-		print_string("    - Node ");
-		print_i32(i);
-		print_string(": ");
-		print_position(node.pos());
-		print_string("\n");
-	}
-}
-
-
-// ====================================================================================================================
 // Elements
 
 struct Triangle {
@@ -299,21 +222,18 @@ fn dump_system_params(params: SystemParams) -> () {
 // Surface model
 
 struct SurfaceModel {
-	nodes:    fn() -> NodeBuffer,
 	elements: fn() -> SurfaceElementBuffer,
 	charges:  fn() -> ChargeBuffer,
 	params:   fn() -> SystemParams
 }
 
 struct SurfaceModelPrimitive {
-	nodes:    NodeBuffer,
 	elements: SurfaceElementBuffer,
 	charges:  ChargeBuffer,
 	params:   SystemParams
 }
 
 struct SurfaceModelPrototype {
-	nodes:    NodeBufferPrototype,
 	elements: SurfaceElementBufferPrototype,
 	charges:  ChargeBufferPrototype,
 	params:   SystemParams
@@ -321,7 +241,6 @@ struct SurfaceModelPrototype {
 
 fn new_surface_model(surf: SurfaceModelPrimitive) -> SurfaceModel {
 	SurfaceModel {
-		nodes:    || surf.nodes,
 		elements: || surf.elements,
 		charges:  || surf.charges,
 		params:   || surf.params
@@ -329,9 +248,7 @@ fn new_surface_model(surf: SurfaceModelPrimitive) -> SurfaceModel {
 }
 
 fn to_surface_model(proto: SurfaceModelPrototype) -> SurfaceModel {
-	let nodes = to_node_buffer(proto.nodes);
 	let surf = SurfaceModelPrimitive {
-		nodes:    nodes,
 		elements: to_surface_element_buffer(proto.elements),
 		charges:  to_charge_buffer(proto.charges),
 		params:   proto.params

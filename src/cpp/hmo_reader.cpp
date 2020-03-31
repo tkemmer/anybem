@@ -11,7 +11,7 @@ namespace anybem {
 	// ================================================================================================================
 	class HMOReaderImpl {
 	public:
-		std::vector<NodePrimitive>     nodes    {0};
+		std::vector<Position>          nodes    {0};
 		std::vector<TrianglePrimitive> elements {0};
 		std::vector<ChargePrimitive>   charges  {0};
 
@@ -191,7 +191,6 @@ namespace anybem {
 	SurfaceModel HMOReader::readSurfaceModel(const std::string& filename) {
 		HMOReaderImpl reader(filename);
 		return {
-			NodeBuffer{move(reader.nodes)},
 			SurfaceElementBuffer{move(reader.elements)},
 			ChargeBuffer{move(reader.charges)}
 		};
