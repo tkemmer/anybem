@@ -1,5 +1,5 @@
 set(AnyBEM_IMPALA_FILES
-	"${PROJECT_SOURCE_DIR}/src/impala/backend/backend_cpu.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/backend/backend_${AnyBEM_BACKEND}.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/import.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/common.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/math.impala"

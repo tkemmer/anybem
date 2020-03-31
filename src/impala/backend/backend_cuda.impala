@@ -1,0 +1,2 @@
+static math = cuda_intrinsics;
+static device_id = 0; // FIXME

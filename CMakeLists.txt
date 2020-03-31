@@ -26,6 +26,8 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	list(APPEND AnyBEM_IMPALA_FLAGS "-emit-annotated" "-log-level" "debug")
 endif()
 
+set(AnyBEM_BACKEND "cpu" CACHE STRING "Backend to be used for matrix multiplication: cpu or cuda")
+
 add_subdirectory(src)
 add_subdirectory(tools/cli)
 
