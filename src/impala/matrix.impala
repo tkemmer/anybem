@@ -10,7 +10,7 @@ struct PotentialMatrix {
 	pot:      PotentialType,
 	loc:      LocalityType,
 	xis:      fn()             -> PositionVector,
-	elements: fn()             -> SurfaceElementBuffer,
+	elements: fn()             -> TriangleVector,
 	size:     fn()             -> (Index, Index),
 	get:      fn(Index, Index) -> Real
 }
@@ -18,7 +18,7 @@ struct PotentialMatrix {
 fn new_laplace_potential_matrix(
 	loc:      LocalityType,
 	xis:      PositionVector,
-	elements: SurfaceElementBuffer
+	elements: TriangleVector
 ) -> PotentialMatrix {
 	PotentialMatrix {
 		pot:      Laplace,
@@ -37,7 +37,7 @@ fn new_laplace_potential_matrix(
 fn new_reyukawa_potential_matrix(
 	loc:      LocalityType,
 	xis:      PositionVector,
-	elements: SurfaceElementBuffer,
+	elements: TriangleVector,
 	yuk:      Real
 ) -> PotentialMatrix {
 	PotentialMatrix {
