@@ -103,3 +103,40 @@ fn dump_real_vector(vec: RealVector) -> () {
 		print_string(" "); print_real(vec.get(i as Index)); print_string("\n");
 	}
 }
+
+fn @_host_buf_get_pos(buf: Buffer, idx: Index) -> Position { bitcast[&[Position]](buf.data)(idx) }
+fn @_global_buf_get_pos(buf: Buffer, idx: Index) -> Position { bitcast[&[1][Position]](buf.data)(idx) }
+fn @_buf_get_pos(buf: Buffer, idx: Index) -> Position {
+	if buf.device == 0 { _host_buf_get_pos(buf, idx) } else { _global_buf_get_pos(buf, idx) }
+}
+
+fn @_host_buf_set_pos(buf: Buffer, idx: Index, val: Position) -> () { bitcast[&mut[Position]](buf.data)(idx) = val }
+fn @_global_buf_set_pos(buf: Buffer, idx: Index, val: Position) -> () {
+	bitcast[&mut[1][Position]](buf.data)(idx) = val
+}
+fn @_buf_set_pos(buf: Buffer, idx: Index, val: Position) -> () {
+	if buf.device == 0 { _host_buf_set_pos(buf, idx, val) } else { _global_buf_set_pos(buf, idx, val) }
+}
+
+struct PositionVector {
+	buf:  fn()                -> Buffer,
+	size: fn()                -> Index,
+	get:  fn(Index)           -> Position,
+	set:  fn(Index, Position) -> (),
+}
+
+fn new_position_vector(buf: Buffer) -> PositionVector {
+	PositionVector {
+		buf:  @||         buf,
+		size: @||         buf.size / (sizeof[Position]() as i64),
+		get:  @|idx|      _buf_get_pos(buf, idx),
+		set:  @|idx, val| _buf_set_pos(buf, idx, val)
+	}
+}
+
+fn dump_position_vector(vec: PositionVector) -> () {
+	print_index(vec.size()); print_string("-element Vector[Position]:\n");
+	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
+		print_string(" "); print_position(vec.get(i as Index)); print_string("\n");
+	}
+}
