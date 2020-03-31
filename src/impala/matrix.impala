@@ -62,6 +62,18 @@ fn dump_potential_matrix(mat: PotentialMatrix) -> () {
 	print_string("\n");
 }
 
+fn @_host_buf_get_real(buf: Buffer, idx: Index) -> Real { bitcast[&[Real]](buf.data)(idx) }
+fn @_global_buf_get_real(buf: Buffer, idx: Index) -> Real { bitcast[&[1][Real]](buf.data)(idx) }
+fn @_buf_get_real(buf: Buffer, idx: Index) -> Real {
+	if buf.device == 0 { _host_buf_get_real(buf, idx) } else { _global_buf_get_real(buf, idx) }
+}
+
+fn @_host_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () { bitcast[&mut[Real]](buf.data)(idx) = val }
+fn @_global_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () { bitcast[&mut[1][Real]](buf.data)(idx) = val }
+fn @_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () {
+	if buf.device == 0 { _host_buf_set_real(buf, idx, val) } else { _global_buf_set_real(buf, idx, val) }
+}
+
 struct RealVector{
 	size: fn()            -> Index,
 	get:  fn(Index)       -> Real,
@@ -71,8 +83,8 @@ struct RealVector{
 fn new_real_vector(buf: Buffer) -> RealVector {
 	RealVector {
 		size: @||         buf.size / (sizeof[Real]() as i64),
-		get:  @|idx|      bitcast[&[Real]](buf.data)(idx),
-		set:  @|idx, val| bitcast[&mut[Real]](buf.data)(idx) = val
+		get:  @|idx|      _buf_get_real(buf, idx),
+		set:  @|idx, val| _buf_set_real(buf, idx, val)
 	}
 }
 
