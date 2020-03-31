@@ -140,3 +140,58 @@ fn print_position_vector(vec: PositionVector) -> () {
 		print_string(" "); print_position(vec.get(i as Index)); print_string("\n");
 	}
 }
+
+fn @_host_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
+	new_triangle(bitcast[&[TrianglePrimitive]](buf.data)(idx))
+}
+
+fn @_global_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
+	new_triangle(bitcast[&[1][TrianglePrimitive]](buf.data)(idx))
+}
+
+fn @_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
+	if buf.device == 0 { _host_buf_get_triangle(buf, idx) } else { _global_buf_get_triangle(buf, idx) }
+}
+
+fn @_host_buf_set_triangle(buf: Buffer, idx: Index, val: Triangle) -> () {
+	bitcast[&mut[TrianglePrimitive]](buf.data)(idx) = TrianglePrimitive {
+		v1: val.v1(),
+		v2: val.v2(),
+		v3: val.v3()
+	}
+}
+
+fn @_global_buf_set_triangle(buf: Buffer, idx: Index, val: Triangle) -> () {
+	bitcast[&mut[1][TrianglePrimitive]](buf.data)(idx) = TrianglePrimitive {
+		v1: val.v1(),
+		v2: val.v2(),
+		v3: val.v3()
+	}
+}
+
+fn @_buf_set_triangle(buf: Buffer, idx: Index, val: Triangle) -> () {
+	if buf.device == 0 { _host_buf_set_triangle(buf, idx, val) } else { _global_buf_set_triangle(buf, idx, val) }
+}
+
+struct TriangleVector {
+	buf:  fn()                -> Buffer,
+	size: fn()                -> Index,
+	get:  fn(Index)           -> Triangle,
+	set:  fn(Index, Triangle) -> (),
+}
+
+fn new_triangle_vector(buf: Buffer) -> TriangleVector {
+	TriangleVector {
+		buf:  @||         buf,
+		size: @||         buf.size / (sizeof[TrianglePrimitive]() as i64),
+		get:  @|idx|      _buf_get_triangle(buf, idx),
+		set:  @|idx, val| _buf_set_triangle(buf, idx, val)
+	}
+}
+
+fn print_triangle_vector(vec: TriangleVector) -> () {
+	print_index(vec.size()); print_string("-element Vector[Triangle]:\n");
+	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
+		print_string(" "); print_triangle(vec.get(i as Index)); print_string("\n");
+	}
+}
