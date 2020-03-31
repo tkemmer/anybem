@@ -101,19 +101,10 @@ type SurfaceElementBuffer = TriangleBuffer;
 type SurfaceElementBufferPrimitive = TriangleBufferPrimitive;
 type SurfaceElementBufferPrototype = TriangleBufferPrototype;
 
-fn new_surface_element(elem: SurfaceElementPrimitive) -> SurfaceElement { new_triangle(elem) }
-
-fn new_surface_element_buffer(elements: SurfaceElementBufferPrimitive) -> SurfaceElementBuffer {
-	new_triangle_buffer(elements)
-}
-
-fn to_surface_element_buffer(proto: SurfaceElementBufferPrototype) -> SurfaceElementBuffer {
-	to_triangle_buffer(proto)
-}
-
-fn dump_surface_element_buffer(elements: SurfaceElementBuffer, head_max: i32) -> () {
-	dump_triangle_buffer(elements, head_max)
-}
+static new_surface_element = new_triangle;
+static new_surface_element_buffer = new_triangle_buffer;
+static to_surface_element_buffer = to_triangle_buffer;
+static dump_surface_element_buffer = dump_triangle_buffer;
 
 
 // ====================================================================================================================
