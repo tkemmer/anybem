@@ -74,7 +74,7 @@ fn @_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () {
 	if buf.device == 0 { _host_buf_set_real(buf, idx, val) } else { _global_buf_set_real(buf, idx, val) }
 }
 
-struct RealVector{
+struct RealVector {
 	buf:  fn()            -> Buffer,
 	size: fn()            -> Index,
 	get:  fn(Index)       -> Real,
@@ -95,4 +95,11 @@ fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
 		vec.set(i as Index, val)
 	}
 	vec
+}
+
+fn dump_real_vector(vec: RealVector) -> () {
+	print_index(vec.size()); print_string("-element Vector[Real]:\n");
+	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
+		print_string(" "); print_real(vec.get(i as Index)); print_string("\n");
+	}
 }
