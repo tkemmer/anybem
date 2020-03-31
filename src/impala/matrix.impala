@@ -62,22 +62,21 @@ fn dump_potential_matrix(mat: PotentialMatrix) -> () {
 	print_string("\n");
 }
 
-struct Vector{
+struct RealVector{
 	size: fn()            -> Index,
 	get:  fn(Index)       -> Real,
 	set:  fn(Index, Real) -> ()
 }
 
-fn new_vector(buf: Buffer) -> Vector {
-	let size = buf.size / (sizeof[Real]() as i64);
-	Vector {
-		size: @||         size,
+fn new_real_vector(buf: Buffer) -> RealVector {
+	RealVector {
+		size: @||         buf.size / (sizeof[Real]() as i64),
 		get:  @|idx|      bitcast[&[Real]](buf.data)(idx),
 		set:  @|idx, val| bitcast[&mut[Real]](buf.data)(idx) = val
 	}
 }
 
-fn fill_vector(vec: Vector, val: Real) -> Vector {
+fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
 	for i in range(0, vec.size() as i32) {
 		vec.set(i as Index, val)
 	}
