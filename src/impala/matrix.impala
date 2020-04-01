@@ -139,6 +139,7 @@ fn print_position_vector(vec: PositionVector) -> () {
 	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
 		print_string(" "); print_position(vec.get(i as Index)); print_string("\n");
 	}
+	print_string("\n");
 }
 
 fn @_host_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
@@ -194,6 +195,7 @@ fn print_triangle_vector(vec: TriangleVector) -> () {
 	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
 		print_string(" "); print_triangle(vec.get(i as Index)); print_string("\n");
 	}
+	print_string("\n");
 }
 
 fn @linear_system_context(
