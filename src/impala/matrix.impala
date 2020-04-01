@@ -81,10 +81,10 @@ struct RealVector {
 	set:  fn(Index, Real) -> ()
 }
 
-fn new_real_vector(buf: Buffer) -> RealVector {
+fn new_real_vector(buf: Buffer, size: Index) -> RealVector {
 	RealVector {
 		buf:  @||         buf,
-		size: @||         buf.size / (sizeof[Real]() as i64),
+		size: @||         size,
 		get:  @|idx|      _buf_get_real(buf, idx),
 		set:  @|idx, val| _buf_set_real(buf, idx, val)
 	}
@@ -122,13 +122,13 @@ struct PositionVector {
 	buf:  fn()                -> Buffer,
 	size: fn()                -> Index,
 	get:  fn(Index)           -> Position,
-	set:  fn(Index, Position) -> (),
+	set:  fn(Index, Position) -> ()
 }
 
-fn new_position_vector(buf: Buffer) -> PositionVector {
+fn new_position_vector(buf: Buffer, size: Index) -> PositionVector {
 	PositionVector {
 		buf:  @||         buf,
-		size: @||         buf.size / (sizeof[Position]() as i64),
+		size: @||         size,
 		get:  @|idx|      _buf_get_pos(buf, idx),
 		set:  @|idx, val| _buf_set_pos(buf, idx, val)
 	}
@@ -180,10 +180,10 @@ struct TriangleVector {
 	set:  fn(Index, Triangle) -> (),
 }
 
-fn new_triangle_vector(buf: Buffer) -> TriangleVector {
+fn new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
 	TriangleVector {
 		buf:  @||         buf,
-		size: @||         buf.size / (sizeof[TrianglePrimitive]() as i64),
+		size: @||         size,
 		get:  @|idx|      _buf_get_triangle(buf, idx),
 		set:  @|idx, val| _buf_set_triangle(buf, idx, val)
 	}
