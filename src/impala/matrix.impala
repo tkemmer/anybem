@@ -90,6 +90,18 @@ fn new_real_vector(buf: Buffer, size: Index) -> RealVector {
 	}
 }
 
+fn @new_real_vector_context(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
+	let buf = alloc(size * sizeof[Real]());
+	@@body(new_real_vector(buf, size as Index));
+	release(buf);
+}
+
+fn @new_real_vector_context_platform(size: i32, body: fn(RealVector) -> ()) -> () {
+	with vec in new_real_vector_context(size, alloc_platform) {
+		@@body(vec);
+	}
+}
+
 fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
 	for i in range(0, vec.size() as i32) {
 		vec.set(i as Index, val)
@@ -131,6 +143,18 @@ fn new_position_vector(buf: Buffer, size: Index) -> PositionVector {
 		size: @||         size,
 		get:  @|idx|      _buf_get_pos(buf, idx),
 		set:  @|idx, val| _buf_set_pos(buf, idx, val)
+	}
+}
+
+fn @new_position_vector_context(size: i32, alloc: fn(i32) -> Buffer, body: fn(PositionVector) -> ()) -> () {
+	let buf = alloc(size * sizeof[Position]());
+	@@body(new_position_vector(buf, size as Index));
+	release(buf);
+}
+
+fn @new_position_vector_context_platform(size: i32, body: fn(PositionVector) -> ()) -> () {
+	with vec in new_position_vector_context(size, alloc_platform) {
+		@@body(vec);
 	}
 }
 
@@ -187,6 +211,18 @@ fn new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
 		size: @||         size,
 		get:  @|idx|      _buf_get_triangle(buf, idx),
 		set:  @|idx, val| _buf_set_triangle(buf, idx, val)
+	}
+}
+
+fn @new_triangle_vector_context(size: i32, alloc: fn(i32) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
+	let buf = alloc(size * sizeof[TrianglePrimitive]());
+	@@body(new_triangle_vector(buf, size as Index));
+	release(buf);
+}
+
+fn @new_triangle_vector_context_platform(size: i32, body: fn(TriangleVector) -> ()) -> () {
+	with vec in new_triangle_vector_context(size, alloc_platform) {
+		@@body(vec);
 	}
 }
 
