@@ -81,7 +81,7 @@ struct RealVector {
 	set:  fn(Index, Real) -> ()
 }
 
-fn new_real_vector(buf: Buffer, size: Index) -> RealVector {
+fn @_new_real_vector(buf: Buffer, size: Index) -> RealVector {
 	RealVector {
 		buf:  @||         buf,
 		size: @||         size,
@@ -90,16 +90,18 @@ fn new_real_vector(buf: Buffer, size: Index) -> RealVector {
 	}
 }
 
-fn @new_real_vector_context(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
+fn @new_real_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Real]());
-	@@body(new_real_vector(buf, size as Index));
+	@@body(_new_real_vector(buf, size as Index));
 	release(buf);
 }
 
-fn @new_real_vector_context_platform(size: i32, body: fn(RealVector) -> ()) -> () {
-	with vec in new_real_vector_context(size, alloc_platform) {
-		@@body(vec);
-	}
+fn @new_real_vector_on_host(size: i32, body: fn(RealVector) -> ()) -> () {
+	with vec in new_real_vector(size, alloc_cpu) { @@body(vec); }
+}
+
+fn @new_real_vector_on_platform(size: i32, body: fn(RealVector) -> ()) -> () {
+	with vec in new_real_vector(size, alloc_platform) { @@body(vec); }
 }
 
 fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
@@ -137,7 +139,7 @@ struct PositionVector {
 	set:  fn(Index, Position) -> ()
 }
 
-fn new_position_vector(buf: Buffer, size: Index) -> PositionVector {
+fn @_new_position_vector(buf: Buffer, size: Index) -> PositionVector {
 	PositionVector {
 		buf:  @||         buf,
 		size: @||         size,
@@ -146,16 +148,18 @@ fn new_position_vector(buf: Buffer, size: Index) -> PositionVector {
 	}
 }
 
-fn @new_position_vector_context(size: i32, alloc: fn(i32) -> Buffer, body: fn(PositionVector) -> ()) -> () {
+fn @new_position_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(PositionVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Position]());
-	@@body(new_position_vector(buf, size as Index));
+	@@body(_new_position_vector(buf, size as Index));
 	release(buf);
 }
 
-fn @new_position_vector_context_platform(size: i32, body: fn(PositionVector) -> ()) -> () {
-	with vec in new_position_vector_context(size, alloc_platform) {
-		@@body(vec);
-	}
+fn @new_position_vector_on_host(size: i32, body: fn(PositionVector) -> ()) -> () {
+	with vec in new_position_vector(size, alloc_cpu) { @@body(vec); }
+}
+
+fn @new_position_vector_on_platform(size: i32, body: fn(PositionVector) -> ()) -> () {
+	with vec in new_position_vector(size, alloc_platform) { @@body(vec); }
 }
 
 fn print_position_vector(vec: PositionVector) -> () {
@@ -205,7 +209,7 @@ struct TriangleVector {
 	set:  fn(Index, Triangle) -> (),
 }
 
-fn new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
+fn @_new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
 	TriangleVector {
 		buf:  @||         buf,
 		size: @||         size,
@@ -214,16 +218,18 @@ fn new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
 	}
 }
 
-fn @new_triangle_vector_context(size: i32, alloc: fn(i32) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
+fn @new_triangle_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[TrianglePrimitive]());
-	@@body(new_triangle_vector(buf, size as Index));
+	@@body(_new_triangle_vector(buf, size as Index));
 	release(buf);
 }
 
-fn @new_triangle_vector_context_platform(size: i32, body: fn(TriangleVector) -> ()) -> () {
-	with vec in new_triangle_vector_context(size, alloc_platform) {
-		@@body(vec);
-	}
+fn @new_triangle_vector_on_host(size: i32, body: fn(TriangleVector) -> ()) -> () {
+	with vec in new_triangle_vector(size, alloc_cpu) { @@body(vec); }
+}
+
+fn @new_triangle_vector_on_platform(size: i32, body: fn(TriangleVector) -> ()) -> () {
+	with vec in new_triangle_vector(size, alloc_platform) { @@body(vec); }
 }
 
 fn print_triangle_vector(vec: TriangleVector) -> () {
