@@ -196,18 +196,29 @@ fn print_triangle_vector(vec: TriangleVector) -> () {
 	}
 }
 
-fn potmat_mul(dst: RealVector, A: PotentialMatrix, x: RealVector) -> () {
-	with dst in real_vector_context(dst) {
-		with A in potential_matrix_context(A) {
-			with x in real_vector_context(x)   {
-				for i in parallel(0, 0, A.size()(0) as i32) {
-					let mut sum = zero;
-					for j in range(0, A.size()(1) as i32) {
-						sum += A.get(i as Index, j as Index) * x.get(j as Index)
-					}
-					dst.set(i as Index, sum);
-				}
+fn @linear_system_context(
+	A:    PotentialMatrix,
+	x:    RealVector,
+	b:    RealVector,
+	body: fn(PotentialMatrix, RealVector, RealVector) -> ()
+) -> () {
+	with A in potential_matrix_context(A) {
+		with x in real_vector_context(x) {
+			with b in real_vector_context(b) {
+				@@body(A, x, b)
 			}
+		}
+	}
+}
+
+fn potmat_mul(dst: RealVector, A: PotentialMatrix, x: RealVector) -> () {
+	with A, x, dst in linear_system_context(A, x, dst) {
+		for i in parallel(0, 0, A.size()(0) as i32) {
+			let mut sum = zero;
+			for j in range(0, A.size()(1) as i32) {
+				sum += A.get(i as Index, j as Index) * x.get(j as Index)
+			}
+			dst.set(i as Index, sum);
 		}
 	}
 }
