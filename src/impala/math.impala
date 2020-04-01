@@ -6,6 +6,11 @@ fn @add(u: Position, v: Position) -> Position {
 	}
 }
 
+fn @cld(x: i32, y:i32) -> i32 {
+	let o = if x % y == 0 { 0 } else { 1 };
+	x / y + o
+}
+
 fn @cross(u: Position, v: Position) -> Position {
 	Position {
 		x: u.y * v.z - u.z * v.y,
