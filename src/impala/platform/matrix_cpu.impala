@@ -8,9 +8,9 @@ fn @position_vector_context_cpu(vec: PositionVector, body: fn(PositionVector) ->
 fn @triangle_vector_context_cpu(vec: TriangleVector, body: fn(TriangleVector) -> ()) -> () { @@body(vec) }
 fn @potential_matrix_context_cpu(mat: PotentialMatrix, body: fn(PotentialMatrix) -> ()) -> () { @@body(mat) }
 
-static each_row = each_row_cpu;
+static each_potential_matrix_row = each_potential_matrix_row_cpu;
 
-fn @each_row_cpu(A: PotentialMatrix, body: fn(i32) -> ()) -> () {
+fn @each_potential_matrix_row_cpu(A: PotentialMatrix, body: fn(i32) -> ()) -> () {
 	for i in parallel(0, 0, A.size()(0) as i32) { // TODO
 		@@body(i)
 	}
