@@ -1,0 +1,33 @@
+struct NonlocalSystemMatrix {
+	xis:      fn() -> PositionVector,
+	elements: fn() -> TriangleVector,
+	params:   fn() -> SystemParams,
+	size:     fn() -> (Index, Index)
+}
+
+fn @_new_nonlocal_system_matrix(
+	xis:      PositionVector,
+	elements: TriangleVector,
+	params:   SystemParams
+) -> NonlocalSystemMatrix {
+	NonlocalSystemMatrix {
+		xis:      || xis,
+		elements: || elements,
+		params:   || params,
+		size:     || (xis.size(), elements.size())
+	}
+}
+
+fn @create_nonlocal_system_matrix_on_platform(surf: SurfaceModel, body: fn(NonlocalSystemMatrix) -> ()) -> () {
+	with xis in create_position_vector_on_platform(surf.elements().size(), |i| surf.elements().get(i).center()) {
+		with elems in create_triangle_vector_on_platform(surf.elements().size(), |i| surf.elements().get(i)) {
+			@@body(_new_nonlocal_system_matrix(xis, elems, surf.params()))
+		}
+	}
+}
+
+fn print_nonlocal_system_matrix(mat: NonlocalSystemMatrix) -> () {
+	let (r, c) = mat.size();
+	print_index(r); print_string(" x "); print_index(c);
+	print_string(" NonlocalSystemMatrix\n");
+}
