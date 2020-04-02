@@ -104,11 +104,8 @@ fn @new_real_vector_on_platform(size: i32, body: fn(RealVector) -> ()) -> () {
 	with vec in new_real_vector(size, alloc_platform) { @@body(vec); }
 }
 
-fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
-	for i in range(0, vec.size()) {
-		vec.set(i, val)
-	}
-	vec
+fn @fill_real_vector(vec: RealVector, val: fn(Index) -> Real) -> () {
+	for i in range(0, vec.size()) { vec.set(i, val(i)) }
 }
 
 fn print_real_vector(vec: RealVector) -> () {
@@ -160,6 +157,10 @@ fn @new_position_vector_on_host(size: i32, body: fn(PositionVector) -> ()) -> ()
 
 fn @new_position_vector_on_platform(size: i32, body: fn(PositionVector) -> ()) -> () {
 	with vec in new_position_vector(size, alloc_platform) { @@body(vec); }
+}
+
+fn @fill_position_vector(vec: PositionVector, val: fn(Index) -> Position) -> () {
+	for i in range(0, vec.size()) { vec.set(i, val(i)) }
 }
 
 fn print_position_vector(vec: PositionVector) -> () {
@@ -230,6 +231,10 @@ fn @new_triangle_vector_on_host(size: i32, body: fn(TriangleVector) -> ()) -> ()
 
 fn @new_triangle_vector_on_platform(size: i32, body: fn(TriangleVector) -> ()) -> () {
 	with vec in new_triangle_vector(size, alloc_platform) { @@body(vec); }
+}
+
+fn @fill_triangle_vector(vec: TriangleVector, val: fn(Index) -> Triangle) -> () {
+	for i in range(0, vec.size()) { vec.set(i, val(i)) }
 }
 
 fn print_triangle_vector(vec: TriangleVector) -> () {
