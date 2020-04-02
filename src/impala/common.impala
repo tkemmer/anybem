@@ -24,3 +24,7 @@ static one      = 1 as Real;
 static one_half = 0.5 as Real;
 static four_pi  = 12.566370614359172 as Real;
 static origin   = Position {x: zero, y: zero, z: zero};
+
+fn @yukawa(params: SystemParams) -> Real {
+	math.sqrt(params.epsSigma / params.epsInf) / params.lambda
+}
