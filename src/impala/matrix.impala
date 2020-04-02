@@ -266,12 +266,12 @@ fn print_triangle_vector(vec: TriangleVector) -> () {
 	print_string("\n");
 }
 
-fn potmat_mul(dst: RealVector, A: PotentialMatrix, x: RealVector) -> () {
+fn gemv_potential_real(alpha: Real, A: PotentialMatrix, x: RealVector, beta: Real, y: RealVector) -> () {
 	for i in each_potential_matrix_row(A) {
 		let mut sum = zero;
 		for j in range(0, A.size()(1)) {
-			sum += A.get(i, j) * x.get(j)
+			sum += A.get(i, j) * x.get(j);
 		}
-		dst.set(i, sum);
+		y.set(i, beta * y.get(i) + alpha * sum);
 	}
 }
