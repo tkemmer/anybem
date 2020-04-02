@@ -25,11 +25,13 @@ fn @triangle_vector_on_platform(vec: TriangleVector, body: fn(TriangleVector) ->
 fn @each_potential_matrix_row(A: PotentialMatrix, body: fn(i32) -> ()) -> () {
 	let block = (128, 1, 1);
 	let grid = (cld(A.size()(0), 128) * 128, 1, 1);
+	let acc = platform_acc();
 
-	for item in platform_acc().exec(grid, block) {
+	for item in acc.exec(grid, block) {
 		let i = item.bidx() * item.bdimx() + item.tidx();
 		if i < A.size()(0) {
 			@@body(i)
 		}
 	}
+	acc.sync();
 }
