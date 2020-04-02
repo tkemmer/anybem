@@ -31,3 +31,89 @@ fn print_nonlocal_system_matrix(mat: NonlocalSystemMatrix) -> () {
 	print_index(r); print_string(" x "); print_index(c);
 	print_string(" NonlocalSystemMatrix\n");
 }
+
+fn gemv_nonlocal_system_real(alpha: Real, A: NonlocalSystemMatrix, x: RealVector, beta: Real, y: RealVector) -> () {
+	_fill_nonlocal_sigma(y, A, x);
+	_apply_nonlocal_ls(y, A, x);
+	_apply_nonlocal_ld(y, A, x);
+	_apply_nonlocal_ys(y, A, x);
+	_apply_nonlocal_yd(y, A, x);
+}
+
+fn _fill_nonlocal_sigma(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector) -> () {
+	// TODO get rid of V
+	let V = new_laplace_potential_matrix(SingleLayer, mat.xis(), mat.elements());
+	let nelm = V.size()(1);
+
+	for i in each_potential_matrix_row(V) {
+		let val12 = two_pi * x.get(i);
+		dst.set(i,          val12);
+		dst.set(i + nelm,   val12);
+		dst.set(i + 2*nelm, two_pi * x.get(i + 2 * nelm));
+	}
+}
+
+fn _apply_nonlocal_ls(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector) -> () {
+	let V = new_laplace_potential_matrix(SingleLayer, mat.xis(), mat.elements());
+	let nelm = V.size()(1);
+
+	for i in each_potential_matrix_row(V) {
+		let mut val = zero;
+		for j in range(0, nelm) {
+			val += V.get(i, j) * x.get(j + nelm);
+		}
+		let pref = mat.params().epsOmega / mat.params().epsInf;
+		dst.set(i,          dst.get(i) + pref * val);
+		dst.set(i + nelm,   dst.get(i + nelm) - val);
+		dst.set(i + 2*nelm, dst.get(i + 2*nelm) + pref * val);
+	}
+}
+
+fn _apply_nonlocal_ld(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector) -> () {
+	let K = new_laplace_potential_matrix(DoubleLayer, mat.xis(), mat.elements());
+	let nelm = K.size()(1);
+
+	for i in each_potential_matrix_row(K) {
+		let mut val12 = zero;
+		let mut val3 = zero;
+		for j in range(0, nelm) {
+			let ld = K.get(i, j);
+			val12 += ld * x.get(j);
+			val3  += ld * x.get(j + 2 * nelm);
+		}
+		dst.set(i,          dst.get(i) - val12);
+		dst.set(i + nelm,   dst.get(i + nelm) + val12);
+		dst.set(i + 2*nelm, dst.get(i + 2*nelm) - val3);
+	}
+}
+
+fn _apply_nonlocal_ys(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector) -> () {
+	let Vy = new_reyukawa_potential_matrix(SingleLayer, mat.xis(), mat.elements(), yukawa(mat.params()));
+	let nelm = Vy.size()(1);
+
+	for i in each_potential_matrix_row(Vy) {
+		let mut val = zero;
+		for j in range(0, nelm) {
+			val += Vy.get(i, j) * x.get(j + nelm);
+		}
+		let pref = mat.params().epsOmega * (one / mat.params().epsInf - one / mat.params().epsSigma);
+		dst.set(i, dst.get(i) + pref * val);
+	}
+}
+
+fn _apply_nonlocal_yd(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector) -> () {
+	let Ky = new_reyukawa_potential_matrix(DoubleLayer, mat.xis(), mat.elements(), yukawa(mat.params()));
+	let nelm = Ky.size()(1);
+
+	for i in each_potential_matrix_row(Ky) {
+		let mut val1 = zero;
+		let mut val2 = zero;
+		for j in range(0, nelm) {
+			let yd = Ky.get(i, j);
+			val1 += yd * x.get(j);
+			val2 += yd * x.get(j + 2 * nelm);
+		}
+		let pref = mat.params().epsInf / mat.params().epsSigma;
+		dst.set(i, dst.get(i) - val1 + pref * val2);
+	}
+}
