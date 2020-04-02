@@ -90,6 +90,15 @@ fn @_new_real_vector(buf: Buffer, size: Index) -> RealVector {
 	}
 }
 
+fn @real_vector_view(vec: RealVector, from: Index, to: Index) -> RealVector {
+	RealVector {
+		buf:  vec.buf,
+		size: @||         to - from,
+		get:  @|idx|      vec.get(from + idx),
+		set:  @|idx, val| vec.set(from + idx, val)
+	}
+}
+
 fn @new_real_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Real]());
 	@@body(_new_real_vector(buf, size));
