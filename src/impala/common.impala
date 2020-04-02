@@ -22,6 +22,7 @@ static potpref  = 14.399639772478396    as Real;
 static zero     = 0 as Real;
 static one      = 1 as Real;
 static one_half = 0.5 as Real;
+static two_pi   = 6.283185307179586 as Real;
 static four_pi  = 12.566370614359172 as Real;
 static origin   = Position {x: zero, y: zero, z: zero};
 
