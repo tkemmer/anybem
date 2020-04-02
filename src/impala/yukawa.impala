@@ -39,7 +39,7 @@ fn _reyukawapot_elem(
 		let cpt = _quadrature_point(qpt, elem);
 		sum += pot(cpt, xi, elem.normal(), yuk) * qpt.weight;
 	}
-	sum
+	sum * (2 as Real) * elem.area()
 }
 
 fn @reyukawapot_single(
