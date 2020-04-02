@@ -1,5 +1,5 @@
 fn @real_vector_on_platform(vec: RealVector, body: fn(RealVector) -> ()) -> () {
-	with acc_vec in new_real_vector_on_platform(vec.size() as i32) {
+	with acc_vec in new_real_vector_on_platform(vec.size()) {
 		copy(vec.buf(), acc_vec.buf());
 		@@body(acc_vec);
 		copy(acc_vec.buf(), vec.buf());
@@ -7,7 +7,7 @@ fn @real_vector_on_platform(vec: RealVector, body: fn(RealVector) -> ()) -> () {
 }
 
 fn @position_vector_on_platform(vec: PositionVector, body: fn(PositionVector) -> ()) -> () {
-	with acc_vec in new_position_vector_on_platform(vec.size() as i32) {
+	with acc_vec in new_position_vector_on_platform(vec.size()) {
 		copy(vec.buf(), acc_vec.buf());
 		@@body(acc_vec);
 		copy(acc_vec.buf(), vec.buf());
@@ -15,7 +15,7 @@ fn @position_vector_on_platform(vec: PositionVector, body: fn(PositionVector) ->
 }
 
 fn @triangle_vector_on_platform(vec: TriangleVector, body: fn(TriangleVector) -> ()) -> () {
-	with acc_vec in new_triangle_vector_on_platform(vec.size() as i32) {
+	with acc_vec in new_triangle_vector_on_platform(vec.size()) {
 		copy(vec.buf(), acc_vec.buf());
 		@@body(acc_vec);
 		copy(acc_vec.buf(), vec.buf());
@@ -24,11 +24,11 @@ fn @triangle_vector_on_platform(vec: TriangleVector, body: fn(TriangleVector) ->
 
 fn @each_potential_matrix_row(A: PotentialMatrix, body: fn(i32) -> ()) -> () {
 	let block = (128, 1, 1);
-	let grid = (cld(A.size()(0) as i32, 128) * 128, 1, 1);
+	let grid = (cld(A.size()(0), 128) * 128, 1, 1);
 
 	for item in platform_acc().exec(grid, block) {
 		let i = item.bidx() * item.bdimx() + item.tidx();
-		if i < A.size()(0) as i32 {
+		if i < A.size()(0) {
 			@@body(i)
 		}
 	}

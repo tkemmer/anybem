@@ -3,7 +3,7 @@ fn @position_vector_on_platform(vec: PositionVector, body: fn(PositionVector) ->
 fn @triangle_vector_on_platform(vec: TriangleVector, body: fn(TriangleVector) -> ()) -> () { @@body(vec) }
 
 fn @each_potential_matrix_row(A: PotentialMatrix, body: fn(i32) -> ()) -> () {
-	for i in parallel(0, 0, A.size()(0) as i32) { // TODO
+	for i in parallel(0, 0, A.size()(0)) { // TODO
 		@@body(i)
 	}
 }

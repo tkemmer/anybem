@@ -1,5 +1,5 @@
-type Index = i64;
-static print_index = print_i64;
+type Index = i32;  // DO NOT CHANGE THIS! alloc/parallel currently only support i32
+static print_index = print_i32;
 
 type Real  = f64;
 static print_real  = print_f64;

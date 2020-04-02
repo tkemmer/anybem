@@ -92,7 +92,7 @@ fn @_new_real_vector(buf: Buffer, size: Index) -> RealVector {
 
 fn @new_real_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Real]());
-	@@body(_new_real_vector(buf, size as Index));
+	@@body(_new_real_vector(buf, size));
 	release(buf);
 }
 
@@ -105,16 +105,16 @@ fn @new_real_vector_on_platform(size: i32, body: fn(RealVector) -> ()) -> () {
 }
 
 fn fill_real_vector(vec: RealVector, val: Real) -> RealVector {
-	for i in range(0, vec.size() as i32) {
-		vec.set(i as Index, val)
+	for i in range(0, vec.size()) {
+		vec.set(i, val)
 	}
 	vec
 }
 
 fn print_real_vector(vec: RealVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Real]:\n");
-	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
-		print_string(" "); print_real(vec.get(i as Index)); print_string("\n");
+	for i in range(0, cpu_intrinsics.min(10, vec.size())) {
+		print_string(" "); print_real(vec.get(i)); print_string("\n");
 	}
 }
 
@@ -150,7 +150,7 @@ fn @_new_position_vector(buf: Buffer, size: Index) -> PositionVector {
 
 fn @new_position_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(PositionVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Position]());
-	@@body(_new_position_vector(buf, size as Index));
+	@@body(_new_position_vector(buf, size));
 	release(buf);
 }
 
@@ -164,8 +164,8 @@ fn @new_position_vector_on_platform(size: i32, body: fn(PositionVector) -> ()) -
 
 fn print_position_vector(vec: PositionVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Position]:\n");
-	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
-		print_string(" "); print_position(vec.get(i as Index)); print_string("\n");
+	for i in range(0, cpu_intrinsics.min(10, vec.size())) {
+		print_string(" "); print_position(vec.get(i)); print_string("\n");
 	}
 	print_string("\n");
 }
@@ -220,7 +220,7 @@ fn @_new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
 
 fn @new_triangle_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[TrianglePrimitive]());
-	@@body(_new_triangle_vector(buf, size as Index));
+	@@body(_new_triangle_vector(buf, size));
 	release(buf);
 }
 
@@ -234,8 +234,8 @@ fn @new_triangle_vector_on_platform(size: i32, body: fn(TriangleVector) -> ()) -
 
 fn print_triangle_vector(vec: TriangleVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Triangle]:\n");
-	for i in range(0, cpu_intrinsics.min(10, vec.size() as i32)) {
-		print_string(" "); print_triangle(vec.get(i as Index)); print_string("\n");
+	for i in range(0, cpu_intrinsics.min(10, vec.size())) {
+		print_string(" "); print_triangle(vec.get(i)); print_string("\n");
 	}
 	print_string("\n");
 }
@@ -243,9 +243,9 @@ fn print_triangle_vector(vec: TriangleVector) -> () {
 fn potmat_mul(dst: RealVector, A: PotentialMatrix, x: RealVector) -> () {
 	for i in each_potential_matrix_row(A) {
 		let mut sum = zero;
-		for j in range(0, A.size()(1) as i32) {
-			sum += A.get(i as Index, j as Index) * x.get(j as Index)
+		for j in range(0, A.size()(1)) {
+			sum += A.get(i, j) * x.get(j)
 		}
-		dst.set(i as Index, sum);
+		dst.set(i, sum);
 	}
 }

@@ -5,7 +5,7 @@
 
 namespace anybem {
 	using real_t     = double;
-	using index_t    = int64_t;
+	using index_t    = int32_t;
 
 	struct Position {
 		real_t x;
