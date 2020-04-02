@@ -14,7 +14,7 @@ fn @_new_nonlocal_system_matrix(
 		xis:      || xis,
 		elements: || elements,
 		params:   || params,
-		size:     || (xis.size(), elements.size())
+		size:     || (3 * xis.size(), 3 * elements.size())
 	}
 }
 
