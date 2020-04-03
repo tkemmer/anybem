@@ -24,11 +24,6 @@ struct TriangleBuffer {
 	size:   fn()      -> Index
 }
 
-struct TriangleBufferPrimitive {
-	buf: Buffer,
-	len: Index
-}
-
 struct TriangleBufferPrototype {
 	data: &[TrianglePrimitive],
 	len:  Index
@@ -52,12 +47,12 @@ fn new_triangle(elem: TrianglePrimitive) -> Triangle {
 	}
 }
 
-fn new_triangle_buffer(elements: TriangleBufferPrimitive) -> TriangleBuffer {
+fn new_triangle_buffer(elements: TypedBuffer) -> TriangleBuffer {
 	TriangleBuffer {
-		device: ||    elements.buf.device,
-		get:    |idx| new_triangle(bitcast[&[TrianglePrimitive]](elements.buf.data)(idx)),
-		memory: ||    elements.buf.size,
-		size:   ||    elements.len
+		device: elements.device,
+		get:    @|idx| new_triangle(bitcast[&[TrianglePrimitive]](elements.data())(idx)),
+		memory: @||    elements.buf().size,
+		size:   elements.size
 	}
 }
 
@@ -67,11 +62,7 @@ fn to_triangle_buffer(proto: TriangleBufferPrototype) -> TriangleBuffer {
 		data:   bitcast[&[i8]](proto.data),
 		size:   (proto.len as i64) * (sizeof[TrianglePrimitive]() as i64)
 	};
-	let elements = TriangleBufferPrimitive {
-		buf: buf,
-		len: proto.len
-	};
-	new_triangle_buffer(elements)
+	new_triangle_buffer(new_typed_buffer(buf, proto.len))
 }
 
 fn print_triangle(elem: Triangle) -> () {
@@ -106,7 +97,6 @@ fn print_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 type SurfaceElement = Triangle;
 type SurfaceElementPrimitive = TrianglePrimitive;
 type SurfaceElementBuffer = TriangleBuffer;
-type SurfaceElementBufferPrimitive = TriangleBufferPrimitive;
 type SurfaceElementBufferPrototype = TriangleBufferPrototype;
 
 static new_surface_element = new_triangle;
@@ -135,11 +125,6 @@ struct ChargeBuffer {
 	size:   fn()      -> Index
 }
 
-struct ChargeBufferPrimitive {
-	buf: Buffer,
-	len: Index
-}
-
 struct ChargeBufferPrototype {
 	data: &[ChargePrimitive],
 	len:  Index
@@ -152,12 +137,12 @@ fn new_charge(charge: ChargePrimitive) -> Charge {
 	}
 }
 
-fn new_charge_buffer(charges: ChargeBufferPrimitive) -> ChargeBuffer {
+fn new_charge_buffer(charges: TypedBuffer) -> ChargeBuffer {
 	ChargeBuffer {
-		device: ||    charges.buf.device,
-		get:    |idx| new_charge(bitcast[&[ChargePrimitive]](charges.buf.data)(idx)),
-		memory: ||    charges.buf.size,
-		size:   ||    charges.len
+		device: charges.device,
+		get:    @|idx| new_charge(bitcast[&[ChargePrimitive]](charges.data())(idx)),
+		memory: @||    charges.buf().size,
+		size:   charges.size
 	}
 }
 
@@ -167,11 +152,7 @@ fn to_charge_buffer(proto: ChargeBufferPrototype) -> ChargeBuffer {
 		data:   bitcast[&[i8]](proto.data),
 		size:   (proto.len as i64) * (sizeof[ChargePrimitive]() as i64)
 	};
-	let charges = ChargeBufferPrimitive {
-		buf: buf,
-		len: proto.len
-	};
-	new_charge_buffer(charges)
+	new_charge_buffer(new_typed_buffer(buf, proto.len))
 }
 
 fn print_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
