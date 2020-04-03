@@ -17,6 +17,24 @@ fn print_position(pos: Position) -> () {
 	print_string("}");
 }
 
+struct TypedBuffer {
+	buf:    fn() -> Buffer,
+	data:   fn() -> &[i8],
+	device: fn() -> i32,
+	memory: fn() -> i64,
+	size:   fn() -> Index
+}
+
+fn @new_typed_buffer(buf: Buffer, size: Index) -> TypedBuffer {
+	TypedBuffer {
+		buf:    @|| buf,
+		data:   @|| buf.data,
+		device: @|| buf.device,
+		memory: @|| buf.size,
+		size:   @|| size
+	}
+}
+
 static eps0     = 8.854187817620389e-12 as Real;
 static potpref  = 14.399639772478396    as Real;
 static zero     = 0 as Real;
