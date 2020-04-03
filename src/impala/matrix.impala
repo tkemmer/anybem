@@ -62,16 +62,18 @@ fn print_potential_matrix(mat: PotentialMatrix) -> () {
 	print_string("\n");
 }
 
-fn @_host_buf_get_real(buf: Buffer, idx: Index) -> Real { bitcast[&[Real]](buf.data)(idx) }
-fn @_global_buf_get_real(buf: Buffer, idx: Index) -> Real { bitcast[&[1][Real]](buf.data)(idx) }
-fn @_buf_get_real(buf: Buffer, idx: Index) -> Real {
-	if buf.device == 0 { _host_buf_get_real(buf, idx) } else { _global_buf_get_real(buf, idx) }
+fn @_host_buf_get_real(buf: TypedBuffer, idx: Index) -> Real { bitcast[&[Real]](buf.data())(idx) }
+fn @_global_buf_get_real(buf: TypedBuffer, idx: Index) -> Real { bitcast[&[1][Real]](buf.data())(idx) }
+fn @_buf_get_real(buf: TypedBuffer, idx: Index) -> Real {
+	if buf.device() == 0 { _host_buf_get_real(buf, idx) } else { _global_buf_get_real(buf, idx) }
 }
 
-fn @_host_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () { bitcast[&mut[Real]](buf.data)(idx) = val }
-fn @_global_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () { bitcast[&mut[1][Real]](buf.data)(idx) = val }
-fn @_buf_set_real(buf: Buffer, idx: Index, val: Real) -> () {
-	if buf.device == 0 { _host_buf_set_real(buf, idx, val) } else { _global_buf_set_real(buf, idx, val) }
+fn @_host_buf_set_real(buf: TypedBuffer, idx: Index, val: Real) -> () { bitcast[&mut[Real]](buf.data())(idx) = val }
+fn @_global_buf_set_real(buf: TypedBuffer, idx: Index, val: Real) -> () {
+	bitcast[&mut[1][Real]](buf.data())(idx) = val
+}
+fn @_buf_set_real(buf: TypedBuffer, idx: Index, val: Real) -> () {
+	if buf.device() == 0 { _host_buf_set_real(buf, idx, val) } else { _global_buf_set_real(buf, idx, val) }
 }
 
 struct RealVector {
@@ -81,10 +83,10 @@ struct RealVector {
 	set:  fn(Index, Real) -> ()
 }
 
-fn @_new_real_vector(buf: Buffer, size: Index) -> RealVector {
+fn @_new_real_vector(buf: TypedBuffer) -> RealVector {
 	RealVector {
-		buf:  @||         buf,
-		size: @||         size,
+		buf:  buf.buf,
+		size: buf.size,
 		get:  @|idx|      _buf_get_real(buf, idx),
 		set:  @|idx, val| _buf_set_real(buf, idx, val)
 	}
@@ -101,7 +103,7 @@ fn @real_vector_view(vec: RealVector, from: Index, to: Index) -> RealVector {
 
 fn @new_real_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Real]());
-	@@body(_new_real_vector(buf, size));
+	@@body(_new_real_vector(new_typed_buffer(buf, size)));
 	release(buf);
 }
 
@@ -131,18 +133,20 @@ fn print_real_vector(vec: RealVector) -> () {
 	}
 }
 
-fn @_host_buf_get_pos(buf: Buffer, idx: Index) -> Position { bitcast[&[Position]](buf.data)(idx) }
-fn @_global_buf_get_pos(buf: Buffer, idx: Index) -> Position { bitcast[&[1][Position]](buf.data)(idx) }
-fn @_buf_get_pos(buf: Buffer, idx: Index) -> Position {
-	if buf.device == 0 { _host_buf_get_pos(buf, idx) } else { _global_buf_get_pos(buf, idx) }
+fn @_host_buf_get_pos(buf: TypedBuffer, idx: Index) -> Position { bitcast[&[Position]](buf.data())(idx) }
+fn @_global_buf_get_pos(buf: TypedBuffer, idx: Index) -> Position { bitcast[&[1][Position]](buf.data())(idx) }
+fn @_buf_get_pos(buf: TypedBuffer, idx: Index) -> Position {
+	if buf.device() == 0 { _host_buf_get_pos(buf, idx) } else { _global_buf_get_pos(buf, idx) }
 }
 
-fn @_host_buf_set_pos(buf: Buffer, idx: Index, val: Position) -> () { bitcast[&mut[Position]](buf.data)(idx) = val }
-fn @_global_buf_set_pos(buf: Buffer, idx: Index, val: Position) -> () {
-	bitcast[&mut[1][Position]](buf.data)(idx) = val
+fn @_host_buf_set_pos(buf: TypedBuffer, idx: Index, val: Position) -> () {
+	bitcast[&mut[Position]](buf.data())(idx) = val
 }
-fn @_buf_set_pos(buf: Buffer, idx: Index, val: Position) -> () {
-	if buf.device == 0 { _host_buf_set_pos(buf, idx, val) } else { _global_buf_set_pos(buf, idx, val) }
+fn @_global_buf_set_pos(buf: TypedBuffer, idx: Index, val: Position) -> () {
+	bitcast[&mut[1][Position]](buf.data())(idx) = val
+}
+fn @_buf_set_pos(buf: TypedBuffer, idx: Index, val: Position) -> () {
+	if buf.device() == 0 { _host_buf_set_pos(buf, idx, val) } else { _global_buf_set_pos(buf, idx, val) }
 }
 
 struct PositionVector {
@@ -152,10 +156,10 @@ struct PositionVector {
 	set:  fn(Index, Position) -> ()
 }
 
-fn @_new_position_vector(buf: Buffer, size: Index) -> PositionVector {
+fn @_new_position_vector(buf: TypedBuffer) -> PositionVector {
 	PositionVector {
-		buf:  @||         buf,
-		size: @||         size,
+		buf:  buf.buf,
+		size: buf.size,
 		get:  @|idx|      _buf_get_pos(buf, idx),
 		set:  @|idx, val| _buf_set_pos(buf, idx, val)
 	}
@@ -163,7 +167,7 @@ fn @_new_position_vector(buf: Buffer, size: Index) -> PositionVector {
 
 fn @new_position_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(PositionVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Position]());
-	@@body(_new_position_vector(buf, size));
+	@@body(_new_position_vector(new_typed_buffer(buf, size)));
 	release(buf);
 }
 
@@ -194,36 +198,36 @@ fn print_position_vector(vec: PositionVector) -> () {
 	print_string("\n");
 }
 
-fn @_host_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
-	new_triangle(bitcast[&[TrianglePrimitive]](buf.data)(idx))
+fn @_host_buf_get_triangle(buf: TypedBuffer, idx: Index) -> Triangle {
+	new_triangle(bitcast[&[TrianglePrimitive]](buf.data())(idx))
 }
 
-fn @_global_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
-	new_triangle(bitcast[&[1][TrianglePrimitive]](buf.data)(idx))
+fn @_global_buf_get_triangle(buf: TypedBuffer, idx: Index) -> Triangle {
+	new_triangle(bitcast[&[1][TrianglePrimitive]](buf.data())(idx))
 }
 
-fn @_buf_get_triangle(buf: Buffer, idx: Index) -> Triangle {
-	if buf.device == 0 { _host_buf_get_triangle(buf, idx) } else { _global_buf_get_triangle(buf, idx) }
+fn @_buf_get_triangle(buf: TypedBuffer, idx: Index) -> Triangle {
+	if buf.device() == 0 { _host_buf_get_triangle(buf, idx) } else { _global_buf_get_triangle(buf, idx) }
 }
 
-fn @_host_buf_set_triangle(buf: Buffer, idx: Index, val: Triangle) -> () {
-	bitcast[&mut[TrianglePrimitive]](buf.data)(idx) = TrianglePrimitive {
+fn @_host_buf_set_triangle(buf: TypedBuffer, idx: Index, val: Triangle) -> () {
+	bitcast[&mut[TrianglePrimitive]](buf.data())(idx) = TrianglePrimitive {
 		v1: val.v1(),
 		v2: val.v2(),
 		v3: val.v3()
 	}
 }
 
-fn @_global_buf_set_triangle(buf: Buffer, idx: Index, val: Triangle) -> () {
-	bitcast[&mut[1][TrianglePrimitive]](buf.data)(idx) = TrianglePrimitive {
+fn @_global_buf_set_triangle(buf: TypedBuffer, idx: Index, val: Triangle) -> () {
+	bitcast[&mut[1][TrianglePrimitive]](buf.data())(idx) = TrianglePrimitive {
 		v1: val.v1(),
 		v2: val.v2(),
 		v3: val.v3()
 	}
 }
 
-fn @_buf_set_triangle(buf: Buffer, idx: Index, val: Triangle) -> () {
-	if buf.device == 0 { _host_buf_set_triangle(buf, idx, val) } else { _global_buf_set_triangle(buf, idx, val) }
+fn @_buf_set_triangle(buf: TypedBuffer, idx: Index, val: Triangle) -> () {
+	if buf.device() == 0 { _host_buf_set_triangle(buf, idx, val) } else { _global_buf_set_triangle(buf, idx, val) }
 }
 
 struct TriangleVector {
@@ -233,10 +237,10 @@ struct TriangleVector {
 	set:  fn(Index, Triangle) -> (),
 }
 
-fn @_new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
+fn @_new_triangle_vector(buf: TypedBuffer) -> TriangleVector {
 	TriangleVector {
-		buf:  @||         buf,
-		size: @||         size,
+		buf:  buf.buf,
+		size: buf.size,
 		get:  @|idx|      _buf_get_triangle(buf, idx),
 		set:  @|idx, val| _buf_set_triangle(buf, idx, val)
 	}
@@ -244,7 +248,7 @@ fn @_new_triangle_vector(buf: Buffer, size: Index) -> TriangleVector {
 
 fn @new_triangle_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[TrianglePrimitive]());
-	@@body(_new_triangle_vector(buf, size));
+	@@body(_new_triangle_vector(new_typed_buffer(buf, size)));
 	release(buf);
 }
 
