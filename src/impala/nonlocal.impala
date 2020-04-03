@@ -41,11 +41,9 @@ fn gemv_nonlocal_system_real(alpha: Real, A: NonlocalSystemMatrix, x: RealVector
 }
 
 fn _fill_nonlocal_sigma(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector) -> () {
-	// TODO get rid of V
-	let V = new_laplace_potential_matrix(SingleLayer, mat.xis(), mat.elements());
-	let nelm = V.size()(1);
+	let nelm = mat.elements().size();
 
-	for i in each_potential_matrix_row(V) {
+	for i in each_index_on_platform(nelm) {
 		let val12 = two_pi * x.get(i);
 		dst.set(i,          val12);
 		dst.set(i + nelm,   val12);
@@ -57,7 +55,7 @@ fn _apply_nonlocal_ls(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 	let V = new_laplace_potential_matrix(SingleLayer, mat.xis(), mat.elements());
 	let nelm = V.size()(1);
 
-	for i in each_potential_matrix_row(V) {
+	for i in each_index_on_platform(nelm) {
 		let mut val = zero;
 		for j in range(0, nelm) {
 			val += V.get(i, j) * x.get(j + nelm);
@@ -73,7 +71,7 @@ fn _apply_nonlocal_ld(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 	let K = new_laplace_potential_matrix(DoubleLayer, mat.xis(), mat.elements());
 	let nelm = K.size()(1);
 
-	for i in each_potential_matrix_row(K) {
+	for i in each_index_on_platform(nelm) {
 		let mut val12 = zero;
 		let mut val3 = zero;
 		for j in range(0, nelm) {
@@ -91,7 +89,7 @@ fn _apply_nonlocal_ys(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 	let Vy = new_reyukawa_potential_matrix(SingleLayer, mat.xis(), mat.elements(), yukawa(mat.params()));
 	let nelm = Vy.size()(1);
 
-	for i in each_potential_matrix_row(Vy) {
+	for i in each_index_on_platform(nelm) {
 		let mut val = zero;
 		for j in range(0, nelm) {
 			val += Vy.get(i, j) * x.get(j + nelm);
@@ -105,7 +103,7 @@ fn _apply_nonlocal_yd(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 	let Ky = new_reyukawa_potential_matrix(DoubleLayer, mat.xis(), mat.elements(), yukawa(mat.params()));
 	let nelm = Ky.size()(1);
 
-	for i in each_potential_matrix_row(Ky) {
+	for i in each_index_on_platform(nelm) {
 		let mut val1 = zero;
 		let mut val2 = zero;
 		for j in range(0, nelm) {
