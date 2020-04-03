@@ -42,6 +42,6 @@ int main(int argc, char** argv) {
 	     << " * Charges:  "s << to_string(surf.charge_count()) << "\n"s
 	     << "\n"s;
 
-	auto sproto = surf.prototype();
+	auto sproto = surf.primitive();
 	anybem_surface_model_stats(&sproto);
 }

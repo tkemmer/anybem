@@ -18,7 +18,7 @@ namespace anybem {
 
 	class TriangleBuffer final {
 	public:
-		struct Prototype {
+		struct Primitive {
 			TrianglePrimitive* data;
 			index_t            len;
 		};
@@ -32,7 +32,7 @@ namespace anybem {
 
 		~TriangleBuffer() noexcept = default;
 
-		Prototype prototype() { return {elements_.data(), size()}; }
+		Primitive primitive() { return {elements_.data(), size()}; }
 
 		index_t size() const noexcept { return elements_.size(); }
 
@@ -54,7 +54,7 @@ namespace anybem {
 
 	class ChargeBuffer final {
 	public:
-		struct Prototype {
+		struct Primitive {
 			ChargePrimitive* data;
 			index_t          len;
 		};
@@ -72,7 +72,7 @@ namespace anybem {
 
 		~ChargeBuffer() noexcept = default;
 
-		Prototype prototype() { return {charges_.data(), size()}; }
+		Primitive primitive() { return {charges_.data(), size()}; }
 
 		index_t size() const noexcept { return charges_.size(); }
 
@@ -100,9 +100,9 @@ namespace anybem {
 	class SurfaceModel final {
 	public:
 
-		struct Prototype {
-			SurfaceElementBuffer::Prototype elements;
-			ChargeBuffer::Prototype         charges;
+		struct Primitive {
+			SurfaceElementBuffer::Primitive elements;
+			ChargeBuffer::Primitive         charges;
 			SystemParams                    params;
 		};
 
@@ -126,10 +126,10 @@ namespace anybem {
 
 		~SurfaceModel() = default;
 
-		Prototype prototype() {
+		Primitive primitive() {
 			return {
-				elements_.prototype(),
-				charges_.prototype(),
+				elements_.primitive(),
+				charges_.primitive(),
 				params_
 			};
 		}

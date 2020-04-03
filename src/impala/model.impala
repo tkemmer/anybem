@@ -24,9 +24,9 @@ struct TriangleBuffer {
 	size:   fn()      -> Index
 }
 
-struct TriangleBufferPrototype {
+struct TriangleBufferPrimitive {
 	data: &[TrianglePrimitive],
-	len:  Index
+	size: Index
 }
 
 fn new_triangle(elem: TrianglePrimitive) -> Triangle {
@@ -56,13 +56,13 @@ fn new_triangle_buffer(elements: TypedBuffer) -> TriangleBuffer {
 	}
 }
 
-fn to_triangle_buffer(proto: TriangleBufferPrototype) -> TriangleBuffer {
+fn to_triangle_buffer(tbuf: TriangleBufferPrimitive) -> TriangleBuffer {
 	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](proto.data),
-		size:   (proto.len as i64) * (sizeof[TrianglePrimitive]() as i64)
+		data:   bitcast[&[i8]](tbuf.data),
+		size:   (tbuf.size as i64) * (sizeof[TrianglePrimitive]() as i64)
 	};
-	new_triangle_buffer(new_typed_buffer(buf, proto.len))
+	new_triangle_buffer(new_typed_buffer(buf, tbuf.size))
 }
 
 fn print_triangle(elem: Triangle) -> () {
@@ -97,7 +97,7 @@ fn print_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
 type SurfaceElement = Triangle;
 type SurfaceElementPrimitive = TrianglePrimitive;
 type SurfaceElementBuffer = TriangleBuffer;
-type SurfaceElementBufferPrototype = TriangleBufferPrototype;
+type SurfaceElementBufferPrimitive = TriangleBufferPrimitive;
 
 static new_surface_element = new_triangle;
 static new_surface_element_buffer = new_triangle_buffer;
@@ -125,9 +125,9 @@ struct ChargeBuffer {
 	size:   fn()      -> Index
 }
 
-struct ChargeBufferPrototype {
+struct ChargeBufferPrimitive {
 	data: &[ChargePrimitive],
-	len:  Index
+	size: Index
 }
 
 fn new_charge(charge: ChargePrimitive) -> Charge {
@@ -146,13 +146,13 @@ fn new_charge_buffer(charges: TypedBuffer) -> ChargeBuffer {
 	}
 }
 
-fn to_charge_buffer(proto: ChargeBufferPrototype) -> ChargeBuffer {
+fn to_charge_buffer(cbuf: ChargeBufferPrimitive) -> ChargeBuffer {
 	let buf = Buffer {
 		device: 0,
-		data:   bitcast[&[i8]](proto.data),
-		size:   (proto.len as i64) * (sizeof[ChargePrimitive]() as i64)
+		data:   bitcast[&[i8]](cbuf.data),
+		size:   (cbuf.size as i64) * (sizeof[ChargePrimitive]() as i64)
 	};
-	new_charge_buffer(new_typed_buffer(buf, proto.len))
+	new_charge_buffer(new_typed_buffer(buf, cbuf.size))
 }
 
 fn print_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
@@ -208,30 +208,23 @@ struct SurfaceModel {
 }
 
 struct SurfaceModelPrimitive {
-	elements: SurfaceElementBuffer,
-	charges:  ChargeBuffer,
+	elements: SurfaceElementBufferPrimitive,
+	charges:  ChargeBufferPrimitive,
 	params:   SystemParams
 }
 
-struct SurfaceModelPrototype {
-	elements: SurfaceElementBufferPrototype,
-	charges:  ChargeBufferPrototype,
-	params:   SystemParams
-}
-
-fn new_surface_model(surf: SurfaceModelPrimitive) -> SurfaceModel {
+fn new_surface_model(elements: SurfaceElementBuffer, charges: ChargeBuffer, params: SystemParams) -> SurfaceModel {
 	SurfaceModel {
-		elements: || surf.elements,
-		charges:  || surf.charges,
-		params:   || surf.params
+		elements: @|| elements,
+		charges:  @|| charges,
+		params:   @|| params
 	}
 }
 
-fn to_surface_model(proto: SurfaceModelPrototype) -> SurfaceModel {
-	let surf = SurfaceModelPrimitive {
-		elements: to_surface_element_buffer(proto.elements),
-		charges:  to_charge_buffer(proto.charges),
-		params:   proto.params
-	};
-	new_surface_model(surf)
+fn to_surface_model(surf: SurfaceModelPrimitive) -> SurfaceModel {
+	new_surface_model(
+		to_surface_element_buffer(surf.elements),
+		to_charge_buffer(surf.charges),
+		surf.params
+	)
 }
