@@ -44,6 +44,7 @@ fn _fill_nonlocal_sigma(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVecto
 	let nelm = mat.elements().size();
 
 	for i in each_index_on_platform(nelm) {
+		let two_pi = (2 as Real) * math.pi();
 		let val12 = two_pi * x.get(i);
 		dst.set(i,          val12);
 		dst.set(i + nelm,   val12);

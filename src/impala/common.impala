@@ -19,7 +19,6 @@ fn @new_typed_buffer(buf: Buffer, size: Index) -> TypedBuffer {
 	}
 }
 
-static two_pi   = 6.283185307179586 as Real;
 static origin   = Position {x: 0 as Real, y: 0 as Real, z: 0 as Real};
 
 fn @yukawa(params: SystemParams) -> Real {
