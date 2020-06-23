@@ -1,18 +1,6 @@
 type Index = i32;  // DO NOT CHANGE THIS! alloc/parallel currently only support i32
 static print_index = print_i32;
 
-struct Position {
-	x: Real,
-	y: Real,
-	z: Real
-}
-
-fn print_position(pos: Position) -> () {
-	print_string("Position{");
-	print_real(pos.x); print_string(", "); print_real(pos.y); print_string(", "); print_real(pos.z);
-	print_string("}");
-}
-
 struct TypedBuffer {
 	buf:    fn() -> Buffer,
 	data:   fn() -> &[i8],

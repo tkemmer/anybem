@@ -1,3 +1,15 @@
+struct Position {
+	x: Real,
+	y: Real,
+	z: Real
+}
+
+fn print_position(pos: Position) -> () {
+	print_string("Position{");
+	print_real(pos.x); print_string(", "); print_real(pos.y); print_string(", "); print_real(pos.z);
+	print_string("}");
+}
+
 fn @add(u: Position, v: Position) -> Position {
 	Position {
 		x: u.x + v.x,
