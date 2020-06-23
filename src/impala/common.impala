@@ -19,8 +19,6 @@ fn @new_typed_buffer(buf: Buffer, size: Index) -> TypedBuffer {
 	}
 }
 
-static origin   = Position {x: 0 as Real, y: 0 as Real, z: 0 as Real};
-
 fn @yukawa(params: SystemParams) -> Real {
 	math.sqrt(params.epsSigma / params.epsInf) / params.lambda
 }
