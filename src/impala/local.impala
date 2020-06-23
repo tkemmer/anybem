@@ -1,0 +1,35 @@
+struct LocalSystemMatrix {
+	K:      fn() -> PotentialMatrix,
+	params: fn() -> SystemParams,
+	size:   fn() -> (Index, Index)
+}
+
+fn @_new_local_system_matrix(K: PotentialMatrix, params: SystemParams) -> LocalSystemMatrix {
+	LocalSystemMatrix {
+		K:      || K,
+		params: || params,
+		size:   || K.size()
+	}
+}
+
+fn @create_local_system_matrix_on_platform(surf: SurfaceModel, body: fn(LocalSystemMatrix) -> ()) -> () {
+	with xis in create_position_vector_on_platform(surf.elements().size(), |i| surf.elements().get(i).center()) {
+		with elems in create_triangle_vector_on_platform(surf.elements().size(), |i| surf.elements().get(i)) {
+			@@body(_new_local_system_matrix(new_laplace_potential_matrix(DoubleLayer, xis, elems), surf.params()))
+		}
+	}
+}
+
+fn print_local_system_matrix(mat: LocalSystemMatrix) -> () {
+	let (r, c) = mat.size();
+	print_index(r); print_string(" x "); print_index(c);
+	print_string(" LocalSystemMatrix\n");
+}
+
+fn gemv_local_system_real(alpha: Real, A: LocalSystemMatrix, x: RealVector, beta: Real, y: RealVector) -> () {
+	let frac = A.params().epsOmega / A.params().epsSigma;
+	for i in each_index_on_platform(A.size()(0)) {
+		y.set(i, x.get(i));
+	}
+	gemv_potential_real(frac - one, A.K(), x, two_pi * (one + frac), y);
+}
