@@ -1,0 +1,31 @@
+type Real = f32;
+
+struct RealMath {
+	abs:  fn(Real) -> Real,
+	asin: fn(Real) -> Real,
+	eps:  fn() -> Real,
+	exp:  fn(Real) -> Real,
+	log:  fn(Real) -> Real,
+	max:  fn(Real, Real) -> Real,
+	min:  fn(Real, Real) -> Real,
+	one:  fn() -> Real,
+	pi:   fn() -> Real,
+	sqrt: fn(Real) -> Real,
+	zero: fn() -> Real
+}
+
+static math = RealMath {
+	abs:  platform_intrinsics.fabsf,
+	asin: platform_intrinsics.asinf,
+	eps:  || 3.45e-4f,
+	exp:  platform_intrinsics.expf,
+	log:  platform_intrinsics.logf,
+	max:  platform_intrinsics.fmaxf,
+	min:  platform_intrinsics.fminf,
+	one:  || 1.0f,
+	pi:   || 3.1415927f,
+	sqrt: platform_intrinsics.sqrtf,
+	zero: || 0.0f
+};
+
+static print_real  = print_f32;

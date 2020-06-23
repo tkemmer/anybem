@@ -46,7 +46,7 @@ fn @sign(x: Real) -> Real {
 	if x == zero {
 		zero
 	} else {
-		x / math.fabs(x)
+		x / math.abs(x)
 	}
 }
 

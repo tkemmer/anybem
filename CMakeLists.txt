@@ -32,6 +32,8 @@ if(AnyBEM_BACKEND STREQUAL "cpu")
 	set(AnyBEM_PLATFORM "cpu")
 endif()
 
+set(AnyBEM_INTRINSICS "cpu" CACHE STRING "Floating-point precision level for intrinsics: f32 or f64")
+
 add_subdirectory(src)
 add_subdirectory(tools/cli)
 

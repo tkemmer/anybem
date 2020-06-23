@@ -1,96 +1,116 @@
 fn math_tests(brn: BadhronSuite) -> () {
 	with brn.group("Math helpers") {
-		let x1 = Position{x: 1., y: 2., z: 3.};
-		let x2 = Position{x: 4., y: 6., z: 8.};
-		let x3 = Position{x: -1., y: -1., z: -1.};
+		let x1 = Position{x: 1 as Real, y: 2 as Real,  z: 3 as Real};
+		let x2 = Position{x: 4 as Real, y: 6 as Real,  z: 8 as Real};
+		let x3 = Position{x: -1 as Real, y: -1 as Real, z: -1 as Real};
 
 		with brn.subgroup("add") {
-			with brn.assert() { assert_position(Position{x: 5., y: 8., z: 11.}, add(x1, x2)) }
-			with brn.assert() { assert_position(Position{x: 5., y: 8., z: 11.}, add(x2, x1)) }
-			with brn.assert() { assert_position(Position{x: 0., y: 1., z:  2.}, add(x1, x3)) }
-			with brn.assert() { assert_position(Position{x: 0., y: 1., z:  2.}, add(x3, x1)) }
+			with brn.assert() { assert_position(Position{x: 5 as Real, y: 8 as Real, z: 11 as Real}, add(x1, x2)) }
+			with brn.assert() { assert_position(Position{x: 5 as Real, y: 8 as Real, z: 11 as Real}, add(x2, x1)) }
+			with brn.assert() { assert_position(Position{x: 0 as Real, y: 1 as Real, z:  2 as Real}, add(x1, x3)) }
+			with brn.assert() { assert_position(Position{x: 0 as Real, y: 1 as Real, z:  2 as Real}, add(x3, x1)) }
 			with brn.assert() { assert_position(Position{x: x1.x, y: x1.y, z:  x1.z}, add(x1, origin)) }
 			with brn.assert() { assert_position(Position{x: x1.x, y: x1.y, z:  x1.z}, add(origin, x1)) }
 		}
 
 		with brn.subgroup("cross") {
-			with brn.assert() { assert_position(Position{x: -2., y:  4., z: -2.}, cross(x1, x2)) }
-			with brn.assert() { assert_position(Position{x:  2., y: -4., z:  2.}, cross(x2, x1)) }
-			with brn.assert() { assert_position(Position{x:  1., y: -2., z:  1.}, cross(x1, x3)) }
-			with brn.assert() { assert_position(Position{x: -1., y:  2., z: -1.}, cross(x3, x1)) }
-			with brn.assert() { assert_position(Position{x:  0., y:  0., z:  0.}, cross(x1, origin)) }
-			with brn.assert() { assert_position(Position{x:  0., y:  0., z:  0.}, cross(origin, x1)) }
+			with brn.assert() { assert_position(Position{x: -2 as Real, y:  4 as Real, z: -2 as Real}, cross(x1, x2)) }
+			with brn.assert() { assert_position(Position{x:  2 as Real, y: -4 as Real, z:  2 as Real}, cross(x2, x1)) }
+			with brn.assert() { assert_position(Position{x:  1 as Real, y: -2 as Real, z:  1 as Real}, cross(x1, x3)) }
+			with brn.assert() { assert_position(Position{x: -1 as Real, y:  2 as Real, z: -1 as Real}, cross(x3, x1)) }
+			with brn.assert() {
+				assert_position(Position{x:  0 as Real, y:  0 as Real, z:  0 as Real}, cross(x1, origin))
+			}
+			with brn.assert() {
+				assert_position(Position{x:  0 as Real, y:  0 as Real, z:  0 as Real}, cross(origin, x1))
+			}
 		}
 
 		with brn.subgroup("dot") {
-			with brn.assert_f64(40.)  { dot(x1, x2) }
-			with brn.assert_f64(40.)  { dot(x2, x1) }
-			with brn.assert_f64(-6.)  { dot(x1, x3) }
-			with brn.assert_f64(-6.)  { dot(x3, x1) }
-			with brn.assert_f64(zero) { dot(origin, x1) }
-			with brn.assert_f64(zero) { dot(x1, origin) }
+			with brn.assert() { assert_real(40 as Real, dot(x1, x2)) }
+			with brn.assert() { assert_real(40 as Real, dot(x2, x1)) }
+			with brn.assert() { assert_real(-6 as Real, dot(x1, x3)) }
+			with brn.assert() { assert_real(-6 as Real, dot(x3, x1)) }
+			with brn.assert() { assert_real(zero, dot(origin, x1)) }
+			with brn.assert() { assert_real(zero, dot(x1, origin)) }
 		}
 
 		with brn.subgroup("euclidean") {
-			with brn.assert_f64(7.0710678118654755) { euclidean(x1, x2) }
-			with brn.assert_f64(7.0710678118654755) { euclidean(x2, x1) }
-			with brn.assert_f64(5.385164807134504)  { euclidean(x1, x3) }
-			with brn.assert_f64(5.385164807134504)  { euclidean(x3, x1) }
-			with brn.assert_f64(3.7416573867739413) { euclidean(x1, origin) }
-			with brn.assert_f64(3.7416573867739413) { euclidean(origin, x1) }
+			with brn.assert() { assert_real(7.0710678118654755  as Real, euclidean(x1, x2)) }
+			with brn.assert() { assert_real(7.0710678118654755  as Real, euclidean(x2, x1)) }
+			with brn.assert() { assert_real(5.385164807134504   as Real, euclidean(x1, x3)) }
+			with brn.assert() { assert_real(5.385164807134504   as Real, euclidean(x3, x1)) }
+			with brn.assert() { assert_real(3.7416573867739413  as Real, euclidean(x1, origin)) }
+			with brn.assert() { assert_real(3.7416573867739413  as Real, euclidean(origin, x1)) }
 		}
 
 		with brn.subgroup("neg") {
 			with brn.assert() { assert_position(Position{x: -x1.x, y: -x1.y, z: -x1.z}, neg(x1)) }
 			with brn.assert() { assert_position(Position{x: -x2.x, y: -x2.y, z: -x2.z}, neg(x2)) }
 			with brn.assert() { assert_position(Position{x: -x3.x, y: -x3.y, z: -x3.z}, neg(x3)) }
-			with brn.assert() { assert_position(Position{x: 0., y: 0., z: 0.}, neg(origin)) }
+			with brn.assert() { assert_position(Position{x: 0 as Real, y: 0 as Real, z: 0 as Real}, neg(origin)) }
 		}
 
 		with brn.subgroup("sdiv") {
-			with brn.assert() { assert_position(Position{x:  0.5, y:  1. , z:  1.5}, sdiv(x1,     2.)) }
-			with brn.assert() { assert_position(Position{x: -2. , y: -3. , z: -4. }, sdiv(x2,    -2.)) }
-			with brn.assert() { assert_position(Position{x: -0.5, y: -0.5, z: -0.5}, sdiv(x3,     2.)) }
-			with brn.assert() { assert_position(Position{x:  0. , y:  0. , z:  0. }, sdiv(origin, 2.)) }
+			with brn.assert() {
+				assert_position(Position{x: 0.5 as Real, y: 1 as Real , z: 1.5 as Real}, sdiv(x1, 2 as Real))
+			}
+			with brn.assert() {
+				assert_position(Position{x: -2 as Real , y: -3 as Real , z: -4 as Real}, sdiv(x2, -2 as Real))
+			}
+			with brn.assert() {
+				assert_position(Position{x: -0.5 as Real, y: -0.5 as Real, z: -0.5 as Real}, sdiv(x3, 2 as Real))
+			}
+			with brn.assert() {
+				assert_position(Position{x: 0 as Real , y:  0 as Real, z:  0 as Real}, sdiv(origin, 2 as Real))
+			}
 		}
 
 		with brn.subgroup("sign") {
-			with brn.assert_f64(0.)  { sign( 0.) }
-			with brn.assert_f64(0.)  { sign(-0.) }
-			with brn.assert_f64(1.)  { sign( 1.) }
-			with brn.assert_f64(1.)  { sign( 2.) }
-			with brn.assert_f64(-1.) { sign(-1.) }
-			with brn.assert_f64(-1.) { sign(-2.) }
+			with brn.assert() { assert_real( 0 as Real, sign( 0 as Real)) }
+			with brn.assert() { assert_real( 0 as Real, sign(-0 as Real)) }
+			with brn.assert() { assert_real( 1 as Real, sign( 1 as Real)) }
+			with brn.assert() { assert_real( 1 as Real, sign( 2 as Real)) }
+			with brn.assert() { assert_real(-1 as Real, sign(-1 as Real)) }
+			with brn.assert() { assert_real(-1 as Real, sign(-2 as Real)) }
 		}
 
 		with brn.subgroup("smul") {
-			with brn.assert() { assert_position(Position{x:  2., y:   4., z:   6.}, smul(x1,     2.)) }
-			with brn.assert() { assert_position(Position{x: -8., y: -12., z: -16.}, smul(x2,    -2.)) }
-			with brn.assert() { assert_position(Position{x: -2., y:  -2., z:  -2.}, smul(x3,     2.)) }
-			with brn.assert() { assert_position(Position{x:  0., y:   0., z:   0.}, smul(origin, 2.)) }
+			with brn.assert() {
+				assert_position(Position{x: 2 as Real, y: 4 as Real, z: 6 as Real}, smul(x1, 2 as Real))
+			}
+			with brn.assert() {
+				assert_position(Position{x: -8 as Real, y: -12 as Real, z: -16 as Real}, smul(x2, -2 as Real))
+			}
+			with brn.assert() {
+				assert_position(Position{x: -2 as Real, y: -2 as Real, z: -2 as Real}, smul(x3,2 as Real))
+			}
+			with brn.assert() {
+				assert_position(Position{x: 0 as Real, y: 0 as Real, z: 0 as Real}, smul(origin, 2 as Real))
+			}
 		}
 
 		with brn.subgroup("sub") {
-			with brn.assert() { assert_position(Position{x: -3., y: -4., z: -5.}, sub(x1, x2)) }
-			with brn.assert() { assert_position(Position{x:  3., y:  4., z:  5.}, sub(x2, x1)) }
-			with brn.assert() { assert_position(Position{x:  2., y:  3., z:  4.}, sub(x1, x3)) }
-			with brn.assert() { assert_position(Position{x: -2., y: -3., z: -4.}, sub(x3, x1)) }
+			with brn.assert() { assert_position(Position{x: -3 as Real, y: -4 as Real, z: -5 as Real}, sub(x1, x2)) }
+			with brn.assert() { assert_position(Position{x:  3 as Real, y:  4 as Real, z:  5 as Real}, sub(x2, x1)) }
+			with brn.assert() { assert_position(Position{x:  2 as Real, y:  3 as Real, z:  4 as Real}, sub(x1, x3)) }
+			with brn.assert() { assert_position(Position{x: -2 as Real, y: -3 as Real, z: -4 as Real}, sub(x3, x1)) }
 			with brn.assert() { assert_position(Position{x:  x1.x, y:  x1.y, z:  x1.z}, sub(x1, origin)) }
 			with brn.assert() { assert_position(Position{x: -x1.x, y: -x1.y, z: -x1.z}, sub(origin, x1)) }
 		}
 
 		with brn.subgroup("vecnorm") {
-			with brn.assert_f64(3.7416573867739413) { vecnorm(x1) }
-			with brn.assert_f64(10.770329614269007) { vecnorm(x2) }
-			with brn.assert_f64(1.7320508075688772) { vecnorm(x3) }
-			with brn.assert_f64(0.) { vecnorm(origin) }
+			with brn.assert() { assert_real(3.7416573867739413 as Real, vecnorm(x1)) }
+			with brn.assert() { assert_real(10.770329614269007 as Real, vecnorm(x2)) }
+			with brn.assert() { assert_real(1.7320508075688772 as Real, vecnorm(x3)) }
+			with brn.assert() { assert_real(0                  as Real, vecnorm(origin)) }
 		}
 
 		with brn.subgroup("vecnorm2") {
-			with brn.assert_f64(14.)  { vecnorm2(x1) }
-			with brn.assert_f64(116.) { vecnorm2(x2) }
-			with brn.assert_f64(3.)   { vecnorm2(x3) }
-			with brn.assert_f64(0.)   { vecnorm2(origin) }
+			with brn.assert() { assert_real(14  as Real, vecnorm2(x1)) }
+			with brn.assert() { assert_real(116 as Real, vecnorm2(x2)) }
+			with brn.assert() { assert_real(3   as Real, vecnorm2(x3)) }
+			with brn.assert() { assert_real(0   as Real, vecnorm2(origin)) }
 		}
 	}
 }

@@ -68,15 +68,15 @@ fn _reyukawapot_single(
 	let rnorm = euclidean(x, xi);
 	let snorm = yuk * rnorm;
 
-	if rnorm < etol {
+	if rnorm < math.eps() {
 		-yuk
 	} else if snorm < 0.1 as Real {
 		let mut term = -snorm;
 		let mut tsum = zero;
-		let     tol  = etol * math.fabs(term);
+		let     tol  = math.eps() * math.abs(term);
 
 		for i in range(1, 16) {
-			if math.fabs(term) <= tol {
+			if math.abs(term) <= tol {
 				break()
 			}
 
@@ -101,15 +101,15 @@ fn _reyukawapot_double(
 	let snorm = yuk * rnorm;
 	let cosovernorm2 = dot(sub(x, xi), n) / (rnorm * rnorm * rnorm);
 
-	if rnorm < etol {
+	if rnorm < math.eps() {
 		yuk * yuk / (2 as Real) / math.sqrt(3 as Real)
 	} else if snorm < 0.1 as Real {
 		let mut term = one_half * snorm * snorm;
 		let mut tsum = zero;
-		let     tol  = etol * math.fabs(term);
+		let     tol  = math.eps() * math.abs(term);
 
 		for i in range(2, 17) {
-			if math.fabs(term) <= tol {
+			if math.abs(term) <= tol {
 				break()
 			}
 

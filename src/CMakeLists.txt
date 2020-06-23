@@ -1,5 +1,6 @@
 set(AnyBEM_IMPALA_FILES
 	"${PROJECT_SOURCE_DIR}/src/impala/backend/backend_${AnyBEM_BACKEND}.impala"
+	"${PROJECT_SOURCE_DIR}/src/impala/intrinsics/intrinsics_${AnyBEM_INTRINSICS}.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/platform/matrix_${AnyBEM_PLATFORM}.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/import.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/common.impala"

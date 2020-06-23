@@ -1,4 +1,4 @@
-static math = cuda_intrinsics;
+static platform_intrinsics = cuda_intrinsics;
 static device_id = 0; // FIXME
 
 fn @platform_acc() -> Accelerator { cuda_accelerator(device_id) }

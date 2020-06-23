@@ -1,98 +1,134 @@
 fn laplace_tests(brn: BadhronSuite) -> () {
 	with brn.group("Laplace potentials") {
 		let elem = Triangle{
-				v1:     || Position{x: 0., y: 0., z: 0.},
-				v2:     || Position{x: 0., y: 1., z: 0.},
-				v3:     || Position{x: 0., y: 0., z: 1.},
-				center: || Position{x: 0., y: 1./3., z: 1./3.},
-				normal: || Position{x: 1., y: 0., z: 0.},
-				area:   || 0.5,
-				dist:   || 0.
+				v1:     || Position{x: 0 as Real, y: 0 as Real, z: 0 as Real},
+				v2:     || Position{x: 0 as Real, y: 1 as Real, z: 0 as Real},
+				v3:     || Position{x: 0 as Real, y: 0 as Real, z: 1 as Real},
+				center: || Position{x: 0 as Real, y: 0.33333333333 as Real, z: 0.3333333333 as Real},
+				normal: || Position{x: 1 as Real, y: 0 as Real, z: 0 as Real},
+				area:   || 0.5 as Real,
+				dist:   || 0 as Real
 		};
 
 		with brn.subgroup("_laplacepot_distance") {
-			with brn.assert_f64(0.) { _laplacepot_distance(elem.v1(), elem) }
-			with brn.assert_f64(0.) { _laplacepot_distance(elem.v2(), elem) }
-			with brn.assert_f64(0.) { _laplacepot_distance(elem.v3(), elem) }
-			with brn.assert_f64(1.) { _laplacepot_distance(Position{x: 1., y: 0., z: 0.}, elem) }
-			with brn.assert_f64(1.) { _laplacepot_distance(Position{x: 1., y: 1., z: 0.}, elem) }
-			with brn.assert_f64(1.) { _laplacepot_distance(Position{x: 1., y: 0., z: 1.}, elem) }
-			with brn.assert_f64(-1.) { _laplacepot_distance(Position{x: -1., y: 0., z: 0.}, elem) }
-			with brn.assert_f64(-1.) { _laplacepot_distance(Position{x: -1., y: 1., z: 0.}, elem) }
-			with brn.assert_f64(-1.) { _laplacepot_distance(Position{x: -1., y: 0., z: 1.}, elem) }
+			with brn.assert() { assert_real(0 as Real, _laplacepot_distance(elem.v1(), elem)) }
+			with brn.assert() { assert_real(0 as Real, _laplacepot_distance(elem.v2(), elem)) }
+			with brn.assert() { assert_real(0 as Real, _laplacepot_distance(elem.v3(), elem)) }
+			with brn.assert() { assert_real(
+				1 as Real,
+				_laplacepot_distance(Position{x: 1 as Real, y: 0 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				1 as Real,
+				_laplacepot_distance(Position{x: 1 as Real, y: 1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				1 as Real,
+				_laplacepot_distance(Position{x: 1 as Real, y: 0 as Real, z: 1 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				-1 as Real,
+				_laplacepot_distance(Position{x: -1 as Real, y: 0 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				-1 as Real,
+				_laplacepot_distance(Position{x: -1 as Real, y: 1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				-1 as Real,
+				_laplacepot_distance(Position{x: -1 as Real, y: 0 as Real, z: 1 as Real}, elem)
+			)}
 		}
 
 		with brn.subgroup("_laplacepot_project") {
-			with brn.assert() {
-				assert_position(elem.v1(), _laplacepot_project(Position{x: 1., y: 0., z: 0.}, elem))
-			}
-			with brn.assert() {
-				assert_position(elem.v2(), _laplacepot_project(Position{x: 1., y: 1., z: 0.}, elem))
-			}
-			with brn.assert() {
-				assert_position(elem.v3(), _laplacepot_project(Position{x: 1., y: 0., z: 1.}, elem))
-			}
+			with brn.assert() { assert_position(
+					elem.v1(),
+					_laplacepot_project(Position{x: 1 as Real, y: 0 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_position(
+				elem.v2(),
+				_laplacepot_project(Position{x: 1 as Real, y: 1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_position(
+				elem.v3(),
+				_laplacepot_project(Position{x: 1 as Real, y: 0 as Real, z: 1 as Real}, elem)
+			)}
 		}
 
 		with brn.subgroup("laplacepot_single") {
 			// (1) xi is a triangle vertex
-			with brn.assert_f64(1.246450480280461) {
+			with brn.assert() { assert_real(
+				1.246450480280461 as Real,
 				laplacepot_single(elem.v1(), elem)
-			}
-			with brn.assert_f64(0.881373587019543) {
+			)}
+			with brn.assert() { assert_real(
+				0.881373587019543 as Real,
 				laplacepot_single(elem.v2(), elem)
-			}
-			with brn.assert_f64(0.881373587019543) {
+			)}
+			with brn.assert() { assert_real(
+				0.881373587019543 as Real,
 				laplacepot_single(elem.v3(), elem)
-			}
+			)}
 
 			// (2) xi is in the same plane as the triangle
-			with brn.assert_f64(0.36507689326091797) {
-				laplacepot_single(Position{x: 0., y: -1., z: 0.}, elem)
-			}
-			with brn.assert_f64(0.2647295540813806) {
-				laplacepot_single(Position{x: 0., y: -1., z: -1.}, elem)
-			}
+			with brn.assert() { assert_real(
+				0.36507689326091797 as Real,
+				laplacepot_single(Position{x: 0 as Real, y: -1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				0.2647295540813806 as Real,
+				laplacepot_single(Position{x: 0 as Real, y: -1 as Real, z: -1 as Real}, elem)
+			)}
 
 			// (3) xi lies on a line through a vertex, perpendicular to the triangle plane
-			with brn.assert_f64(0.4369992897579713) {
-				laplacepot_single(Position{x: 1., y: 0., z: 0.}, elem)
-			}
-			with brn.assert_f64(0.3966795606632589) {
-				laplacepot_single(Position{x: 1., y: 1., z: 0.}, elem)
-			}
-			with brn.assert_f64(0.3966795606632589) {
-				laplacepot_single(Position{x: 1., y: 0., z: 1.}, elem)
-			}
+			with brn.assert() { assert_real(
+				0.4369992897579713 as Real,
+				laplacepot_single(Position{x: 1 as Real, y: 0 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				0.3966795606632589 as Real,
+				laplacepot_single(Position{x: 1 as Real, y: 1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				0.3966795606632589 as Real,
+				laplacepot_single(Position{x: 1 as Real, y: 0 as Real, z: 1 as Real}, elem)
+			)}
 
 			// (4) xi lies somewhere else in space
-			with brn.assert_f64(0.2927502120375999) {
-				laplacepot_single(Position{x: 1., y: -1., z: 0.}, elem)
-			}
-			with brn.assert_f64(0.233364182004741) {
-				laplacepot_single(Position{x: 1., y: -1., z: -1.}, elem)
-			}
+			with brn.assert() { assert_real(
+				0.2927502120375999 as Real,
+				laplacepot_single(Position{x: 1 as Real, y: -1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				0.233364182004741 as Real,
+				laplacepot_single(Position{x: 1 as Real, y: -1 as Real, z: -1 as Real}, elem)
+			)}
 		}
 
 		with brn.subgroup("laplacepot_double") {
 			// (1) xi is a triangle vertex
-			with brn.assert_f64(0.) {
+			with brn.assert() { assert_real(
+				0 as Real,
 				laplacepot_double(elem.v1(), elem)
-			}
-			with brn.assert_f64(0.) {
+			)}
+			with brn.assert() { assert_real(
+				0 as Real,
 				laplacepot_double(elem.v2(), elem)
-			}
-			with brn.assert_f64(0.) {
+			)}
+			with brn.assert() { assert_real(
+				0 as Real,
 				laplacepot_double(elem.v3(), elem)
-			}
+			)}
 
 			// (2) xi is in the same plane as the triangle
-			with brn.assert_f64(0.) {
-				laplacepot_double(Position{x: 0., y: -1., z: 0.}, elem)
-			}
-			with brn.assert_f64(0.) {
-				laplacepot_double(Position{x: 0., y: -1., z: -1.}, elem)
-			}
+			with brn.assert() { assert_real(
+				0 as Real,
+				laplacepot_double(Position{x: 0 as Real, y: -1 as Real, z: 0 as Real}, elem)
+			)}
+			with brn.assert() { assert_real(
+				0 as Real,
+				laplacepot_double(Position{x: 0 as Real, y: -1 as Real, z: -1 as Real}, elem)
+			)}
 
 			brn.pending("xi above vertex");
 			brn.pending("xi somewhere in space");

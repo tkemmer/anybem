@@ -1,15 +1,23 @@
 fn assert_position(exp: Position, obs: Position) -> BadhronCheckFn {
-	let x_eq = badhron_approx_f64(exp.x, obs.x);
-	let y_eq = badhron_approx_f64(exp.y, obs.y);
-	let z_eq = badhron_approx_f64(exp.z, obs.z);
+	let x_eq = approx_real(exp.x, obs.x);
+	let y_eq = approx_real(exp.y, obs.y);
+	let z_eq = approx_real(exp.z, obs.z);
 	BadhronCheckFn {
 		name:   "assert_position",
 		check:  || x_eq && y_eq && z_eq,
 		report: |r| {
-			if !x_eq { r.add_float_report("x-coordinate mismatch", exp.x, obs.x) }
-			if !y_eq { r.add_float_report("y-coordinate mismatch", exp.y, obs.y) }
-			if !z_eq { r.add_float_report("z-coordinate mismatch", exp.z, obs.z) }
+			if !x_eq { r.add_float_report("x-coordinate mismatch", exp.x as f64, obs.x as f64) }
+			if !y_eq { r.add_float_report("y-coordinate mismatch", exp.y as f64, obs.y as f64) }
+			if !z_eq { r.add_float_report("z-coordinate mismatch", exp.z as f64, obs.z as f64) }
 		}
+	}
+}
+
+fn assert_real(exp: Real, obs: Real) -> BadhronCheckFn {
+	BadhronCheckFn {
+		name:   "assert_real",
+		check:  ||  approx_real(exp, obs),
+		report: |r| r.add_float_report("value mismatch", exp as f64, obs as f64)
 	}
 }
 

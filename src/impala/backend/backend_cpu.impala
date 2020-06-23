@@ -1,2 +1,2 @@
-static math = cpu_intrinsics;
+static platform_intrinsics = cpu_intrinsics;
 static alloc_platform = alloc_cpu;
