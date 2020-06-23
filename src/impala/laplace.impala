@@ -84,19 +84,19 @@ fn _laplacepot(
 	// again the cosine of θ1 (θ2) in these cases.
 	// Note that the equation (as given above) uses a polar coordinate system with ξ being the pole and h giving the
 	// polar axis. The negative angles are needed whenever the corresponding triangle side lies below the polar axis.
-	let sin_phi1 = math.max(-one, math.min(one, cos(u1, u1norm)));
-	let sin_phi2 = math.max(-one, math.min(one, cos(u2, u2norm)));
+	let sin_phi1 = math.max(-math.one(), math.min(math.one(), cos(u1, u1norm)));
+	let sin_phi2 = math.max(-math.one(), math.min(math.one(), cos(u2, u2norm)));
 
 	// Compute the height of the triangle, that is, the cathetus ``c₁`` of a triangle given the hypotenuse ``h`` and
 	// the cosine of the exterior angle ``θ`` between the hypotenuse and the other cathetus ``c₂``.
-	let cathethus = | hyp: Real, cos_theta: Real | math.sqrt(hyp * hyp * (one - cos_theta * cos_theta));
+	let cathethus = | hyp: Real, cos_theta: Real | math.sqrt(hyp * hyp * (math.one() - cos_theta * cos_theta));
 	let h = cathethus(u1norm, sin_phi1);
 
 	// Check whether the triangle is degenerate
-	let degenerate = || math.max(zero, h) < math.eps()              // ξ on the line through v1 and v2 (|φ1| = |φ2| = π/2)
-	                 || one - math.abs(sin_phi1) < math.eps()       // ξ on the line through v1 and v2 (φ1 = π/2)
-	                 || one - math.abs(sin_phi2) < math.eps()       // ξ on the line through v1 and v2 (φ2 = π/2)
-	                 || math.abs(sin_phi1 - sin_phi2) < math.eps(); // v1 and v2 on the line through ξ (φ1 = φ2 = 0)
+	let degenerate = || math.max(math.zero(), h) < math.eps()         // ξ on the line through v1 and v2 (|φ1| = |φ2| = π/2)
+	                 || math.one() - math.abs(sin_phi1) < math.eps()  // ξ on the line through v1 and v2 (φ1 = π/2)
+	                 || math.one() - math.abs(sin_phi2) < math.eps()  // ξ on the line through v1 and v2 (φ2 = π/2)
+	                 || math.abs(sin_phi1 - sin_phi2) < math.eps();   // v1 and v2 on the line through ξ (φ1 = φ2 = 0)
 
 	// Helper function to determine whether the normal vector of the plane specified by the vectors `u1` and `u2` has
 	// the same orientation as the normal vector `n`. Returns ``1`` if both normals have the same orientation, ``0``
@@ -108,7 +108,7 @@ fn _laplacepot(
 	// checking on which side of v the observation point lies. This is equivalent to checking whether the normal of the
 	// triangle here and the one of the surface element (which are obviously (anti)parallel) are oriented alike.
 	if degenerate() {
-		zero
+		math.zero()
 	} else {
 		nsign() * pot(sin_phi1, sin_phi2, h, d)
 	}
@@ -128,8 +128,8 @@ fn _laplacepot_single_plane(
 	) -> Real {
 
 	one_half * h * math.log(
-		(one + sin_phi2) * (one - sin_phi1) /
-		((one - sin_phi2) * (one + sin_phi1))
+		(math.one() + sin_phi2) * (math.one() - sin_phi1) /
+		((math.one() - sin_phi2) * (math.one() + sin_phi1))
 	)
 }
 
@@ -145,8 +145,8 @@ fn _laplacepot_single_space(
 	let chi2 = d2 / (d2 + h * h);
 	let chi = math.sqrt(chi2);
 	let logterm = | sin_phi: Real | {
-		let term1 = math.sqrt(one - chi2 * sin_phi * sin_phi);
-		let term2 = math.sqrt(one - chi2) * sin_phi;
+		let term1 = math.sqrt(math.one() - chi2 * sin_phi * sin_phi);
+		let term2 = math.sqrt(math.one() - chi2) * sin_phi;
 		(term1 + term2) / (term1 - term2)
 	};
 	one_half * h * math.log(logterm(sin_phi2) / logterm(sin_phi1)) + math.abs(d) *
@@ -161,7 +161,7 @@ fn _laplacepot_double_plane(
 		Real
 ) -> Real {
 
-	zero
+	math.zero()
 }
 
 /// Double-layer potential, observation point somewhere else in space

@@ -22,19 +22,19 @@ fn born_extpot_local(pos: &Position, ion: &BornIon, params: &SystemParams) -> Re
 fn born_extpot_nonlocal(pos: &Position, ion: &BornIon, params: &SystemParams) -> Real {
 	let r  = euclidean(*pos, (*ion).charge.pos);
 	let nu = math.sqrt((*params).epsSigma / (*params).epsInf) * (*ion).radius / (*params).lambda;
-	born_potpref * (*ion).charge.val/(*params).epsSigma/r * (one + ((*params).epsSigma - (*params).epsInf) /
+	born_potpref * (*ion).charge.val/(*params).epsSigma/r * (math.one() + ((*params).epsSigma - (*params).epsInf) /
 		(*params).epsInf * sinh(nu)/nu * math.exp(-nu * (*ion).radius))
 }
 
 fn born_intpot_local(pos: &Position, ion: &BornIon, params: &SystemParams) -> Real {
 	born_potpref * (*ion).charge.val *
-		(one/euclidean(*pos, (*ion).charge.pos) + one/(*ion).radius * (one/(*params).epsSigma - one))
+		(math.one()/euclidean(*pos, (*ion).charge.pos) + math.one()/(*ion).radius * (math.one()/(*params).epsSigma - math.one()))
 }
 
 fn born_intpot_nonlocal(pos: &Position, ion: &BornIon, params: &SystemParams) -> Real {
 	let r  = euclidean(*pos, (*ion).charge.pos);
 	let nu = math.sqrt((*params).epsSigma/(*params).epsInf) * (*ion).radius / (*params).lambda;
-	born_potpref * (*ion).charge.val * (one/r + one/(*ion).radius/(*params).epsSigma *
-		(one - (*params).epsSigma + ((*params).epsSigma - (*params).epsInf) /
+	born_potpref * (*ion).charge.val * (math.one()/r + math.one()/(*ion).radius/(*params).epsSigma *
+		(math.one() - (*params).epsSigma + ((*params).epsSigma - (*params).epsInf) /
 		(*params).epsInf * sinh(nu)/nu * math.exp(-nu)))
 }

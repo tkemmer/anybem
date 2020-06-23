@@ -20,12 +20,10 @@ fn @new_typed_buffer(buf: Buffer, size: Index) -> TypedBuffer {
 }
 
 static eps0     = 8.854187817620389e-12 as Real;
-static zero     = 0 as Real;
-static one      = 1 as Real;
 static one_half = 0.5 as Real;
 static two_pi   = 6.283185307179586 as Real;
 static four_pi  = 12.566370614359172 as Real;
-static origin   = Position {x: zero, y: zero, z: zero};
+static origin   = Position {x: 0 as Real, y: 0 as Real, z: 0 as Real};
 
 fn @yukawa(params: SystemParams) -> Real {
 	math.sqrt(params.epsSigma / params.epsInf) / params.lambda

@@ -51,12 +51,12 @@ fn @neg(u: Position) -> Position {
 }
 
 fn @sdiv(u: Position, a: Real) -> Position {
-	smul(u, one / a)
+	smul(u, math.one() / a)
 }
 
 fn @sign(x: Real) -> Real {
-	if x == zero {
-		zero
+	if x == math.zero() {
+		math.zero()
 	} else {
 		x / math.abs(x)
 	}

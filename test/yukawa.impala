@@ -1,6 +1,6 @@
 fn yukawa_tests(brn: BadhronSuite) -> () {
 	with brn.group("Yukawa potentials") {
-		let x   = Position{x: one, y: one, z: one};
+		let x   = Position{x: math.one(), y: math.one(), z: math.one()};
 		let yuk = 7 as Real;
 
 		with brn.subgroup("_reyukawapot_single") {
@@ -33,7 +33,7 @@ fn yukawa_tests(brn: BadhronSuite) -> () {
 		}
 
 		with brn.subgroup("_reyukawapot_double") {
-			let n = Position{x: one, y: zero, z: zero};
+			let n = Position{x: math.one(), y: math.zero(), z: math.zero()};
 
 			// x --> xi
 			with brn.assert() { assert_real(

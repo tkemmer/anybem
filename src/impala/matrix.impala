@@ -281,7 +281,7 @@ fn print_triangle_vector(vec: TriangleVector) -> () {
 
 fn gemv_potential_real(alpha: Real, A: PotentialMatrix, x: RealVector, beta: Real, y: RealVector) -> () {
 	for i in each_index_on_platform(A.size()(0)) {
-		let mut sum = zero;
+		let mut sum = math.zero();
 		for j in range(0, A.size()(1)) {
 			sum += A.get(i, j) * x.get(j);
 		}

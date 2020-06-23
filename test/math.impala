@@ -31,8 +31,8 @@ fn math_tests(brn: BadhronSuite) -> () {
 			with brn.assert() { assert_real(40 as Real, dot(x2, x1)) }
 			with brn.assert() { assert_real(-6 as Real, dot(x1, x3)) }
 			with brn.assert() { assert_real(-6 as Real, dot(x3, x1)) }
-			with brn.assert() { assert_real(zero, dot(origin, x1)) }
-			with brn.assert() { assert_real(zero, dot(x1, origin)) }
+			with brn.assert() { assert_real(math.zero(), dot(origin, x1)) }
+			with brn.assert() { assert_real(math.zero(), dot(x1, origin)) }
 		}
 
 		with brn.subgroup("euclidean") {

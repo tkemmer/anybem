@@ -33,7 +33,7 @@ fn _reyukawapot_elem(
 	pot:  YukawaPotFn,
 ) -> Real {
 
-	let mut sum = zero;
+	let mut sum = math.zero();
 	for i in range(0, 7) {
 		let qpt = _quadrature_points_triangle(i);
 		let cpt = _quadrature_point(qpt, elem);
@@ -72,7 +72,7 @@ fn _reyukawapot_single(
 		-yuk
 	} else if snorm < 0.1 as Real {
 		let mut term = -snorm;
-		let mut tsum = zero;
+		let mut tsum = math.zero();
 		let     tol  = math.eps() * math.abs(term);
 
 		for i in range(1, 16) {
@@ -81,12 +81,12 @@ fn _reyukawapot_single(
 			}
 
 			tsum += term;
-			term *= -snorm / (i as Real + one)
+			term *= -snorm / (i as Real + math.one())
 		}
 
 		tsum / rnorm
 	} else {
-		(math.exp(-snorm) - one) / rnorm
+		(math.exp(-snorm) - math.one()) / rnorm
 	}
 }
 
@@ -105,7 +105,7 @@ fn _reyukawapot_double(
 		yuk * yuk / (2 as Real) / math.sqrt(3 as Real)
 	} else if snorm < 0.1 as Real {
 		let mut term = one_half * snorm * snorm;
-		let mut tsum = zero;
+		let mut tsum = math.zero();
 		let     tol  = math.eps() * math.abs(term);
 
 		for i in range(2, 17) {
@@ -113,12 +113,12 @@ fn _reyukawapot_double(
 				break()
 			}
 
-			tsum += term * (i as Real - one);
-			term *= -snorm / (i as Real + one)
+			tsum += term * (i as Real - math.one());
+			term *= -snorm / (i as Real + math.one())
 		}
 
 		tsum * cosovernorm2
 	} else {
-		(one - (one + snorm) * math.exp(-snorm)) * cosovernorm2
+		(math.one() - (math.one() + snorm) * math.exp(-snorm)) * cosovernorm2
 	}
 }

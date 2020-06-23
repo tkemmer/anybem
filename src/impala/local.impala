@@ -31,5 +31,5 @@ fn gemv_local_system_real(alpha: Real, A: LocalSystemMatrix, x: RealVector, beta
 	for i in each_index_on_platform(A.size()(0)) {
 		y.set(i, x.get(i));
 	}
-	gemv_potential_real(frac - one, A.K(), x, two_pi * (one + frac), y);
+	gemv_potential_real(frac - math.one(), A.K(), x, two_pi * (math.one() + frac), y);
 }
