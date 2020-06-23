@@ -127,7 +127,7 @@ fn _laplacepot_single_plane(
 		          Real
 	) -> Real {
 
-	one_half * h * math.log(
+	(0.5 as Real) * h * math.log(
 		(math.one() + sin_phi2) * (math.one() - sin_phi1) /
 		((math.one() - sin_phi2) * (math.one() + sin_phi1))
 	)
@@ -149,7 +149,7 @@ fn _laplacepot_single_space(
 		let term2 = math.sqrt(math.one() - chi2) * sin_phi;
 		(term1 + term2) / (term1 - term2)
 	};
-	one_half * h * math.log(logterm(sin_phi2) / logterm(sin_phi1)) + math.abs(d) *
+	(0.5 as Real) * h * math.log(logterm(sin_phi2) / logterm(sin_phi1)) + math.abs(d) *
 		(math.asin(chi * sin_phi2) - math.asin(sin_phi2) - math.asin(chi * sin_phi1) + math.asin(sin_phi1))
 }
 

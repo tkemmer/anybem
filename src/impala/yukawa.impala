@@ -104,7 +104,7 @@ fn _reyukawapot_double(
 	if rnorm < math.eps() {
 		yuk * yuk / (2 as Real) / math.sqrt(3 as Real)
 	} else if snorm < 0.1 as Real {
-		let mut term = one_half * snorm * snorm;
+		let mut term = snorm * snorm / (2 as Real);
 		let mut tsum = math.zero();
 		let     tol  = math.eps() * math.abs(term);
 
