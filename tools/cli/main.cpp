@@ -44,4 +44,5 @@ int main(int argc, char** argv) {
 
 	auto sproto = surf.primitive();
 	anybem_surface_model_stats(&sproto);
+	anybem_bench_matvec(&sproto, 10);
 }

@@ -3,3 +3,5 @@ static device_id = 0; // FIXME
 
 fn @platform_acc() -> Accelerator { cuda_accelerator(device_id) }
 fn @alloc_platform(size: i32) -> Buffer { alloc_cuda(device_id, size) }
+
+fn @sync_all() -> () { platform_acc().sync() }

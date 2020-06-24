@@ -29,3 +29,4 @@ static math = RealMath {
 };
 
 static print_real  = print_f64;
+static anybem_real = "Float64";

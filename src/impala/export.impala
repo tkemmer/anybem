@@ -5,3 +5,101 @@ fn anybem_surface_model_stats(proto: &SurfaceModelPrimitive) -> () {
 	print_charge_buffer(surf.charges(), 5); print_string("\n");
 	print_system_params(surf.params());
 }
+
+fn _bench_matvec_real(A: PotentialMatrix, x: RealVector, dst: RealVector, n: i32) -> () {
+	gemv_potential_real(math.one(), A, x, math.one(), dst);
+	for i in range(0, n) {
+		let start = get_micro_time();
+		gemv_potential_real(math.one(), A, x, math.one(), dst);
+		sync_all();
+		print_string(" * "); print_i32(i); print_string("\t");
+		print_i64(get_micro_time() - start);
+		print_string("\n");
+	}
+	print_string("\n");
+}
+
+fn _bench_local_real(A: LocalSystemMatrix, x: RealVector, dst: RealVector, n: i32) -> () {
+	gemv_local_system_real(math.one(), A, x, math.one(), dst);
+	for i in range(0, n) {
+		let start = get_micro_time();
+		gemv_local_system_real(math.one(), A, x, math.one(), dst);
+		sync_all();
+		print_string(" * "); print_i32(i); print_string("\t");
+		print_i64(get_micro_time() - start);
+		print_string("\n");
+	}
+	print_string("\n");
+}
+
+fn _bench_nonlocal_real(A: NonlocalSystemMatrix, x: RealVector, dst: RealVector, n: i32) -> () {
+	gemv_nonlocal_system_real(math.one(), A, x, math.one(), dst);
+	for i in range(0, n) {
+		let start = get_micro_time();
+		gemv_nonlocal_system_real(math.one(), A, x, math.one(), dst);
+		sync_all();
+		print_string(" * "); print_i32(i); print_string("\t");
+		print_i64(get_micro_time() - start);
+		print_string("\n");
+	}
+	print_string("\n");
+}
+
+extern
+fn anybem_bench_matvec(proto: &SurfaceModelPrimitive, n: i32) -> () {
+	let model = to_surface_model(*proto);
+	let numelem = model.elements().size();
+
+	with xis in create_position_vector_on_platform(numelem, |i| model.elements().get(i).center()) {
+		with elems in create_triangle_vector_on_platform(numelem, |i| model.elements().get(i)) {
+			with dst in create_real_vector_on_platform(numelem, |_| math.zero()) {
+				with ones in create_real_vector_on_platform(numelem, |_| math.one()) {
+
+					print_string(">>> AnyBEM["); print_string(anybem_real); print_string("]: V\n");
+					_bench_matvec_real(
+						new_laplace_potential_matrix(SingleLayer, xis, elems),
+						ones, dst, n
+					);
+
+					print_string(">>> AnyBEM["); print_string(anybem_real); print_string("]: K\n");
+					_bench_matvec_real(
+						new_laplace_potential_matrix(DoubleLayer, xis, elems),
+						ones, dst, n
+					);
+
+					print_string(">>> AnyBEM["); print_string(anybem_real); print_string("]: Vy\n");
+					_bench_matvec_real(
+						new_reyukawa_potential_matrix(SingleLayer, xis, elems, yukawa(model.params())),
+						ones, dst, n
+					);
+
+					print_string(">>> AnyBEM["); print_string(anybem_real); print_string("]: Ky\n");
+					_bench_matvec_real(
+						new_reyukawa_potential_matrix(DoubleLayer, xis, elems, yukawa(model.params())),
+						ones, dst, n
+					);
+				}
+			}
+		}
+	}
+
+	with mat in create_local_system_matrix_on_platform(model) {
+		with ones in create_real_vector_on_platform(mat.size()(1), |_| math.one()) {
+			with dst in create_real_vector_on_platform(mat.size()(0), |_| math.zero()) {
+
+				print_string(">>> AnyBEM["); print_string(anybem_real); print_string("]: local\n");
+				_bench_local_real(mat, ones, dst, n);
+			}
+		}
+	}
+
+	with mat in create_nonlocal_system_matrix_on_platform(model) {
+		with ones in create_real_vector_on_platform(mat.size()(1), |_| math.one()) {
+			with dst in create_real_vector_on_platform(mat.size()(0), |_| math.zero()) {
+
+				print_string(">>> AnyBEM["); print_string(anybem_real); print_string("]: nonlocal\n");
+				_bench_nonlocal_real(mat, ones, dst, n);
+			}
+		}
+	}
+}
