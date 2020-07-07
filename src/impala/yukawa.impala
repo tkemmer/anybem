@@ -66,11 +66,19 @@ fn _reyukawapot_single(
 ) -> Real {
 
 	let rnorm = euclidean(x, xi);
-	let snorm = yuk * rnorm;
-
 	if rnorm < math.eps() {
-		-yuk
-	} else if snorm < 0.1 as Real {
+		return(-yuk)
+	}
+
+	let snorm = yuk * rnorm;
+	if snorm < 0.1 as Real {
+		_reyukawapot_single_series(snorm) / rnorm
+	} else {
+		(math.exp(-snorm) - math.one()) / rnorm
+	}
+}
+
+fn _reyukawapot_single_series(snorm: Real) -> Real {
 		let mut term = -snorm;
 		let mut tsum = math.zero();
 		let     tol  = math.eps() * math.abs(term);
@@ -83,11 +91,7 @@ fn _reyukawapot_single(
 			tsum += term;
 			term *= -snorm / (i as Real + math.one())
 		}
-
-		tsum / rnorm
-	} else {
-		(math.exp(-snorm) - math.one()) / rnorm
-	}
+		tsum
 }
 
 fn _reyukawapot_double(
