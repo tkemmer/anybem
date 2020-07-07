@@ -20,6 +20,8 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 	${AnyBEM_IMPALA_FILES}
 )
 
+configure_file("../include/anybem/types.h.in" "${PROJECT_BINARY_DIR}/include/anybem/types.h")
+
 add_library(libanybem SHARED
 	${AnyBEM_PROGRAM}
 	../include/anybem/error.h
@@ -27,7 +29,7 @@ add_library(libanybem SHARED
 	../include/anybem/impala.h
 	../include/anybem/model.h
 	../include/anybem/reader.h
-	../include/anybem/types.h
+	"${PROJECT_BINARY_DIR}/include/anybem/types.h"
 	../include/anybem/util.h
 	cpp/hmo_reader.cpp
 	cpp/util.cpp

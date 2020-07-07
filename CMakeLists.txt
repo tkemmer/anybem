@@ -20,6 +20,7 @@ set(CMAKE_CXX_FLAGS         "${CMAKE_CXX_FLAGS}         -Wall -Wextra -pedantic"
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 include_directories(include)
+include_directories("${PROJECT_BINARY_DIR}/include")
 
 set(AnyBEM_IMPALA_FLAGS "")
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -33,6 +34,11 @@ if(AnyBEM_BACKEND STREQUAL "cpu")
 endif()
 
 set(AnyBEM_INTRINSICS "cpu" CACHE STRING "Floating-point precision level for intrinsics: f32 or f64")
+if(AnyBEM_INTRINSICS STREQUAL "f32")
+	set(AnyBEM_FTYPE "float")
+else()
+	set(AnyBEM_FTYPE "double")
+endif()
 
 add_subdirectory(src)
 add_subdirectory(tools/cli)

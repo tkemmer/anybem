@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 namespace anybem {
-	using real_t     = double;
+	using real_t     = @AnyBEM_FTYPE@;
 	using index_t    = int32_t;
 
 	struct Position {
