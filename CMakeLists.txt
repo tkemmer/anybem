@@ -33,7 +33,7 @@ if(AnyBEM_BACKEND STREQUAL "cpu")
 	set(AnyBEM_PLATFORM "cpu")
 endif()
 
-set(AnyBEM_INTRINSICS "cpu" CACHE STRING "Floating-point precision level for intrinsics: f32 or f64")
+set(AnyBEM_INTRINSICS "f64" CACHE STRING "Floating-point precision level for intrinsics: f32 or f64")
 if(AnyBEM_INTRINSICS STREQUAL "f32")
 	set(AnyBEM_FTYPE "float")
 else()
