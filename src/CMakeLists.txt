@@ -1,4 +1,5 @@
 set(AnyBEM_IMPALA_FILES
+	"${PROJECT_BINARY_DIR}/src/impala/cmake.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/backend/backend_${AnyBEM_BACKEND}.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/intrinsics/intrinsics_${AnyBEM_INTRINSICS}.impala"
 	"${PROJECT_SOURCE_DIR}/src/impala/platform/matrix_${AnyBEM_PLATFORM}.impala"
@@ -21,6 +22,7 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 )
 
 configure_file("../include/anybem/types.h.in" "${PROJECT_BINARY_DIR}/include/anybem/types.h")
+configure_file("impala/cmake.impala.in" "${PROJECT_BINARY_DIR}/src/impala/cmake.impala")
 
 add_library(libanybem SHARED
 	${AnyBEM_PROGRAM}

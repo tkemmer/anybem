@@ -27,11 +27,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	list(APPEND AnyBEM_IMPALA_FLAGS "-emit-annotated" "-log-level" "debug")
 endif()
 
-set(AnyBEM_BACKEND "cpu" CACHE STRING "Backend to be used for matrix multiplication: cpu or cuda")
+set(AnyBEM_BACKEND "cpu" CACHE STRING "Back end to be used for matrix multiplication: cpu or cuda")
 set(AnyBEM_PLATFORM "acc")
 if(AnyBEM_BACKEND STREQUAL "cpu")
 	set(AnyBEM_PLATFORM "cpu")
 endif()
+
+set(AnyBEM_DEVICE 0 CACHE STRING "ID of device to be used with accelerator-based back ends (e.g., CUDA): 0 (default)")
 
 set(AnyBEM_INTRINSICS "f64" CACHE STRING "Floating-point precision level for intrinsics: f32 or f64")
 if(AnyBEM_INTRINSICS STREQUAL "f32")
