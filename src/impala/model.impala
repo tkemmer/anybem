@@ -73,16 +73,16 @@ fn print_triangle(elem: Triangle) -> () {
 	print_string(" }");
 }
 
-fn print_triangle_buffer(elements: TriangleBuffer, head_max: i32) -> () {
+fn print_triangle_buffer(elements: TriangleBuffer, head_max: Index) -> () {
 	print_string("Surface element buffer stats:\n");
 	print_string(" * Device: "); print_i32(elements.device()); print_string("\n");
 	print_string(" * Size:   "); print_index(elements.size()); print_string(" elements\n");
 	print_string(" * Memory: "); print_i64(elements.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	for i in range(0, cpu_intrinsics.min(elements.size(), head_max)) {
+	for i in index_range(0 as Index, if elements.size() < head_max { elements.size() } else { head_max }) {
 		let elem = elements.get(i);
 		print_string("    - Element ");
-		print_i32(i);
+		print_index(i);
 		print_string(":\n");
 		print_string("       - v1:     "); print_position(elem.v1()); print_string("\n");
 		print_string("       - v2:     "); print_position(elem.v2()); print_string("\n");
@@ -155,16 +155,16 @@ fn to_charge_buffer(cbuf: ChargeBufferPrimitive) -> ChargeBuffer {
 	new_charge_buffer(new_typed_buffer(buf, cbuf.size))
 }
 
-fn print_charge_buffer(charges: ChargeBuffer, head_max: i32) -> () {
+fn print_charge_buffer(charges: ChargeBuffer, head_max: Index) -> () {
 	print_string("Charge buffer stats:\n");
 	print_string(" * Device: "); print_i32(charges.device()); print_string("\n");
 	print_string(" * Size:   "); print_index(charges.size()); print_string(" charges\n");
 	print_string(" * Memory: "); print_i64(charges.memory()); print_string(" bytes\n");
 	print_string(" * Head:\n");
-	for i in range(0, cpu_intrinsics.min(charges.size(), head_max)) {
+	for i in index_range(0 as Index, if charges.size() < head_max { charges.size() } else { head_max }) {
 		let charge = charges.get(i);
 		print_string("    - Charge ");
-		print_i32(i);
+		print_index(i);
 		print_string(": { ");
 		print_position(charge.pos()); print_string(", "); print_real(charge.val());
 		print_string("}\n");

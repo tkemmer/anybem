@@ -20,8 +20,8 @@ fn @add(u: Position, v: Position) -> Position {
 	}
 }
 
-fn @cld(x: i32, y:i32) -> i32 {
-	let o = if x % y == 0 { 0 } else { 1 };
+fn @cld(x: Index, y:Index) -> Index {
+	let o = if x % y == (0 as Index) { 0 as Index } else { 1 as Index };
 	x / y + o
 }
 

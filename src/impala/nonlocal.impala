@@ -14,7 +14,7 @@ fn @_new_nonlocal_system_matrix(
 		xis:      || xis,
 		elements: || elements,
 		params:   || params,
-		size:     || (3 * xis.size(), 3 * elements.size())
+		size:     || (3 as Index * xis.size(), 3 as Index * elements.size())
 	}
 }
 
@@ -48,7 +48,7 @@ fn _fill_nonlocal_sigma(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVecto
 		let val12 = two_pi * x.get(i);
 		dst.set(i,          val12);
 		dst.set(i + nelm,   val12);
-		dst.set(i + 2*nelm, two_pi * x.get(i + 2 * nelm));
+		dst.set(i + nelm + nelm, two_pi * x.get(i + nelm + nelm));
 	}
 }
 
@@ -58,13 +58,13 @@ fn _apply_nonlocal_ls(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 
 	for i in each_index_on_platform(nelm) {
 		let mut val = math.zero();
-		for j in range(0, nelm) {
+		for j in index_range(0 as Index, nelm) {
 			val += V.get(i, j) * x.get(j + nelm);
 		}
 		let pref = mat.params().epsOmega / mat.params().epsInf;
 		dst.set(i,          dst.get(i) + pref * val);
 		dst.set(i + nelm,   dst.get(i + nelm) - val);
-		dst.set(i + 2*nelm, dst.get(i + 2*nelm) + pref * val);
+		dst.set(i + nelm + nelm, dst.get(i + nelm + nelm) + pref * val);
 	}
 }
 
@@ -75,14 +75,14 @@ fn _apply_nonlocal_ld(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 	for i in each_index_on_platform(nelm) {
 		let mut val12 = math.zero();
 		let mut val3 = math.zero();
-		for j in range(0, nelm) {
+		for j in index_range(0 as Index, nelm) {
 			let ld = K.get(i, j);
 			val12 += ld * x.get(j);
-			val3  += ld * x.get(j + 2 * nelm);
+			val3  += ld * x.get(j + nelm + nelm);
 		}
 		dst.set(i,          dst.get(i) - val12);
 		dst.set(i + nelm,   dst.get(i + nelm) + val12);
-		dst.set(i + 2*nelm, dst.get(i + 2*nelm) - val3);
+		dst.set(i + nelm + nelm, dst.get(i + nelm + nelm) - val3);
 	}
 }
 
@@ -92,7 +92,7 @@ fn _apply_nonlocal_ys(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 
 	for i in each_index_on_platform(nelm) {
 		let mut val = math.zero();
-		for j in range(0, nelm) {
+		for j in index_range(0 as Index, nelm) {
 			val += Vy.get(i, j) * x.get(j + nelm);
 		}
 		let pref = mat.params().epsOmega * (math.one() / mat.params().epsInf - math.one() / mat.params().epsSigma);
@@ -107,10 +107,10 @@ fn _apply_nonlocal_yd(dst: RealVector, mat: NonlocalSystemMatrix, x: RealVector)
 	for i in each_index_on_platform(nelm) {
 		let mut val1 = math.zero();
 		let mut val2 = math.zero();
-		for j in range(0, nelm) {
+		for j in index_range(0 as Index, nelm) {
 			let yd = Ky.get(i, j);
 			val1 += yd * x.get(j);
-			val2 += yd * x.get(j + 2 * nelm);
+			val2 += yd * x.get(j + nelm + nelm);
 		}
 		let pref = mat.params().epsInf / mat.params().epsSigma;
 		dst.set(i, dst.get(i) - val1 + pref * val2);

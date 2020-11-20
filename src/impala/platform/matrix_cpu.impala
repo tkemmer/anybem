@@ -2,8 +2,8 @@ fn @real_vector_on_platform(vec: RealVector, body: fn(RealVector) -> ()) -> () {
 fn @position_vector_on_platform(vec: PositionVector, body: fn(PositionVector) -> ()) -> () { @@body(vec) }
 fn @triangle_vector_on_platform(vec: TriangleVector, body: fn(TriangleVector) -> ()) -> () { @@body(vec) }
 
-fn @each_index_on_platform(n: Index, body: fn(i32) -> ()) -> () {
-	for i in parallel(0, 0, n) { // TODO
-		@@body(i)
+fn @each_index_on_platform(n: Index, body: fn(Index) -> ()) -> () {
+	for i in parallel(0, 0, n as i32) { // TODO
+		@@body(i as Index)
 	}
 }

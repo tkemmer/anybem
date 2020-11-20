@@ -101,25 +101,25 @@ fn @real_vector_view(vec: RealVector, from: Index, to: Index) -> RealVector {
 	}
 }
 
-fn @new_real_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(RealVector) -> ()) -> () {
+fn @new_real_vector(size: i64, alloc: fn(i64) -> Buffer, body: fn(RealVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Real]());
 	@@body(_new_real_vector(new_typed_buffer(buf, size)));
 	release(buf);
 }
 
-fn @new_real_vector_on_host(size: i32, body: fn(RealVector) -> ()) -> () {
+fn @new_real_vector_on_host(size: i64, body: fn(RealVector) -> ()) -> () {
 	with vec in new_real_vector(size, alloc_cpu) { @@body(vec); }
 }
 
-fn @new_real_vector_on_platform(size: i32, body: fn(RealVector) -> ()) -> () {
+fn @new_real_vector_on_platform(size: i64, body: fn(RealVector) -> ()) -> () {
 	with vec in new_real_vector(size, alloc_platform) { @@body(vec); }
 }
 
 fn @fill_real_vector(vec: RealVector, val: fn(Index) -> Real) -> () {
-	for i in range(0, vec.size()) { vec.set(i, val(i)) }
+	for i in index_range(0 as Index, vec.size()) { vec.set(i, val(i)) }
 }
 
-fn @create_real_vector_on_platform(size: i32, val: fn(Index) -> Real, body: fn(RealVector) -> ()) -> () {
+fn @create_real_vector_on_platform(size: i64, val: fn(Index) -> Real, body: fn(RealVector) -> ()) -> () {
 	with vec in new_real_vector_on_host(size) {
 		fill_real_vector(vec, val);
 		with vec in real_vector_on_platform(vec) { @@body(vec) }
@@ -128,7 +128,7 @@ fn @create_real_vector_on_platform(size: i32, val: fn(Index) -> Real, body: fn(R
 
 fn print_real_vector(vec: RealVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Real]:\n");
-	for i in range(0, cpu_intrinsics.min(10, vec.size())) {
+	for i in index_range(0 as Index, if vec.size() < { 10 as Index } { vec.size() } else { 10 as Index }) {
 		print_string(" "); print_real(vec.get(i)); print_string("\n");
 	}
 }
@@ -165,25 +165,25 @@ fn @_new_position_vector(buf: TypedBuffer) -> PositionVector {
 	}
 }
 
-fn @new_position_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(PositionVector) -> ()) -> () {
+fn @new_position_vector(size: i64, alloc: fn(i64) -> Buffer, body: fn(PositionVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[Position]());
 	@@body(_new_position_vector(new_typed_buffer(buf, size)));
 	release(buf);
 }
 
-fn @new_position_vector_on_host(size: i32, body: fn(PositionVector) -> ()) -> () {
+fn @new_position_vector_on_host(size: i64, body: fn(PositionVector) -> ()) -> () {
 	with vec in new_position_vector(size, alloc_cpu) { @@body(vec); }
 }
 
-fn @new_position_vector_on_platform(size: i32, body: fn(PositionVector) -> ()) -> () {
+fn @new_position_vector_on_platform(size: i64, body: fn(PositionVector) -> ()) -> () {
 	with vec in new_position_vector(size, alloc_platform) { @@body(vec); }
 }
 
 fn @fill_position_vector(vec: PositionVector, val: fn(Index) -> Position) -> () {
-	for i in range(0, vec.size()) { vec.set(i, val(i)) }
+	for i in index_range(0 as Index, vec.size()) { vec.set(i, val(i)) }
 }
 
-fn @create_position_vector_on_platform(size: i32, val: fn(Index) -> Position, body: fn(PositionVector) -> ()) -> () {
+fn @create_position_vector_on_platform(size: i64, val: fn(Index) -> Position, body: fn(PositionVector) -> ()) -> () {
 	with vec in new_position_vector_on_host(size) {
 		fill_position_vector(vec, val);
 		with vec in position_vector_on_platform(vec) { @@body(vec) }
@@ -192,7 +192,7 @@ fn @create_position_vector_on_platform(size: i32, val: fn(Index) -> Position, bo
 
 fn print_position_vector(vec: PositionVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Position]:\n");
-	for i in range(0, cpu_intrinsics.min(10, vec.size())) {
+	for i in index_range(0 as Index, if vec.size() < (10 as Index) { vec.size() } else { 10 as Index }) {
 		print_string(" "); print_position(vec.get(i)); print_string("\n");
 	}
 	print_string("\n");
@@ -246,25 +246,25 @@ fn @_new_triangle_vector(buf: TypedBuffer) -> TriangleVector {
 	}
 }
 
-fn @new_triangle_vector(size: i32, alloc: fn(i32) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
+fn @new_triangle_vector(size: i64, alloc: fn(i64) -> Buffer, body: fn(TriangleVector) -> ()) -> () {
 	let buf = alloc(size * sizeof[TrianglePrimitive]());
 	@@body(_new_triangle_vector(new_typed_buffer(buf, size)));
 	release(buf);
 }
 
-fn @new_triangle_vector_on_host(size: i32, body: fn(TriangleVector) -> ()) -> () {
+fn @new_triangle_vector_on_host(size: i64, body: fn(TriangleVector) -> ()) -> () {
 	with vec in new_triangle_vector(size, alloc_cpu) { @@body(vec); }
 }
 
-fn @new_triangle_vector_on_platform(size: i32, body: fn(TriangleVector) -> ()) -> () {
+fn @new_triangle_vector_on_platform(size: i64, body: fn(TriangleVector) -> ()) -> () {
 	with vec in new_triangle_vector(size, alloc_platform) { @@body(vec); }
 }
 
 fn @fill_triangle_vector(vec: TriangleVector, val: fn(Index) -> Triangle) -> () {
-	for i in range(0, vec.size()) { vec.set(i, val(i)) }
+	for i in index_range(0 as Index, vec.size()) { vec.set(i, val(i)) }
 }
 
-fn @create_triangle_vector_on_platform(size: i32, val: fn(Index) -> Triangle, body: fn(TriangleVector) -> ()) -> () {
+fn @create_triangle_vector_on_platform(size: i64, val: fn(Index) -> Triangle, body: fn(TriangleVector) -> ()) -> () {
 	with vec in new_triangle_vector_on_host(size) {
 		fill_triangle_vector(vec, val);
 		with vec in triangle_vector_on_platform(vec) { @@body(vec) }
@@ -273,7 +273,7 @@ fn @create_triangle_vector_on_platform(size: i32, val: fn(Index) -> Triangle, bo
 
 fn print_triangle_vector(vec: TriangleVector) -> () {
 	print_index(vec.size()); print_string("-element Vector[Triangle]:\n");
-	for i in range(0, cpu_intrinsics.min(10, vec.size())) {
+	for i in index_range(0 as Index, if vec.size() < { 10 as Index } { vec.size() } else { 10 as Index }) {
 		print_string(" "); print_triangle(vec.get(i)); print_string("\n");
 	}
 	print_string("\n");
@@ -282,7 +282,7 @@ fn print_triangle_vector(vec: TriangleVector) -> () {
 fn gemv_potential_real(alpha: Real, A: PotentialMatrix, x: RealVector, beta: Real, y: RealVector) -> () {
 	for i in each_index_on_platform(A.size()(0)) {
 		let mut sum = math.zero();
-		for j in range(0, A.size()(1)) {
+		for j in index_range(0 as Index, A.size()(1)) {
 			sum += A.get(i, j) * x.get(j);
 		}
 		y.set(i, beta * y.get(i) + alpha * sum);

@@ -1,8 +1,8 @@
 extern
 fn anybem_surface_model_stats(proto: &SurfaceModelPrimitive) -> () {
 	let surf = to_surface_model(*proto);
-	print_surface_element_buffer(surf.elements(), 3); print_string("\n");
-	print_charge_buffer(surf.charges(), 5); print_string("\n");
+	print_surface_element_buffer(surf.elements(), 3 as Index); print_string("\n");
+	print_charge_buffer(surf.charges(), 5 as Index); print_string("\n");
 	print_system_params(surf.params());
 }
 

@@ -1,5 +1,12 @@
-type Index = i32;  // DO NOT CHANGE THIS! alloc/parallel currently only support i32
-static print_index = print_i32;
+type Index = i64;
+static print_index = print_i64;
+
+fn index_range(lower: Index, upper: Index, body: fn(Index) -> ()) -> () {
+	if lower < upper {
+		@@body(lower);
+		index_range(lower + (1 as Index), upper, body)
+	}
+}
 
 struct TypedBuffer {
 	buf:    fn() -> Buffer,
