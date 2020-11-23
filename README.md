@@ -43,7 +43,8 @@ NAME
 AnyBEM - Nonlocal Protein Electrostatics in Impala
 
 SYNOPSIS
-        ./cli/anybem <hmo file> [--eps-omega <val>] [--eps-sigma <val>] [--eps-inf <val>] [--lambda <val>]
+        ./cli/anybem <hmo file> [--eps-omega <val>] [--eps-sigma <val>] [--eps-inf <val>]
+            [--lambda <val>]
 
 OPTIONS
         <hmo file>  Input file with a triangulated surface model and charges
