@@ -1,5 +1,5 @@
 # AnyBEM - Nonlocal Protein Electrostatics in Impala
-[![](https://img.shields.io/github/license/tkemmer/CuNESSie.jl?style=for-the-badge)](https://github.com/tkemmer/ImplicitArrays.jl/blob/master/LICENSE)
+[![](https://img.shields.io/github/license/tkemmer/anybem?style=for-the-badge)](https://github.com/tkemmer/anybem/blob/master/LICENSE)
 
 The *AnyBEM* library provides domain-specific variants of the implicit representations and matrix-vector products from [`NESSie.jl`](https://github.com/tkemmer/nessie.jl) and [`CuNESSie.jl`](https://github.com/tkemmer/cunessie.jl) for the [Impala](https://github.com/anydsl) language.
 
