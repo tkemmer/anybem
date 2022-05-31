@@ -14,4 +14,4 @@ add_executable(anybem_test
 	${AnyBEM_TEST_PROGRAM}
 	runtests.cpp
 )
-target_link_libraries(anybem_test libanybem badhron)
+target_link_libraries(anybem_test libanybem Badhron::badhron)
