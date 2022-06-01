@@ -10,8 +10,8 @@ anydsl_runtime_wrap(AnyBEM_TEST_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILE
 	runtests.impala
 )
 
-add_executable(anybem_test
+add_executable(anybem-test
 	${AnyBEM_TEST_PROGRAM}
 	runtests.cpp
 )
-target_link_libraries(anybem_test libanybem Badhron::badhron)
+target_link_libraries(anybem-test anybem Badhron::badhron)

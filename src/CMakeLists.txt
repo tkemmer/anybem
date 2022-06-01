@@ -24,7 +24,7 @@ anydsl_runtime_wrap(AnyBEM_PROGRAM IMPALA_FLAGS ${AnyBEM_IMPALA_FLAGS} FILES
 configure_file("../include/anybem/types.h.in" "${PROJECT_BINARY_DIR}/include/anybem/types.h")
 configure_file("impala/cmake.impala.in" "${PROJECT_BINARY_DIR}/src/impala/cmake.impala")
 
-add_library(libanybem SHARED
+add_library(anybem SHARED
 	${AnyBEM_PROGRAM}
 	../include/anybem/error.h
 	../include/anybem/hmo_reader.h
@@ -36,4 +36,4 @@ add_library(libanybem SHARED
 	cpp/hmo_reader.cpp
 	cpp/util.cpp
 )
-target_link_libraries(libanybem PUBLIC ${AnyDSL_runtime_LIBRARIES})
+target_link_libraries(anybem PUBLIC ${AnyDSL_runtime_LIBRARIES})
