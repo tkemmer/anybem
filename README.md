@@ -14,12 +14,19 @@ The *AnyBEM* library provides domain-specific variants of the implicit represent
  * [clipp](https://github.com/muellan/clipp) (optional, for tools only)
  * [Badhron](https://github.com/tkemmer/badhron) (optional, for testing only)
 
- ### Installation
+### Installation
  ```sh
  git clone https://github.com/tkemmer/anybem.git
- mkdir anydsl/build
- cd anydsl/build
+ mkdir anybem/build
+ cd anybem/build
  cmake ..
+ make
+```
+If you installed the AnyDSL runtime library according to the build
+instructions in the project's README file, you'll probably need to tell
+CMake its location, e.g., by replacing the above `cmake` command by
+```sh
+cmake .. -DAnyDSL_runtime_DIR=/<path to anydsl>/runtime/build/share/anydsl/cmake
 ```
 
 ### Configuration options
