@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12...3.16)
 
 project(AnyBEM
-	VERSION      0.2
+	VERSION      0.3
 	DESCRIPTION  "Nonlocal Protein Electrostatics in Impala"
 	HOMEPAGE_URL "https://github.com/tkemmer/anybem"
 	LANGUAGES    CXX
