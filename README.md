@@ -60,3 +60,13 @@ OPTIONS
         --eps-inf   Large-scale solvent response (default: 1.800000)
         --lambda    Correlation length scale (in Angstrom; default: 20.000000)
 ```
+
+## Citing
+If you use `AnyBEM` in your research, please cite the following publications:
+> T. Kemmer, S. Hack, B. Schmidt, A. Hildebrandt. CUDA-accelerated protein electrostatics in linear
+> space. Journal of Computational Science 70 (2023) 102022. <https://doi.org/10.1016/j.jocs.2023.102022>
+
+> T. Kemmer. Space-efficient and exact system representations for the nonlocal protein electrostatics
+> problem. Ph. D. thesis (2021), Johannes Gutenberg University Mainz. Mainz, Germany. <https://doi.org/10.25358/openscience-5689>
+
+Citation items for BibTeX can be found in [CITATION.bib](https://github.com/tkemmer/AnyBEM/blob/master/CITATION.bib).
